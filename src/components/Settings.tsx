@@ -92,18 +92,19 @@ export default function Settings() {
 
   return (
     <div className="flex justify-center">
-      <div className="mx-auto p-8 border max-w-xl mx-2">
-        <h1 className="text-2xl font-bold mb-4 text-center">設定</h1>
+      <div className="mx-auto xs:p-8 p-4 border max-w-xl mx-2">
+        {/* xsはtailwind.configに設定が必要 */}
+        <h1 className="text-2xl font-bold mb-3 text-center">設定</h1>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 ml-1">
           
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-500">並び替え</label>
-            <div className="flex items-center ">
+            <div className="flex items-center space-x-1 mr-1">
               <select
                 name="sort_field"
                 value={settings.sort_field}
                 onChange={handleChange}
-                className="p-2 border border-gray-300 rounded flex-grow"
+                className="p-2 border border-gray-300 rounded w-full"
               >
                 <option value="created_at">作成日</option>
                 <option value="index">優先度</option>
@@ -112,23 +113,23 @@ export default function Settings() {
                 <option value="reviewed_at">復習日</option>
                 <option value="updated_at">更新日</option>
               </select>
-              <span className=" text-gray-600 mx-1">で</span>
+              <span className=" text-gray-600 ">で</span>
               <select
                 name="sort_order"
                 value={settings.sort_order}
                 onChange={handleChange}
-                className="p-2 border border-gray-300 rounded flex-grow"
+                className="p-2 border border-gray-300 rounded w-full"
               >
                 <option value="ASC">昇順</option>
                 <option value="DESC">降順</option>
               </select>
-              <span className=" text-gray-600 mx-1">にする</span>
+              <span className=" text-gray-600 min-w-max ">にする</span>
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-500">優先度</label>
-            <div className="flex items-center ">
+            <div className="flex items-center space-x-1 mr-1">
               <input
                 type="number"
                 name="start_index"
@@ -136,9 +137,9 @@ export default function Settings() {
                 max={settings.end_index}
                 value={settings.start_index}
                 onChange={handleChange}
-                className="p-2 border border-gray-300 rounded flex-grow"
+                className="p-2 border border-gray-300 rounded w-full"
               />
-              <span className=" text-gray-600 mx-1">から</span>
+              <span className=" text-gray-600 min-w-max ">から</span>
               <input
                 type="number"
                 name="end_index"
@@ -146,15 +147,15 @@ export default function Settings() {
                 max={10}
                 value={settings.end_index}
                 onChange={handleChange}
-                className="p-2 border border-gray-300 rounded flex-grow"
+                className="p-2 border border-gray-300 rounded w-full"
               />
-              <span className=" text-gray-600 mx-1">まで</span>
+              <span className=" text-gray-600 min-w-max">まで</span>
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-500">復習回数</label>
-            <div className="flex items-center ">
+            <div className="flex items-center space-x-1 mr-1">
               <input
                 type="number"
                 name="start_review_count"
@@ -162,19 +163,19 @@ export default function Settings() {
                 max={settings.end_review_count}
                 value={settings.start_review_count}
                 onChange={handleChange}
-                className="p-2 border border-gray-300 rounded flex-grow"
+                className="p-2 border border-gray-300 rounded w-full"
               />
-              <span className=" text-gray-600 mx-1">から</span>
-              <input
-                type="number"
-                name="end_review_count"
-                min={settings.start_review_count}
-                max={100}
-                value={settings.end_review_count}
-                onChange={handleChange}
-                className="p-2 border border-gray-300 rounded flex-grow"
-              />
-              <span className=" text-gray-600 mx-1">まで</span>
+              <span className="min-w-max  text-gray-600">から</span>
+                <input
+                  type="number"
+                  name="end_review_count"
+                  min={settings.start_review_count}
+                  max={100}
+                  value={settings.end_review_count}
+                  onChange={handleChange}
+                  className="p-2 border border-gray-300 rounded w-full"
+                />
+                <span className="min-w-max text-gray-600 text-center">まで</span>
             </div>
           </div>
 
@@ -216,21 +217,21 @@ export default function Settings() {
               </div>
             </div>
           </div>
-          <div>
+          <div className="mr-1">
             <label className="block text-sm font-medium text-gray-500 mb-1 -mt-2">表示件数</label>
             <input
               type="number"
               name="display_count"
               value={settings.display_count}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full"
+              className="p-2 border border-gray-300 rounded w-full "
             />
           </div>
 
           {/* Submit ボタン */}
           <button
             type="submit"
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mr-1"
           >
             設定を保存
           </button>
