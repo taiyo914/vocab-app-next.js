@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -20,8 +21,7 @@ export default function SignUpPage() {
     if (error) {
       setError(error.message);
     } else {
-      router.push("/"); // サインアップ成功後にリダイレクト
-      //してもメール認証があるから意味ない。まあ、後で修正すればいいか。とりあえずは全体の構造とパフォーマンスが見たい
+      alert("メールを確認してください")
     }
   };
 
@@ -49,6 +49,8 @@ export default function SignUpPage() {
       >
         Sign Up
       </button>
+      <p className="text-sm text-gray-500">You already have an account?</p>
+      <p>→<Link href={"/login"} className="underline text-blue-600">Login</Link></p>
     </div>
   );
 }

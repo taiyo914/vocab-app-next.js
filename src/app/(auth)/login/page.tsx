@@ -1,53 +1,43 @@
-"use client";
-
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+import { login, signup } from "./actions";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-
-  const handleLogin = async () => {
-    setError(null);
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push("/"); // ログイン成功後にリダイレクト
-    }
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="mb-2 p-2 border border-gray-300"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="mb-2 p-2 border border-gray-300"
-      />
-      {error && <p className="text-red-500">{error}</p>}
-      <button
-        onClick={handleLogin}
-        className="bg-blue-500 text-white py-2 px-4 rounded"
-      >
-        Login
-      </button>
+    <form className="flex flex-col justify-center items-center w-full h-screen">
+      <div className="border rounded-xl p-3 ">
+        <label htmlFor="email">Email:</label>
+        <br/>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          className="border mb-2"
+        />
+        <br />
+        <label htmlFor="password" >Password:</label>
+        <br />
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          className="border mb-2"
+        />
+      <div className="space-x-2 mt-2 flex justify-center">
+        <button
+          formAction={login}
+          className="rounded-lg bg-blue-500 text-white p-2 w-full hover:opacity-80 transition-all"
+        >
+          Log in
+        </button>
+        <button
+          formAction={signup}
+          className="rounded-lg bg-blue-500 text-white p-2 w-full hover:opacity-80 transition-all"
+        >
+          Sign up
+        </button>
+      </div>
     </div>
+    </form>
   );
 }
