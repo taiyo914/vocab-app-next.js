@@ -1,6 +1,19 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createClient } from "../../utils/supabase/client";
+
+// type UserWordsSettings = {
+//   sort_field: string;
+//   sort_order: string;
+//   start_index: number;
+//   end_index: number;
+//   start_review_count: number;
+//   end_review_count: number;
+//   date_field: string;
+//   start_date: string | null;
+//   end_date: string | null;
+//   display_count: number;
+// };
 
 export default function Settings() {
   const supabase = createClient()
@@ -16,7 +29,30 @@ export default function Settings() {
     end_date: "",
     display_count: 10,
   });
+  const [userId, setUserId] = useState("");
 
+  useEffect(()=>{
+    const fetchUser = async () =>{
+      const {data: {user} , error: userError} = await supabase.auth.getUser();
+      console.log(user)
+      if (userError || !user) {
+        alert(`ユーザー情報の取得に失敗しました: ${userError}` );
+      } else{
+        setUserId(user.id)
+        const { data, error } = await supabase
+          .from("user_words_settings")
+          .select('sort_field, sort_order, start_index, end_index, start_review_count, end_review_count, date_field, start_date, end_date, display_count')
+          .eq("user_id", user.id); 
+        if(error){
+          alert(`設定情報の取得に失敗しました: ${error.message}`)
+        } else{
+          setSettings(data[0])
+        }
+      }
+    }
+    fetchUser()
+  },[])
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setSettings({
@@ -27,14 +63,6 @@ export default function Settings() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // ユーザーIDを取得
-    const {data: {user} , error: userError} = await supabase.auth.getUser();
-    console.log(user)
-    if (userError || !user) {
-      alert(`ユーザー情報の取得に失敗しました: ${userError}` );
-      return;
-    }
 
     // Supabaseにデータを保存
     const { error } = await supabase
@@ -52,7 +80,7 @@ export default function Settings() {
         display_count: settings.display_count,
         // page_offsetは変更しないのでここでは指定しない
       })
-      .eq("user_id", user.id); 
+      .eq("user_id", userId); 
 
     if (error) {
       alert(`Error saving settings: ${error.message}`);
