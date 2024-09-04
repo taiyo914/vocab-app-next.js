@@ -96,7 +96,16 @@ export default function Settings() {
         {/* xsはtailwind.configに設定が必要 */}
         <h1 className="text-2xl font-bold mb-3 text-center">設定</h1>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 ml-1">
-          
+          <div className="mr-1">
+              <label className="block text-sm font-medium text-gray-500 mb-1 -mt-2">表示件数</label>
+              <input
+                type="number"
+                name="display_count"
+                value={settings.display_count}
+                onChange={handleChange}
+                className="p-2 border border-gray-300 rounded w-full "
+              />
+            </div>
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-500">並び替え</label>
             <div className="flex items-center space-x-1 mr-1">
@@ -216,16 +225,6 @@ export default function Settings() {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="mr-1">
-            <label className="block text-sm font-medium text-gray-500 mb-1 -mt-2">表示件数</label>
-            <input
-              type="number"
-              name="display_count"
-              value={settings.display_count}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded w-full "
-            />
           </div>
 
           {/* Submit ボタン */}
