@@ -12,7 +12,7 @@ export default function SignIn() {
 
   const handleSignUp = async () => {
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -20,7 +20,15 @@ export default function SignIn() {
     if (error) {
       setMessage(`Error: ${error.message}`);
     } else {
-      setMessage("Please confirm your email");
+      const { error: profileError } = await supabase
+      .from('profiles')
+      .insert([{ user_id: data.user?.id, user_name: data.user?.email, icon: '' }]);
+
+    if (profileError) {
+      setMessage(`Error: ${profileError.message}`);
+    } else {
+      router.push("/");
+    }
     }
   };
 
