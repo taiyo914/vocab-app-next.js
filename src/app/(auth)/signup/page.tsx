@@ -24,7 +24,7 @@ export default function SignIn() {
       .from('profiles')
       .insert([{ user_id: data.user?.id, user_name: data.user?.email, icon: '' }]);
       
-      const { data: settings, error: settingsError } = await supabase
+      const { error: settingsError } = await supabase
       .from('user_words_settings')
       .insert([{ user_id: data.user?.id }]);
 
@@ -33,7 +33,6 @@ export default function SignIn() {
     }else if(settingsError){
       setMessage(`Error: ${settingsError.message}`);
     }else{
-      console.log("設定のデータ取れたかな？", settings)
       router.push("/");
     }
     }
