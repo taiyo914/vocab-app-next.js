@@ -207,7 +207,7 @@ export default function Settings() {
                 <input
                   type="date"
                   name="start_date"
-                  value={settings.start_date}
+                  value={settings.start_date ?? ""}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded flex-grow"
                 />
@@ -217,7 +217,7 @@ export default function Settings() {
                 <input
                   type="date"
                   name="end_date"
-                  value={settings.end_date}
+                  value={settings.end_date ?? ""}
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded flex-grow"
                 />
