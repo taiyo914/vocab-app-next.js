@@ -16,6 +16,7 @@ export default function Home() {
       <Suspense fallback={<div>loading</div>}>
        <WordsList/>
       </Suspense>
+      <p>Link to <Link href="/new" className="underline"> Add new words</Link></p>
     </>
   );
 }
