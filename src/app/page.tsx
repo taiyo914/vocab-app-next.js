@@ -6,6 +6,7 @@ import Link from "next/link";
 import WordsList from "@/components/WordsList";
 import { Suspense } from "react";
 import Spinner from "@/components/Spinner";
+import Settings from "@/components/Settings";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
        <WordsList/>
       </Suspense>
       <p>Link to <Link href="/new" className="underline"> Add new words</Link></p>
+      <Settings/>
     </>
   );
 }
