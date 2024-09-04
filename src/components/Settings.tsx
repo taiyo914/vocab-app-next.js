@@ -1,7 +1,9 @@
 "use client"
 import React, { useState } from "react";
+import { createClient } from "../../utils/supabase/client";
 
 export default function Settings() {
+  const supabase = createClient()
   const [settings, setSettings] = useState({
     sort_field: "created_at",
     sort_order: "DESC",
@@ -9,7 +11,7 @@ export default function Settings() {
     end_index: 10,
     start_review_count: 0,
     end_review_count: 100,
-    date_type: "created_at",
+    date_field: "created_at",
     start_date: "",
     end_date: "",
     display_count: 10,
@@ -23,11 +25,42 @@ export default function Settings() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Settings saved:", settings);
-    // ここでサーバーに送信する処理を行います
+
+    // ユーザーIDを取得
+    const {data: {user} , error: userError} = await supabase.auth.getUser();
+    console.log(user)
+    if (userError || !user) {
+      alert(`ユーザー情報の取得に失敗しました: ${userError}` );
+      return;
+    }
+
+    // Supabaseにデータを保存
+    const { error } = await supabase
+      .from("user_words_settings")
+      .update({ 
+        sort_field: settings.sort_field,
+        sort_order: settings.sort_order,
+        start_index: settings.start_index,
+        end_index: settings.end_index,
+        start_review_count: settings.start_review_count,
+        end_review_count: settings.end_review_count,
+        date_field: settings.date_field,
+        start_date: settings.start_date || null, // 入力がなければnullを指定
+        end_date: settings.end_date || null,     // 入力がなければnullを指定
+        display_count: settings.display_count,
+        // page_offsetは変更しないのでここでは指定しない
+      })
+      .eq("user_id", user.id); 
+
+    if (error) {
+      alert(`Error saving settings: ${error.message}`);
+    } else {
+      alert("Settings saved successfully");
+    }
   };
+
 
   return (
     <div className="flex justify-center">
@@ -121,8 +154,8 @@ export default function Settings() {
             <label className="block text-sm font-medium mb-1 text-gray-500">日付範囲</label>
             <div className="flex flex-wrap items-baseline  ">
                 <select
-                  name="date_type"
-                  value={settings.date_type}
+                  name="date_field"
+                  value={settings.date_field}
                   onChange={handleChange}
                   className=" p-2 border border-gray-300 rounded mb-2 flex-grow  max-w"
                 >
