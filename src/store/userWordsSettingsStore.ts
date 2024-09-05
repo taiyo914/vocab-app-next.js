@@ -36,7 +36,7 @@ const useUserWordsSettingsStore = create<UserWordsSettingsState>((set) => ({
     page_offset: 1,
   },
   
-  // userWordsSettingsを更新するアクション (page_offset以外)
+  // userWordsSettingsを更新するアクション 
   setUserWordsSettings: (settings: Partial<UserWordsSettings>) =>
     set((state) => ({
       userWordsSettings: { ...state.userWordsSettings, ...settings },
