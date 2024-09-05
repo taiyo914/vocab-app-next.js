@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, FormEvent, ChangeEvent, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "../../../utils/supabase/client";
+import { createClient } from "../../utils/supabase/client";
 
 interface FormData {
   word: string;
@@ -14,7 +14,7 @@ interface FormData {
 }
 
 export default function AddNewWord() {
-  const supabase = createClient()
+  const supabase = createClient();
   const [formData, setFormData] = useState<FormData>({
     word: "",
     meaning: "",
@@ -28,9 +28,7 @@ export default function AddNewWord() {
 
   const router = useRouter();
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -69,30 +67,31 @@ export default function AddNewWord() {
     setError(null);
 
     // ログインユーザーのIDを取得
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      setError('ユーザー情報の取得に失敗');
+      setError("ユーザー情報の取得に失敗");
       setLoading(false);
       return;
     }
 
     // 新しい単語をSupabaseに挿入
-    const { error: insertError } = await supabase
-      .from('words')
-      .insert([
-        {
-          user_id: user.id , // ログイン中のユーザーのIDを設定
-          word : data.word,
-          meaning : data.meaning, 
-          example : data.exampleSentence,
-          example_translation: data.exampleTranslation,
-          memo: data.memo, 
-          index: data.rating,
-        },
-      ]);
+    const { error: insertError } = await supabase.from("words").insert([
+      {
+        user_id: user.id, // ログイン中のユーザーのIDを設定
+        word: data.word,
+        meaning: data.meaning,
+        example: data.exampleSentence,
+        example_translation: data.exampleTranslation,
+        memo: data.memo,
+        index: data.rating,
+      },
+    ]);
 
     if (insertError) {
-      setError('データの追加(インサート)に失敗: ' + insertError.message);
+      setError("データの追加(インサート)に失敗: " + insertError.message);
     } else {
       setFormData({
         word: "",
@@ -102,7 +101,7 @@ export default function AddNewWord() {
         memo: "",
         rating: 0,
       });
-      alert('Word added successfully');
+      alert("Word added successfully");
     }
 
     setLoading(false);
@@ -115,14 +114,11 @@ export default function AddNewWord() {
           <Link href="/" className="hover:opacity-65 transition duration-300">
             ⬅ 戻る
           </Link>
-          <Link
-            href="new/import"
-            className="p-2 bg-gray-900 text-white rounded-md shadow hover:bg-gray-300 hover:text-gray-900 transition duration-300"
-          >
+          <Link href="new/import" className="p-2 bg-gray-900 text-white rounded-md shadow hover:bg-gray-300 hover:text-gray-900 transition duration-300">
             <span className=""> {"CSV/TSV"}</span>からインポート
           </Link>
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
         {loading && "ローディング中"}
         <form onSubmit={handleSubmit}>
           <div className=" p-6 border bg-white rounded-lg shadow-lg">
@@ -130,109 +126,51 @@ export default function AddNewWord() {
               <label className="block text-gray-700 font-bold " htmlFor="word">
                 語句
               </label>
-              <input
-                type="text"
-                name="word"
-                id="word"
-                value={formData.word}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white"
-              />
+              <input type="text" name="word" id="word" value={formData.word} onChange={handleChange} className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white" />
             </div>
 
             <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold "
-                htmlFor="meaning"
-              >
+              <label className="block text-gray-700 font-bold " htmlFor="meaning">
                 意味
               </label>
-              <input
-                type="text"
-                name="meaning"
-                id="meaning"
-                value={formData.meaning}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white"
-              />
+              <input type="text" name="meaning" id="meaning" value={formData.meaning} onChange={handleChange} className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white" />
             </div>
 
             <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold"
-                htmlFor="exampleSentence"
-              >
+              <label className="block text-gray-700 font-bold" htmlFor="exampleSentence">
                 例文
               </label>
-              <textarea
-                name="exampleSentence"
-                id="exampleSentence"
-                value={formData.exampleSentence}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white h-24"
-              ></textarea>
+              <textarea name="exampleSentence" id="exampleSentence" value={formData.exampleSentence} onChange={handleChange} className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white h-24"></textarea>
             </div>
 
             <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold"
-                htmlFor="exampleTranslation"
-              >
+              <label className="block text-gray-700 font-bold" htmlFor="exampleTranslation">
                 例文訳
               </label>
-              <textarea
-                name="exampleTranslation"
-                id="exampleTranslation"
-                value={formData.exampleTranslation}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white h-24"
-              ></textarea>
+              <textarea name="exampleTranslation" id="exampleTranslation" value={formData.exampleTranslation} onChange={handleChange} className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white h-24"></textarea>
             </div>
 
             <div className="mb-4">
               <label className="block text-gray-700 font-bold" htmlFor="memo">
                 メモ
               </label>
-              <textarea
-                name="memo"
-                id="memo"
-                value={formData.memo}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white h-24"
-              ></textarea>
+              <textarea name="memo" id="memo" value={formData.memo} onChange={handleChange} className="w-full px-3 py-2 border rounded-md text-gray-700 bg-white h-24"></textarea>
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 font-bold mb-2">
-                優先度{" "}
-              </label>
+              <label className="block text-gray-700 font-bold mb-2">優先度 </label>
               <div className="flex">
-                <input
-                  type="range"
-                  name="rating"
-                  min="0"
-                  max="10"
-                  value={formData.rating}
-                  onChange={handleSliderChange}
-                  className="w-full"
-                />
+                <input type="range" name="rating" min="0" max="10" value={formData.rating} onChange={handleSliderChange} className="w-full" />
                 <div className="text-gray-500  pl-2">{formData.rating}</div>
               </div>
             </div>
           </div>
 
           <div className="flex justify-center space-x-3 my-4 px-1">
-            <button
-              type="submit"
-              className="w-2/3 py-2 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-lg transition duration-300"
-            >
+            <button type="submit" className="w-2/3 py-2 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-lg transition duration-300">
               追加
             </button>
-            <button
-              type="button"
-              onClick={handleSubmitAndContinue}
-              className="w-2/3 py-2 px-4 bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-lg  transition duration-300"
-            >
+            <button type="button" onClick={handleSubmitAndContinue} className="w-2/3 py-2 px-4 bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-lg  transition duration-300">
               追加して新規作成
             </button>
           </div>

@@ -1,6 +1,6 @@
-"use server"
+"use server";
 import Image from "next/image";
-import { createClient } from "../../utils/supabase/server";
+import { createClient } from "../utils/supabase/server";
 import LogOutBtn from "@/components/LogOutBtn";
 import Link from "next/link";
 import WordsList from "@/components/WordsList";
@@ -9,27 +9,23 @@ import Settings from "@/components/Settings";
 import { UserWordsSettingsProps } from "@/types/UserWordsSettingsProps";
 
 export default async function Home() {
-  const supabase = createClient()
+  const supabase = createClient();
   const getUserId = async () => {
-    const { data, error } = await supabase.auth.getUser(); 
+    const { data, error } = await supabase.auth.getUser();
     if (error) {
       console.error(error);
       return "";
     }
     return data.user.id;
-  }
+  };
   const getUserWordsSettings = async (userId: string) => {
-    const { data: userWordsSettings, error } = await supabase
-      .from("user_words_settings")
-      .select("sort_field, sort_order, start_index, end_index, start_review_count, end_review_count, date_field, start_date, end_date, display_count, page_offset")
-      .eq("user_id", userId)
-      .single();
+    const { data: userWordsSettings, error } = await supabase.from("user_words_settings").select("sort_field, sort_order, start_index, end_index, start_review_count, end_review_count, date_field, start_date, end_date, display_count, page_offset").eq("user_id", userId).single();
     if (error) {
       console.log(`Error fetching data: ${error.message}`);
     }
     return userWordsSettings;
   };
-  const getInitialWords = async (userId: string , userWordsSettings: any) => {
+  const getInitialWords = async (userId: string, userWordsSettings: any) => {
     const { data: initialWords, error } = await supabase
       .from("words")
       .select("id, word, meaning, example, example_translation, memo, index")
@@ -46,21 +42,33 @@ export default async function Home() {
       throw new Error(`Error fetching data: ${error.message}`);
     }
     return initialWords;
-  }
-  const userId = await getUserId()
-  const userWordsSettings = await getUserWordsSettings(userId)
-  const initialWords = await getInitialWords(userId, userWordsSettings)
+  };
+  const userId = await getUserId();
+  const initialUserWordsSettings = await getUserWordsSettings(userId);
+  const initialWords = await getInitialWords(userId, initialUserWordsSettings);
 
   return (
     <>
       <h1>Hello World</h1>
-      <LogOutBtn/>
-      <p>Link to <Link href="/profile" className="underline"> profile</Link></p>
+      <LogOutBtn />
+      <p>
+        Link to{" "}
+        <Link href="/profile" className="underline">
+          {" "}
+          profile
+        </Link>
+      </p>
       <Suspense fallback={<div>loading</div>}>
-       <WordsList userId={userId} userWordsSettings={userWordsSettings} initialWords={initialWords}/>
+        <WordsList userId={userId} initialUserWordsSettings={initialUserWordsSettings} initialWords={initialWords} />
       </Suspense>
-      <p>Link to <Link href="/new" className="underline"> Add new words</Link></p>
-      <Settings/>
+      <p>
+        Link to{" "}
+        <Link href="/new" className="underline">
+          {" "}
+          Add new words
+        </Link>
+      </p>
+      <Settings />
     </>
   );
 }

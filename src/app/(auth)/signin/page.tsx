@@ -1,17 +1,17 @@
-"use client"
-import { useState } from 'react';
-import { createClient } from '../../../../utils/supabase/client';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+"use client";
+import { useState } from "react";
+import { createClient } from "../../../utils/supabase/client";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignIn() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const handleSignIn = async () => {
-    const supabase = createClient() 
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -20,7 +20,7 @@ export default function SignIn() {
     if (error) {
       setMessage(`Error: ${error.message}`);
     } else {
-      router.push("/")
+      router.push("/");
     }
   };
 
@@ -36,9 +36,13 @@ export default function SignIn() {
         <p className="text-red-500 mt-2">{message}</p>
         <div className="block text-center mt-4 ">
           <p className="text-sm text-gray-400">You don't have your account?</p>
-          <p> → <Link href="/signup" className="text-gray-500 hover:underline  transition-all">
-            Sing Up
-          </Link></p>
+          <p>
+            {" "}
+            →{" "}
+            <Link href="/signup" className="text-gray-500 hover:underline  transition-all">
+              Sing Up
+            </Link>
+          </p>
         </div>
       </div>
     </div>

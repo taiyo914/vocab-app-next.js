@@ -1,9 +1,10 @@
-"use client"
-import { useEffect, useState } from 'react';
-import { createClient } from '../../utils/supabase/client';
+"use client";
+import { useEffect, useState } from "react";
+import { createClient } from "../utils/supabase/client";
 //zustandのStoreからインポート
-import useUserIdStore from '@/store/userIdStore';
-import useUserWordsSettingsStore from '@/store/userWordsSettingsStore';
+import useUserIdStore from "@/store/userIdStore";
+import useUserWordsSettingsStore from "@/store/userWordsSettingsStore";
+import { getWords } from "@/app/actions/getWords";
 
 type WordProps = {
   id: string;
@@ -18,21 +19,20 @@ type WordProps = {
 type Props = {
   initialWords: WordProps[];
   userId: string;
-  userWordsSettings: any; // 型定義はあとで
+  initialUserWordsSettings: any; // 型定義はあとで
 };
 
-const WordsList = ({ initialWords, userId, userWordsSettings }: Props) => {
+const WordsList = ({ initialWords, userId, initialUserWordsSettings }: Props) => {
   const setUserId = useUserIdStore((state) => state.setUserId);
-  const setUserWordsSettings = useUserWordsSettingsStore((state) => state.setUserWordsSettings);
+  const { userWordsSettings, setUserWordsSettings, incrementPageOffset, decrementPageOffset } = useUserWordsSettingsStore();
   const [words, setWords] = useState<WordProps[]>(initialWords);
   const [message, setMessage] = useState<string | null>(null);
-  const supabase = createClient()
 
   useEffect(() => {
     // ZustandにuserIdとuserWordsSettingsをセット
     setUserId(userId);
-    setUserWordsSettings(userWordsSettings);
-  }, [userId, userWordsSettings, setUserId, setUserWordsSettings]);
+    setUserWordsSettings(initialUserWordsSettings);
+  }, []);
 
   return (
     <div className="border p-4 m-2">
@@ -41,12 +41,24 @@ const WordsList = ({ initialWords, userId, userWordsSettings }: Props) => {
       <ul>
         {words.map((word, index) => (
           <li key={word.id}>
-            <p><strong>Word:</strong> {word.word}</p>
-            <p><strong>Meaning:</strong> {word.meaning}</p>
-            <p><strong>Example:</strong> {word.example}</p>
-            <p><strong>Example Translation:</strong> {word.example_translation}</p>
-            <p><strong>Memo:</strong> {word.memo}</p>
-            <p><strong>Index:</strong> {word.index}</p>
+            <p>
+              <strong>Word:</strong> {word.word}
+            </p>
+            <p>
+              <strong>Meaning:</strong> {word.meaning}
+            </p>
+            <p>
+              <strong>Example:</strong> {word.example}
+            </p>
+            <p>
+              <strong>Example Translation:</strong> {word.example_translation}
+            </p>
+            <p>
+              <strong>Memo:</strong> {word.memo}
+            </p>
+            <p>
+              <strong>Index:</strong> {word.index}
+            </p>
           </li>
         ))}
       </ul>

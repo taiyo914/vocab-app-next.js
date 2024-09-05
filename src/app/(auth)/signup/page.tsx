@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { createClient } from "../../../../utils/supabase/client";
+import { createClient } from "../../../utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -20,21 +20,17 @@ export default function SignIn() {
     if (error) {
       setMessage(`Error: ${error.message}`);
     } else {
-      const { error: profileError } = await supabase
-      .from('profiles')
-      .insert([{ user_id: data.user?.id, user_name: data.user?.email, icon: '' }]);
-      
-      const { error: settingsError } = await supabase
-      .from('user_words_settings')
-      .insert([{ user_id: data.user?.id }]);
+      const { error: profileError } = await supabase.from("profiles").insert([{ user_id: data.user?.id, user_name: data.user?.email, icon: "" }]);
 
-    if (profileError) {
-      setMessage(`Error: ${profileError.message}`);
-    }else if(settingsError){
-      setMessage(`Error: ${settingsError.message}`);
-    }else{
-      router.push("/");
-    }
+      const { error: settingsError } = await supabase.from("user_words_settings").insert([{ user_id: data.user?.id }]);
+
+      if (profileError) {
+        setMessage(`Error: ${profileError.message}`);
+      } else if (settingsError) {
+        setMessage(`Error: ${settingsError.message}`);
+      } else {
+        router.push("/");
+      }
     }
   };
 
@@ -50,9 +46,13 @@ export default function SignIn() {
         <p className="text-red-500 mt-2">{message}</p>
         <div className="block text-center mt-4 ">
           <p className="text-sm text-gray-400">You already have your account?</p>
-          <p> → <Link href="/signin" className="text-gray-500 hover:underline  transition-all">
-            Log In
-          </Link></p>
+          <p>
+            {" "}
+            →{" "}
+            <Link href="/signin" className="text-gray-500 hover:underline  transition-all">
+              Log In
+            </Link>
+          </p>
         </div>
       </div>
     </div>
