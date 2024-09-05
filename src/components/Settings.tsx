@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "../../utils/supabase/client";
 import { useRouter } from "next/navigation";
 
-type UserWordsSettings = {
+type UserWordsSettingsProps = {
   sort_field: string;
   sort_order: string;
   start_index: number;
@@ -14,6 +14,7 @@ type UserWordsSettings = {
   start_date: string | null;
   end_date: string | null;
   display_count: number;
+  page_offset: number;
 };
 
 export default function Settings() {
