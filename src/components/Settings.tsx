@@ -3,18 +3,18 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "../../utils/supabase/client";
 import { useRouter } from "next/navigation";
 
-// type UserWordsSettings = {
-//   sort_field: string;
-//   sort_order: string;
-//   start_index: number;
-//   end_index: number;
-//   start_review_count: number;
-//   end_review_count: number;
-//   date_field: string;
-//   start_date: string | null;
-//   end_date: string | null;
-//   display_count: number;
-// };
+type UserWordsSettings = {
+  sort_field: string;
+  sort_order: string;
+  start_index: number;
+  end_index: number;
+  start_review_count: number;
+  end_review_count: number;
+  date_field: string;
+  start_date: string | null;
+  end_date: string | null;
+  display_count: number;
+};
 
 export default function Settings() {
   const supabase = createClient()
