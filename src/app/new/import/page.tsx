@@ -38,7 +38,7 @@ const DataForm: React.FC = () => {
           example: row[2] || "",
           example_translation: row[3] || "",
           memo: row[4] || "",
-          index: row[5] ? parseInt(row[5], 10) : null,
+          index: row[5] ? parseInt(row[5], 10) : 0,
         }))
       : csvParseRows(data.trim(), (row, i) => ({
           user_id: user?.id,
@@ -50,12 +50,14 @@ const DataForm: React.FC = () => {
           index: row[5] ? parseInt(row[5], 10) : 0,
         }));
     console.log(parsedData);
-    const { error } = await supabase.from("words").insert(parsedData);
+    const { error } = await supabase.from("words").insert(parsedData.reverse());
     if (error) {
       console.log("インサートエラー:", error.message);
+      alert(`単語の保存に失敗しました: ${error.message}`)
     } else {
       alert(`単語の保存に成功しました！`);
     }
+
     router.push("/");
   };
 
