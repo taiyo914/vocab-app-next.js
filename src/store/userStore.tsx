@@ -34,10 +34,10 @@ const useUserStore = create<UserState>((set, get) => ({
       const { data: { user }, error } = await supabase.auth.getUser();
       if (error) throw new Error(error.message); 
       set({ userId: user?.id || null });
+      return null;
     } catch (err:any) {
-      set({ error: err.message }); // 型エラー: 'err''は 'unknown' 型です。
-      返り値の例: return err.message // 型エラー: 'err''は 'unknown' 型です。
-      //→ コンポーネント内で const error = fetchUserId()でうけとれる
+      set({ error: err.message }); 
+      return err.message 
     }
   },
 
