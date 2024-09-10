@@ -14,7 +14,7 @@ export type WordType = {
   deleted_at: string | null;
 };
 
-export type UserWordsSettingsType = {
+export type WordsSettingsType = {
   sort_field: string;
   sort_order: string;
   start_index: number;
@@ -30,6 +30,6 @@ export type UserWordsSettingsType = {
 
 export type InitialInfoProps = {
   userId: string;
-  initialUserWordsSettings: UserWordsSettingsType;
+  initialUserWordsSettings: WordsSettingsType;
   initialWords: WordType[];
 };

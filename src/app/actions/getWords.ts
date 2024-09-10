@@ -3,9 +3,9 @@
 
 import { createClient } from "../../utils/supabase/server"; // ここにSupabaseのクライアントをインポート
 const supabase = createClient();
-import { UserWordsSettingsProps } from "@/types/UserWordsSettingsProps";
+import { WordsSettingsType } from "@/types/Types";
 
-export async function getWords(userId: string, userWordsSettings: UserWordsSettingsProps) {
+export async function getWords(userId: string, userWordsSettings: WordsSettingsType) {
   const { data: words, error } = await supabase
     .from("words")
     .select("id, word, meaning, example, example_translation, memo, index")
