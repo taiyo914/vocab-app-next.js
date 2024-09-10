@@ -17,6 +17,8 @@ interface UserState {
   fetchUserWordsSettings: () => Promise<string | null>;
   fetchWords: () => Promise<string | null>;
   setUserWordsSettings: (settings: any) => void;
+  incrementOffset: () => void;
+  decrementOffset: () => void;
 }
 
 
@@ -25,8 +27,6 @@ const useUserStore = create<UserState>((set, get) => ({
   wordsSettings: null,
   words: null,
   error: null, 
-
-  setUserWordsSettings: (settings) => set({ wordsSettings: settings }),
 
   fetchUserId: async () => {
     try {
@@ -83,6 +83,33 @@ const useUserStore = create<UserState>((set, get) => ({
     }
   },
 
+  setUserWordsSettings: (settings) => set({ wordsSettings: settings }),
+
+  incrementOffset: () => {
+    const { wordsSettings } = get();
+    if (!wordsSettings) {
+      set({ error: "ユーザー情報がありません。ページをリロードしてください。" });
+      return;
+    } 
+    set({
+      wordsSettings: {
+        ...wordsSettings,
+        page_offset: wordsSettings.page_offset + 1,},
+    });
+  },
+
+  decrementOffset: () => {
+    const { wordsSettings } = get();
+    if (!wordsSettings) {
+      set({ error: "ユーザー情報がありません。ページをリロードしてください。" });
+      return;
+    } 
+    set({
+      wordsSettings: {
+        ...wordsSettings,
+        page_offset: wordsSettings.page_offset - 1,},
+    });
+  },
   
 }));
 
