@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-type SettingsModalState = {
+type OpenModalState = {
   isOpen: boolean;
   toggleModal: () => void;
 };
 
-const useSettingsModalStore = create<SettingsModalState>((set) => ({
+const useOpenModalStore = create<OpenModalState>((set) => ({
   isOpen: false,
   toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
 }));
 
-export default useSettingsModalStore;
+export default useOpenModalStore;
