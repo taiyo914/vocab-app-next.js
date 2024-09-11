@@ -11,7 +11,7 @@ export default async function Home() {
       <Header />
       <TopButtons />
       <Display />
-      {/* <SettingsModal/> */}
+      <SettingsModal/>
       <BottomButton />
       <Footer />
     </div>

@@ -1,28 +1,30 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import useSettingsModalStore from "@/store/settingsModalStore";
-import { UserWordsSettingsType } from "@/types/Types";
-import useUserWordsSettingsStore from "@/store/userWordsSettingsStore";
+import useOpenModalStore from "@/store/openModalStore";
+import useUserStore from "@/store/userStore";
+import { WordsSettingsType } from "@/types/Types";
 import { motion, AnimatePresence } from "framer-motion";
 
-type SettingsProps = {
-  userId: string;
-  initialUserWordsSettings: UserWordsSettingsType;
-};
-
-export default function SettingsModal({ userId, initialUserWordsSettings }: SettingsProps) {
-  const { isOpen, toggleModal } = useSettingsModalStore();
-  const { setUserWordsSettings } = useUserWordsSettingsStore();
+export default function SettingsModal() {
+  const { isOpen, toggleModal } = useOpenModalStore();
+  const { userId, wordsSettings, setWordsSettings } = useUserStore();
   const supabase = createClient();
-  const [temporarySettings, setTemporarySettings] = useState<UserWordsSettingsType>(initialUserWordsSettings);
+  const [temporarySettings, setTemporarySettings] = useState<WordsSettingsType | null>(wordsSettings);
+
+  useEffect(() => {
+    if (wordsSettings) {
+      setTemporarySettings(wordsSettings);
+      alert("SettingsModal内のuseEffectが発動しました")
+    }
+  }, [wordsSettings]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setTemporarySettings({
       ...temporarySettings,
       [name]: value,
-    });
+    } as WordsSettingsType);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,7 +42,7 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
     if (error) {
       alert(`設定の更新に失敗しました...: ${error.message}`);
     } else {
-      setUserWordsSettings({ ...temporarySettings, page_offset: 1 });
+      setWordsSettings({ ...temporarySettings, page_offset: 1 });
       console.log("submitが実行されました")
       toggleModal()
     }
@@ -81,7 +83,7 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                 <input
                   type="number"
                   name="display_count"
-                  value={temporarySettings.display_count}
+                  value={temporarySettings?.display_count}
                   onChange={handleChange}
                   className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                 />
@@ -91,7 +93,7 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                 <div className="flex items-center space-x-2">
                   <select
                     name="sort_field"
-                    value={temporarySettings.sort_field}
+                    value={temporarySettings?.sort_field}
                     onChange={handleChange}
                     className="xs:pl-3 pl-1 xs:py-3 py-1 pr-0 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   >
@@ -105,7 +107,7 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                   <span className=" text-gray-600 ">で</span>
                   <select
                     name="sort_order"
-                    value={temporarySettings.sort_order}
+                    value={temporarySettings?.sort_order}
                     onChange={handleChange}
                     className="xs:pl-3 pl-1 xs:py-3 py-1 pr-0 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   >
@@ -123,8 +125,8 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                     type="number"
                     name="start_index"
                     min={0}
-                    max={temporarySettings.end_index}
-                    value={temporarySettings.start_index}
+                    max={temporarySettings?.end_index}
+                    value={temporarySettings?.start_index}
                     onChange={handleChange}
                     className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
@@ -132,9 +134,9 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                   <input
                     type="number"
                     name="end_index"
-                    min={temporarySettings.start_index}
+                    min={temporarySettings?.start_index}
                     max={10}
-                    value={temporarySettings.end_index}
+                    value={temporarySettings?.end_index}
                     onChange={handleChange}
                     className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
@@ -149,8 +151,8 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                     type="number"
                     name="start_review_count"
                     min={0}
-                    max={temporarySettings.end_review_count}
-                    value={temporarySettings.start_review_count}
+                    max={temporarySettings?.end_review_count}
+                    value={temporarySettings?.start_review_count}
                     onChange={handleChange}
                     className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
@@ -158,9 +160,9 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                   <input
                     type="number"
                     name="end_review_count"
-                    min={temporarySettings.start_review_count}
+                    min={temporarySettings?.start_review_count}
                     max={100}
-                    value={temporarySettings.end_review_count}
+                    value={temporarySettings?.end_review_count}
                     onChange={handleChange}
                     className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
@@ -174,7 +176,7 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                   <div className="flex flex-grow items-center mb-2">
                     <select
                       name="date_field"
-                      value={temporarySettings.date_field}
+                      value={temporarySettings?.date_field}
                       onChange={handleChange}
                       className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-black flex-grow  max-w"
                     >
@@ -189,7 +191,7 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                       <input
                         type="date"
                         name="start_date"
-                        value={temporarySettings.start_date ?? ""}
+                        value={temporarySettings?.start_date ?? ""}
                         onChange={handleChange}
                         className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-black flex-grow"
                       />
@@ -199,7 +201,7 @@ export default function SettingsModal({ userId, initialUserWordsSettings }: Sett
                       <input
                         type="date"
                         name="end_date"
-                        value={temporarySettings.end_date ?? ""}
+                        value={temporarySettings?.end_date ?? ""}
                         onChange={handleChange}
                         className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-black flex-grow"
                       />
