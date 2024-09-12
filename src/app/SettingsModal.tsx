@@ -15,16 +15,17 @@ export default function SettingsModal() {
   useEffect(() => {
     if (wordsSettings) {
       setTemporarySettings(wordsSettings);
-      alert("SettingsModal内のuseEffectが発動しました")
+      // alert("SettingsModal内のuseEffectが発動しました")
     }
   }, [wordsSettings]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setTemporarySettings({
-      ...temporarySettings,
+    
+    setTemporarySettings((prevSettings) => ({
+      ...prevSettings,
       [name]: value,
-    } as WordsSettingsType);
+    } as WordsSettingsType)) 
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
