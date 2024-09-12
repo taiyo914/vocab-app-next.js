@@ -12,6 +12,8 @@ interface UserState {
   userId: string | null;
   wordsSettings: WordsSettingsType | null;
   words: WordType[] | null;
+  totalWords: number; // totalWordsを追加
+  fetchingKey: number; // fetchingKeyを追加
   error: string | null;
   fetchUserId: () => Promise<string | null>;
   fetchUserWordsSettings: () => Promise<string | null>;
@@ -26,6 +28,8 @@ const useUserStore = create<UserState>((set, get) => ({
   userId: null,
   wordsSettings: null,
   words: null,
+  totalWords: 0, // 初期値
+  fetchingKey: 0, // 初期値
   error: null, 
 
   fetchUserId: async () => {
@@ -60,22 +64,40 @@ const useUserStore = create<UserState>((set, get) => ({
 
   fetchWords: async () => {
     try {
-      const { userId, wordsSettings } = get();
+      const { userId, wordsSettings, words } = get();
       if (!userId || !wordsSettings) return null;
-      const { data, error } = await supabase
-        .from("words")
-        .select("id, word, meaning, example, example_translation, memo, index, favorite, review_count, reviewed_at, created_at, updated_at, deleted_at")
-        .eq("user_id", userId)
-        .gte("index", wordsSettings.start_index || 0)
-        .lte("index", wordsSettings.end_index || 10)
-        .gte("review_count", wordsSettings.start_review_count || 0)
-        .lte("review_count", wordsSettings.end_review_count || 100)
-        .gte(wordsSettings.date_field, wordsSettings.start_date || "1900-01-01")
-        .lte(wordsSettings.date_field, wordsSettings.end_date || "2100-12-31")
-        .order(wordsSettings.sort_field || "increment", { ascending: wordsSettings.sort_order === "ASC" })
-        .range((wordsSettings.page_offset - 1) * wordsSettings.display_count, wordsSettings.page_offset * wordsSettings.display_count - 1);
-      if (error) throw new Error(error.message);
-      set({ words: data || null });
+
+      // APIへリクエストを送信
+      const response = await fetch("/api/getWords", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          userWordsSettings: wordsSettings,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Error fetching words");
+      }
+
+      // Zustandの状態を更新
+      if (JSON.stringify(words) !== JSON.stringify(data.words)) {
+        set({
+          words: data.words,
+          totalWords: data.totalWords,
+          fetchingKey: get().fetchingKey + 1, // fetchingKeyを更新
+        });
+      } else {
+        set({
+          words: data.words,
+          totalWords: data.totalWords,
+        });
+      }
       return null;
     } catch (err: any) {
       set({ error: err.message });
