@@ -15,9 +15,20 @@ export default function SettingsModal() {
   useEffect(() => {
     if (wordsSettings) {
       setTemporarySettings(wordsSettings);
-      // alert("SettingsModal内のuseEffectが発動しました")
     }
-  }, [wordsSettings]);
+  }, [
+    wordsSettings?.sort_field,
+    wordsSettings?.sort_order,
+    wordsSettings?.start_index,
+    wordsSettings?.end_index,
+    wordsSettings?.start_review_count,
+    wordsSettings?.end_review_count,
+    wordsSettings?.date_field,
+    wordsSettings?.start_date,
+    wordsSettings?.end_date,
+    wordsSettings?.display_count,
+    //page_offset以外
+  ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -80,17 +91,17 @@ export default function SettingsModal() {
             <h1 className="text-2xl font-bold mb-5 text-center">設定</h1>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 xs:gap-6 gap-3 ">
               <div className="">
-                <label className="block  font-medium text-gray-500 xs:mb-2 xs:-mt-2 -mt-4">表示件数</label>
+                <label className="block  font-medium text-gray-500 xs:mb-1 xs:-mt-2 -mt-4">表示件数</label>
                 <input
                   type="number"
                   name="display_count"
                   value={temporarySettings?.display_count}
                   onChange={handleChange}
-                  className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                  className="xs:px-3 p-2 xs:py-2 py- border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                 />
               </div>
               <div>
-                <label className="block font-medium xs:mb-2  text-gray-500">並び替え</label>
+                <label className="block font-medium xs:mb-1  text-gray-500">並び替え</label>
                 <div className="flex items-center space-x-2">
                   <select
                     name="sort_field"
@@ -120,7 +131,7 @@ export default function SettingsModal() {
               </div>
 
               <div>
-                <label className="block font-medium xs:mb-2  text-gray-500">優先度</label>
+                <label className="block font-medium xs:mb-1  text-gray-500">優先度</label>
                 <div className="flex items-center space-x-2 ">
                   <input
                     type="number"
@@ -129,7 +140,7 @@ export default function SettingsModal() {
                     max={temporarySettings?.end_index}
                     value={temporarySettings?.start_index}
                     onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
                   <span className=" text-gray-600 min-w-max ">から</span>
                   <input
@@ -139,14 +150,14 @@ export default function SettingsModal() {
                     max={10}
                     value={temporarySettings?.end_index}
                     onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
                   <span className=" text-gray-600 min-w-max">まで</span>
                 </div>
               </div>
 
               <div>
-                <label className="block font-medium xs:mb-2 text-gray-500">復習回数</label>
+                <label className="block font-medium xs:mb-1 text-gray-500">復習回数</label>
                 <div className="flex items-center space-x-2">
                   <input
                     type="number"
@@ -155,7 +166,7 @@ export default function SettingsModal() {
                     max={temporarySettings?.end_review_count}
                     value={temporarySettings?.start_review_count}
                     onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
                   <span className="min-w-max  text-gray-600">から</span>
                   <input
@@ -165,14 +176,14 @@ export default function SettingsModal() {
                     max={100}
                     value={temporarySettings?.end_review_count}
                     onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
                   />
                   <span className="min-w-max text-gray-600 text-center">まで</span>
                 </div>
               </div>
 
               <div>
-                <label className="block font-medium xs:mb-2 text-gray-500">日付範囲</label>
+                <label className="block font-medium xs:mb-1 text-gray-500">日付範囲</label>
                 <div className="flex flex-wrap items-baseline -mr-2">
                   <div className="flex flex-grow items-center mb-2">
                     <select
