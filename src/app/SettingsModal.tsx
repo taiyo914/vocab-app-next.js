@@ -11,6 +11,13 @@ export default function SettingsModal() {
   const { userId, wordsSettings, setWordsSettings } = useUserStore();
   const supabase = createClient();
   const [temporarySettings, setTemporarySettings] = useState<WordsSettingsType | null>(wordsSettings);
+  const [showDetails, setShowDetails] = useState(false); // 詳細設定を表示するかどうかの状態
+  const toggleDetails = () => setShowDetails((prev) => !prev); // トグルボタン用
+  const onClose = () => {
+    toggleModal()
+    setTemporarySettings(wordsSettings)
+  }
+
 
   useEffect(() => {
     if (wordsSettings) {
@@ -71,7 +78,7 @@ export default function SettingsModal() {
             animate={{ opacity: 0.5 }}   
             exit={{ opacity: 0 }}        
             transition={{ duration: 0.3 }}
-            onClick={toggleModal}
+            onClick={onClose}
           ></motion.div>
         <motion.div 
            initial={{ opacity: 0, y: -50 }}  
@@ -89,25 +96,34 @@ export default function SettingsModal() {
         >
           <div className="bg-white p-5 xs:px-10 xs:py-7 max-h-[90vh] overflow-y-auto " >
             <h1 className="text-2xl font-bold mb-5 text-center">設定</h1>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 xs:gap-6 gap-3 ">
-              <div className="">
-                <label className="block  font-medium text-gray-500 xs:mb-1 xs:-mt-2 -mt-4">表示件数</label>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 ">
+              <div className="mb-4">
+                <label className="block font-medium text-gray-500 xs:mb-1 xs:-mt-2 -mt-4 ">表示件数</label>
                 <input
                   type="number"
                   name="display_count"
+                  min = {1}
                   value={temporarySettings?.display_count}
                   onChange={handleChange}
-                  className="xs:px-3 p-2 xs:py-2 py- border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                  className="
+                    xs:py-2 py-1 px-3 w-full 
+                    font-[550] 
+                    border border-gray-300 rounded-lg 
+                    focus:outline-none focus:border-black"
                 />
               </div>
-              <div>
+              <div className="mb-7">
                 <label className="block font-medium xs:mb-1  text-gray-500">並び替え</label>
                 <div className="flex items-center space-x-2">
                   <select
                     name="sort_field"
                     value={temporarySettings?.sort_field}
                     onChange={handleChange}
-                    className="xs:pl-3 pl-1 xs:py-3 py-1 pr-0 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                    className="
+                      xs:pl-3 pl-2 xs:py-3 py-2 pr-0 
+                      border border-gray-300 rounded-lg 
+                      w-full font-[580]
+                      focus:outline-none focus:border-black"
                   >
                     <option value="increment">作成日</option>
                     <option value="index">優先度</option>
@@ -121,7 +137,11 @@ export default function SettingsModal() {
                     name="sort_order"
                     value={temporarySettings?.sort_order}
                     onChange={handleChange}
-                    className="xs:pl-3 pl-1 xs:py-3 py-1 pr-0 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
+                    className="
+                      xs:pl-3 pl-2 xs:py-3 py-2 pr-0 
+                      border border-gray-300 rounded-lg 
+                      w-full font-[580]
+                      focus:outline-none focus:border-black"
                   >
                     <option value="ASC">昇順</option>
                     <option value="DESC">降順</option>
@@ -130,99 +150,155 @@ export default function SettingsModal() {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-medium xs:mb-1  text-gray-500">優先度</label>
-                <div className="flex items-center space-x-2 ">
-                  <input
-                    type="number"
-                    name="start_index"
-                    min={0}
-                    max={temporarySettings?.end_index}
-                    value={temporarySettings?.start_index}
-                    onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
-                  />
-                  <span className=" text-gray-600 min-w-max ">から</span>
-                  <input
-                    type="number"
-                    name="end_index"
-                    min={temporarySettings?.start_index}
-                    max={10}
-                    value={temporarySettings?.end_index}
-                    onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
-                  />
-                  <span className=" text-gray-600 min-w-max">まで</span>
-                </div>
-              </div>
 
-              <div>
-                <label className="block font-medium xs:mb-1 text-gray-500">復習回数</label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    name="start_review_count"
-                    min={0}
-                    max={temporarySettings?.end_review_count}
-                    value={temporarySettings?.start_review_count}
-                    onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
-                  />
-                  <span className="min-w-max  text-gray-600">から</span>
-                  <input
-                    type="number"
-                    name="end_review_count"
-                    min={temporarySettings?.start_review_count}
-                    max={100}
-                    value={temporarySettings?.end_review_count}
-                    onChange={handleChange}
-                    className="xs:px-3 p-2 xs:py-2 py-1 border border-gray-300 rounded-lg w-full focus:outline-none focus:border-black"
-                  />
-                  <span className="min-w-max text-gray-600 text-center">まで</span>
+                {/* トグルボタン */}
+                <div className="flex justify-center text-sm">
+                  <button
+                    type="button"
+                    className="bg-gray-200 text-gray-700 px-5 py-2 text-center rounded-full"
+                    onClick={toggleDetails}
+                  >
+                    {showDetails ? "閉じる" : "詳細設定"}
+                  </button>
                 </div>
-              </div>
 
-              <div>
-                <label className="block font-medium xs:mb-1 text-gray-500">日付範囲</label>
-                <div className="flex flex-wrap items-baseline -mr-2">
-                  <div className="flex flex-grow items-center mb-2">
-                    <select
-                      name="date_field"
-                      value={temporarySettings?.date_field}
-                      onChange={handleChange}
-                      className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-black flex-grow  max-w"
+
+              <AnimatePresence>
+                  {showDetails && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity:1}}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="overflow-hidden"
                     >
-                      <option value="created_at">作成日</option>
-                      <option value="updated_at">更新日</option>
-                      <option value="reviewed_at">復習日</option>
-                    </select>
-                    <span className="text-gray-600 mx-2">を</span>
-                  </div>
-                  <div className="flex items-center flex-wrap flex-grow">
-                    <div className="flex items-center flex-grow mb-2">
-                      <input
-                        type="date"
-                        name="start_date"
-                        value={temporarySettings?.start_date ?? ""}
-                        onChange={handleChange}
-                        className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-black flex-grow"
-                      />
-                      <span className="text-gray-600 min-w-8 mx-2 ">から</span>
-                    </div>
-                    <div className="flex items-center flex-grow mb-2">
-                      <input
-                        type="date"
-                        name="end_date"
-                        value={temporarySettings?.end_date ?? ""}
-                        onChange={handleChange}
-                        className="xs:px-3 p-2 xs:py-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:border-black flex-grow"
-                      />
-                      <span className="text-gray-600 min-w-8 mx-2">まで</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-between xs:mt-3 mt-1 space-x-3">
+                      <div className="mb-4 mt-1">
+                        <label className="block font-medium xs:mb-1  text-gray-500">優先度</label>
+                        <div className="flex items-center space-x-2 ">
+                          <input
+                            type="number"
+                            name="start_index"
+                            min={0}
+                            max={temporarySettings?.end_index}
+                            value={temporarySettings?.start_index}
+                            onChange={handleChange}
+                            className="
+                             xs:py-2 py-1 px-3
+                             w-full font-[550] 
+                             border border-gray-300 rounded-lg  
+                             focus:outline-none focus:border-black"
+                          />
+                          <span className=" text-gray-600 min-w-max ">から</span>
+                          <input
+                            type="number"
+                            name="end_index"
+                            min={temporarySettings?.start_index}
+                            max={10}
+                            value={temporarySettings?.end_index}
+                            onChange={handleChange}
+                            className="
+                              xs:py-2 py-1 px-3
+                              w-full font-[550] 
+                              border border-gray-300 rounded-lg  
+                              focus:outline-none focus:border-black"
+                          />
+                          <span className=" text-gray-600 min-w-max">まで</span>
+                        </div>
+                      </div>
+
+                      <div className="mb-4 ">
+                        <label className="block font-medium xs:mb-1 text-gray-500">復習回数</label>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="number"
+                            name="start_review_count"
+                            min={0}
+                            max={temporarySettings?.end_review_count}
+                            value={temporarySettings?.start_review_count}
+                            onChange={handleChange}
+                            className="
+                              xs:py-2 py-1 px-3
+                              w-full font-[550] 
+                              border border-gray-300 rounded-lg  
+                              focus:outline-none focus:border-black"
+                          />
+                          <span className="min-w-max  text-gray-600">から</span>
+                          <input
+                            type="number"
+                            name="end_review_count"
+                            min={temporarySettings?.start_review_count}
+                            max={100}
+                            value={temporarySettings?.end_review_count}
+                            onChange={handleChange}
+                            className="
+                              xs:py-2 py-1 px-3
+                              w-full font-[550] 
+                              border border-gray-300 rounded-lg  
+                              focus:outline-none focus:border-black"
+                          />
+                          <span className="min-w-max text-gray-600 text-center">まで</span>
+                        </div>
+                      </div>
+
+                      <div className="">
+                        <label className="block font-medium xs:mb-1 text-gray-500">日付範囲</label>
+                        <div className="flex flex-wrap items-baseline -mr-2">
+                          <div className="flex flex-grow items-center mb-2">
+                            <select
+                              name="date_field"
+                              value={temporarySettings?.date_field}
+                              onChange={handleChange}
+                              className="
+                                xs:p-3 p-2 
+                                font-[580] 
+                                border border-gray-300 rounded-lg 
+                                focus:outline-none focus:border-black 
+                                flex-grow  max-w"
+                            >
+                              <option value="created_at">作成日</option>
+                              <option value="updated_at">更新日</option>
+                              <option value="reviewed_at">復習日</option>
+                            </select>
+                            <span className="text-gray-600 mx-2">を</span>
+                          </div>
+                          <div className="flex items-center flex-wrap flex-grow">
+                            <div className="flex items-center flex-grow mb-2">
+                              <input
+                                type="date"
+                                name="start_date"
+                                value={temporarySettings?.start_date ?? ""}
+                                onChange={handleChange}
+                                className="
+                                qxs:p-3 p-2 
+                                font-[580] 
+                                border border-gray-300 rounded-lg f
+                                ocus:outline-none focus:border-black 
+                                flex-grow"
+                              />
+                              <span className="text-gray-600 min-w-8 mx-2 ">から</span>
+                            </div>
+                            <div className="flex items-center flex-grow mb-2">
+                              <input
+                                type="date"
+                                name="end_date"
+                                value={temporarySettings?.end_date ?? ""}
+                                onChange={handleChange}
+                                className="
+                                  xs:p-3 p-2 
+                                  font-[580] 
+                                  border border-gray-300 rounded-lg 
+                                  focus:outline-none focus:border-black 
+                                  flex-grow"
+                              />
+                              <span className="text-gray-600 min-w-8 mx-2">まで</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>)}
+              </AnimatePresence>
+
+              <div className="flex justify-between space-x-3 mt-7">
                 <button
                   type="submit"
                   className="bg-blue-500 text-lg text-white px-3 xs:py-3 py-2 rounded-lg hover:bg-blue-600 transition-all w-full"
@@ -231,7 +307,7 @@ export default function SettingsModal() {
                 </button>
                 <div
                   className="bg-gray-500 text-lg text-white px-3 xs:py-3 py-2 rounded-lg hover:bg-gray-600 transition-all mr-1 w-full text-center"
-                  onClick={toggleModal}
+                  onClick={onClose}
                 >
                   閉じる
                 </div>
