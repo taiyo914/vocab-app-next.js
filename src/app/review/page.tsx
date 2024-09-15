@@ -11,12 +11,23 @@ import { Swiper as SwiperType } from "swiper";
 import Link from "next/link";
 import useUserStore from "@/store/userStore";
 import LoadingDots from "../LoadingDots";
+import CustomSlider from "./CustomSlider";
+import { createClient } from "@/utils/supabase/client";
 
 const Review = () => {
+  const supabase = createClient();
   const [activeIndex, setActiveIndex] = useState(0);
   const [indexValues, setindexValues] = useState<number[]>([]);
-  const { words, fetchWords, userId, fetchUserId, wordsSettings, fetchUserWordsSettings } =
-    useUserStore();
+  const {
+    words,
+    setWords,
+    fetchWords,
+    userId,
+    fetchUserId,
+    wordsSettings,
+    fetchUserWordsSettings,
+  } = useUserStore();
+  const [indexValue, setIndexValue] = useState(1);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -44,21 +55,48 @@ const Review = () => {
     fetchAllData();
   }, [words, fetchUserId, fetchUserWordsSettings, fetchWords]);
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newindex = parseInt(e.target.value, 10);
-    setindexValues((prev) => {
-      const newValues = [...prev];
-      const cardIndex = Math.floor((activeIndex - 1) / 5); // 各cardの基準に基づくindexを取得
-      newValues[cardIndex] = newindex;
-      return newValues;
-    });
+  if (!words) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingDots />
+      </div>
+    );
+  }
+
+  const handleSliderChange = (newIndexValue: number, wordId: string) => {
+
+    //words状態を更新
+    const updatedWords = words?.map((word) =>
+      word.id === wordId ? { ...word, index: newIndexValue } : word
+    );
+
+    setWords(updatedWords);
+
+    // Supabaseに変更を反映
+    const updateWordIndex = async () => {
+      try {
+        const { error } = await supabase
+          .from("words")
+          .update({ index: newIndexValue })
+          .eq("id", wordId);
+        if (error) {
+          console.error("Supabase更新エラー:", error.message);
+        } else {
+          console.log("indexの変更がsupabaseに保存されました!!");
+        }
+      } catch (err) {
+        console.error("データベース更新中にエラーが発生しました:", err);
+      }
+    };
+
+    updateWordIndex();
   };
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveIndex(swiper.activeIndex);
   };
 
-  const isNotFirstOrLastSlide = activeIndex > 0 && activeIndex < words!.length * 5 + 1;
+  const isNotFirstOrLastSlide = activeIndex > 0 && activeIndex < words.length * 5 + 1;
 
   return (
     <div className="h-screen p-4 flex flex-col items-center ">
@@ -93,49 +131,79 @@ const Review = () => {
             <div className="text-3xl font-bold mb-4">Let's get started ! ➞</div>
           </div>
         </SwiperSlide>
-        {words!.map((word) => (
-          <React.Fragment key={word.id}>
+        {words.map((word) => (
+          <div key={word.id}>
             {word.word && (
-              <SwiperSlide>
-                <div className="text-gray-400 pt-3 pl-3 ">語句</div>
-                <div className="h-full flex items-center justify-center text-3xl -mt-8 px-20">
-                  <div className="font-bold">{word.word}</div>
+              <SwiperSlide key={`${word.id}-word`}>
+                <div className="flex flex-col h-full justify-between">
+                  <div className="text-gray-400 pt-3 px-3 xs:text-2xl">語句</div>
+                  <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
+                    <div className="font-bold">{word.word}</div>
+                  </div>
+                  <CustomSlider
+                    sliderValue={word.index}
+                    onChange={(value) => handleSliderChange(value, word.id)}
+                  />
                 </div>
               </SwiperSlide>
             )}
             {word.meaning && (
-              <SwiperSlide>
-                <div className="text-gray-400 pt-3 pl-3 ">意味</div>
-                <div className="w-full h-full flex items-center justify-center text-3xl -mt-8 px-20">
-                  <div className="font-bold">{word.meaning}</div>
+              <SwiperSlide key={`${word.id}-meaning`}>
+                <div className="flex flex-col h-full justify-between">
+                  <div className="text-gray-400 pt-3 px-3 xs:text-2xl">意味</div>
+                  <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
+                    <div className="font-bold">{word.meaning}</div>
+                  </div>
+                  <CustomSlider
+                    sliderValue={word.index}
+                    onChange={(value) => handleSliderChange(value, word.id)} 
+                  />
                 </div>
               </SwiperSlide>
             )}
             {word.example && (
-              <SwiperSlide>
-                <div className="text-gray-400 pt-3 pl-3 ">例文</div>
-                <div className="w-full h-full flex items-center justify-center text-2xl -mt-8 px-20">
-                  <div className="leading-normal">{word.example}</div>
+              <SwiperSlide key={`${word.id}-example`}>
+              <div className="flex flex-col h-full justify-between">
+                <div className="text-gray-400 pt-3 px-3 xs:text-2xl">例文</div>
+                <div className="f-full flex items-center justify-center text-3xl pl-16 pr-16">
+                  <div className="font-bold">{word.example}</div>
                 </div>
-              </SwiperSlide>
+                <CustomSlider
+                  sliderValue={word.index}
+                  onChange={(value) => handleSliderChange(value, word.id)} 
+                />
+              </div>
+            </SwiperSlide>
             )}
             {word.example_translation && (
-              <SwiperSlide>
-                <div className="text-gray-400 pt-3 pl-3 ">例文訳</div>
-                <div className="w-full h-full flex items-center justify-center text-2xl -mt-8 px-20">
-                  <div className="leading-normal">{word.example_translation}</div>
+              <SwiperSlide key={`${word.id}-example_translation`}>
+              <div className="flex flex-col h-full justify-between">
+                <div className="text-gray-400 pt-3 px-3 xs:text-2xl">例文訳</div>
+                <div className="f-full flex items-center justify-center text-3xl pl-16 pr-16">
+                  <div className="font-bold">{word.example_translation}</div>
                 </div>
-              </SwiperSlide>
+                <CustomSlider
+                  sliderValue={word.index}
+                  onChange={(value) => handleSliderChange(value, word.id)} 
+                />
+              </div>
+            </SwiperSlide>
             )}
             {word.memo && (
-              <SwiperSlide>
-                <div className="text-gray-400 pt-3 pl-3 ">メモ</div>
-                <div className="w-full h-full flex items-center justify-center text-xl -mt-8 px-20">
-                  <div className="leading-normal">{word.memo}</div>
+              <SwiperSlide key={`${word.id}-memo`}>
+                <div className="flex flex-col h-full justify-between">
+                <div className="text-gray-400 pt-3 px-3 xs:text-2xl">メモ</div>
+                <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
+                  <div className="font-bold">{word.memo}</div>
                 </div>
+                <CustomSlider
+                  sliderValue={word.index}
+                  onChange={(value) => handleSliderChange(value, word.id)}
+                />
+              </div>
               </SwiperSlide>
             )}
-          </React.Fragment>
+          </div>
         ))}
 
         <SwiperSlide>
@@ -157,22 +225,6 @@ const Review = () => {
         </SwiperSlide>
       </Swiper>
 
-      {isNotFirstOrLastSlide && (
-        <div className="mt-4 w-full text-center flex justify-center max-w-3xl">
-          <input
-            type="range"
-            name="priority"
-            min="0"
-            max="10"
-            value={indexValues[Math.floor((activeIndex - 1) / 5)]}
-            onChange={handleSliderChange}
-            className="w-2/3"
-          />
-          <div className="px-2">
-            {indexValues[Math.floor((activeIndex - 1) / 5)]}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

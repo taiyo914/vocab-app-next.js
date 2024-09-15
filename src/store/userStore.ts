@@ -19,6 +19,7 @@ interface UserState {
   fetchUserWordsSettings: () => Promise<string | null>;
   fetchWords: () => Promise<string | null>;
   setWordsSettings: (settings: any) => void;
+  setWords: (words: WordType[]) => void; // 新しくsetWordsを追加
   incrementOffset: () => void;
   decrementOffset: () => void;
 }
@@ -106,6 +107,8 @@ const useUserStore = create<UserState>((set, get) => ({
   },
 
   setWordsSettings: (settings) => set({ wordsSettings: settings }),
+
+  setWords: (words) => set({ words }), // ここでsetWordsを定義
 
   incrementOffset: () => {
     const { wordsSettings } = get();
