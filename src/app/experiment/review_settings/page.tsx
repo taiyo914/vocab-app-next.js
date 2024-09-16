@@ -10,21 +10,21 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Link from "next/link";
 import useUserStore from "@/store/userStore";
-import LoadingDots from "../LoadingDots";
-import CustomSlider from "./CustomSlider";
+import LoadingDots from "@/app/LoadingDots";
+import CustomSlider from "@/app/review/CustomSlider";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
-import EditModal from "./EditModal";
+import EditModal from "@/app/review/EditModal";
 import useReviewSettingsStore from "@/store/reviewSettingsStore"
+import ReviewSettingsModal from "./ReviewSettingsModal";
 
 const Review = () => {
   const supabase = createClient();
   const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの開閉状態
   const [editWord, setEditWord] = useState<WordType | null>(null); // 編集するwordの状態
   const {userId, words, wordsSettings, setWords,
-    fetchWords, fetchUserId, fetchUserWordsSettings,} = useUserStore();
+         fetchWords, fetchUserId, fetchUserWordsSettings,} = useUserStore();
   const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore()
-  
   // userId の取得（初回のみ実行）
   useEffect(() => {
     if (!userId) {
@@ -68,7 +68,7 @@ const Review = () => {
   const handleSliderChange = (newIndexValue: number, wordId: string) => {
 
     //words状態を更新
-    const updatedWords = words?.map((word) =>
+    const updatedWords = words!.map((word) =>
       word.id === wordId ? { ...word, index: newIndexValue } : word
     );
 
@@ -94,6 +94,7 @@ const Review = () => {
     updateWordIndex();
   };
 
+  /////////////////////////////////////////編集モーダルに関する記述////////////////////////////////////////////
   const openModal = (word: WordType) => { //wordを受け取り、editWordに初期値として情報をセットしてからモーダルを開く
     setEditWord(word); 
     setIsModalOpen(true); // モーダルを開く
@@ -116,7 +117,7 @@ const Review = () => {
 
       if (error) throw new Error(error.message);
 
-      const updateWords = words.map((word) =>
+      const updateWords = words!.map((word) =>
         word.id === editWord.id ? { ...editWord } : word
       );
   
@@ -127,10 +128,12 @@ const Review = () => {
       console.error('更新エラー:', err.message);
     }
   };
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   return (
     <>
       <div className="h-screen p-4  short:p-0 flex flex-col items-center ">
+      
         <div className="w-full">
           <div className="flex justify-between items-center mb-3 short:mb-0 space-x-3">
             <Link
@@ -146,7 +149,6 @@ const Review = () => {
             >
               完 了
             </Link>
-
           </div>
         </div>
         <Swiper
@@ -163,7 +165,7 @@ const Review = () => {
               <div className="text-3xl font-bold mb-4">Let's get started ! ➞</div>
             </div>
           </SwiperSlide>
-          {words.map((word) => (
+          {words!.map((word) => (
             <div key={word.id}>
               {word.word && (
                 <SwiperSlide key={`${word.id}-word`}>
@@ -314,12 +316,12 @@ const Review = () => {
       </div>
           
        {/* モーダル */}
-          <EditModal
-            isModalOpen={isModalOpen}
-            closeModal={closeModal}
-            editWord={editWord}
-            setEditWord={setEditWord}
-          />
+        <EditModal
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          editWord={editWord}
+          setEditWord={setEditWord}
+        />
     </>
   );
 };

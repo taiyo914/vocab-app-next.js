@@ -11,19 +11,14 @@ import useTabStore from "@/store/currentTabStore";
 import { debounce } from "lodash"; 
 import CardsDisplay from "./CardsDisplay";
 import LoadingDots from "@/app/LoadingDots";
+import useReviewSettingsStore from "@/store/reviewSettingsStore"
 
 
 const DisplayContent = () => {
   const { currentTab } = useTabStore();
-  const {
-    userId,
-    wordsSettings,
-    words,
-    fetchingKey, // fetchingKeyをZustandから取得
-    fetchUserId,
-    fetchUserWordsSettings,
-    fetchWords,
-  } = useUserStore();
+  const { userId, wordsSettings, words, fetchingKey, 
+          fetchUserId, fetchUserWordsSettings, fetchWords, } = useUserStore();
+  const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore()
 
   useEffect(() => {
     fetchUserId(); // 初回のみ取得、キャッシュ済みなら何もしない
@@ -43,6 +38,13 @@ const DisplayContent = () => {
       updatePageOffsetInSupabase(wordsSettings.page_offset);
     }
   }, [userId, wordsSettings, fetchWords]);
+
+  useEffect(() => {
+    if (userId && !fields && showEmptyCards === null) {
+      fetchReviewSettings(userId); // userId が存在し、fields がまだ取得されていない場合に取得
+      console.log("設定の取得", fields, showEmptyCards)
+    }
+  }, [userId, fields, showEmptyCards, fetchReviewSettings]);
 
   //ページネーションを更新する関数
   const updatePageOffsetInSupabase = useCallback(
