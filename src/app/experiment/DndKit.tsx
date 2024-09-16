@@ -11,7 +11,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
-
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 export default function App() {
   const [items, setItems] = useState(["item-1", "item-2", "item-3", "item-4"]);
   const mouseSensor = useSensor(MouseSensor);
@@ -32,7 +32,7 @@ export default function App() {
   return (
     <>
       <p>{items}</p>
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           <div className="flex flex-col justify-center items-center p-10 m-10 border rounded">
             {items.map((id) => (
@@ -90,7 +90,7 @@ function SortableItem({ id }: { id: string }) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition ? `transform 0.3s ease ` : undefined,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.8 : 1,
   };
 
   return (
