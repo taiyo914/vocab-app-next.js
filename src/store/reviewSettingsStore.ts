@@ -43,6 +43,12 @@ const useReivewSettingsStore = create<ReivewSettings>((set) => ({
         .upsert({ user_id: userId, fields, show_empty_cards:showEmptyCards });
 
       if (error) throw new Error(error.message);
+
+      set({
+        fields, 
+        showEmptyCards,
+        error: null, // エラーをクリア
+      });
     } catch (err: any) {
       set({ error: err.message });
     }
