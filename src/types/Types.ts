@@ -12,6 +12,7 @@ export type WordType = {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
+  [key: string]: string | number | boolean | null;
 };
 
 export type WordsSettingsType = {

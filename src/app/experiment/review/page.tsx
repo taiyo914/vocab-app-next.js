@@ -27,9 +27,9 @@ const Review = () => {
   const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore()
 
 
-    ////////////////////////////////////////////////////////////////////
-    const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-    ////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  ////////////////////////////////////////////////////////////////////
 
 
 
@@ -137,39 +137,69 @@ const Review = () => {
     }
   };
 
+  const renderField = (word:WordType, field: string, showEmptyCards:boolean) => {
+    const value = word[field]; 
+    if (!showEmptyCards && !value) {
+      return null;
+    }
 
-  const renderField = (word:WordType , field:string) => {
     switch (field) {
       case 'word':
-        return word.word ? <div>{word.word}</div> : null;
+        return (
+          <div className="flex gap-2 border p-3 mb-1">
+            <h3 className="text-red-500">語句</h3>
+            <div>{value || "（未入力)"}</div>
+          </div>
+        );
       case 'meaning':
-        return word.meaning ? <div>{word.meaning}</div> : null;
+        return (
+          <div className="flex gap-2 border p-3 mb-1">
+            <h3 className="text-blue-500">意味</h3>
+            <div>{value || "（未入力）"}</div>
+          </div>
+        );
       case 'example':
-        return word.example ? <div>{word.example}</div> : null;
+        return (
+          <div className="flex gap-2 border p-3 mb-1">
+            <h3 className="text-green-500">例文</h3>
+            <div>{value || "（未入力）"}</div>
+          </div>
+        );
       case 'example_translation':
-        return word.example_translation ? <div>{word.example_translation}</div> : null;
+        return (
+          <div className="flex gap-2 border p-3 mb-1">
+            <h3 className="text-yellow-500">例文訳</h3>
+            <div>{value || "（未入力）"}</div>
+          </div>
+        );
       case 'memo':
-        return word.memo ? <div>{word.memo}</div> : null;
+        return (
+          <div className="flex gap-2 border p-3 mb-1">
+            <h3 className="text-purple-500">メモ</h3>
+            <div>{value || "（未入力）"}</div>
+          </div>
+        );
       default:
         return null;
     }
   };
   
+  
   return (
     <>
-      {/* <div>
+      <div>
         {words!.map((word) => (
           <div key={word.id}>
             {fields
               .filter((field) => !field.startsWith('-')) // 非表示項目はスキップ
-              .map((field) => (
+              .map((field ) => (
                 <div key={`${word.id}-${field}`}>
-                  {renderField(word, field)}
+                  {renderField(word, field, showEmptyCards)}
                 </div>
               ))}
           </div>
         ))}
-      </div> */}
+      </div>
       <div className="flex justify-center items-center h-screen">
       <button 
           onClick={() => setIsSettingsModalOpen(true)} 
