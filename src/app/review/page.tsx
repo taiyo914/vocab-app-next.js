@@ -169,7 +169,8 @@ const Review = () => {
                       <div className="text-gray-400 xs:text-2xl">語句</div>
                       <button 
                         onClick={() => openModal(word)}
-                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500">
+                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out">
                         <PencilSquareIcon className="h-5"/>
                         <div >カードを編集</div>
                       </button>
@@ -193,7 +194,8 @@ const Review = () => {
                       <div className="text-gray-400 xs:text-2xl">意味</div>
                       <button 
                         onClick={() => openModal(word)}
-                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500">
+                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                          hover:bg-gray-100 transition-all duration-300 ease-out">
                         <PencilSquareIcon className="h-5"/>
                         <div >カードを編集</div>
                       </button>
@@ -217,7 +219,8 @@ const Review = () => {
                       <div className="text-gray-400 xs:text-2xl">例文</div>
                       <button 
                         onClick={() => openModal(word)}
-                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500">
+                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                          hover:bg-gray-100 transition-all duration-300 ease-out">
                         <PencilSquareIcon className="h-5"/>
                         <div >カードを編集</div>
                       </button>
@@ -241,7 +244,8 @@ const Review = () => {
                       <div className="text-gray-400 xs:text-2xl">例文訳</div>
                       <button 
                         onClick={() => openModal(word)}
-                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500">
+                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                          hover:bg-gray-100 transition-all duration-300 ease-out">
                         <PencilSquareIcon className="h-5"/>
                         <div >カードを編集</div>
                       </button>
@@ -265,7 +269,8 @@ const Review = () => {
                       <div className="text-gray-400 xs:text-2xl">メモ</div>
                       <button 
                         onClick={() => openModal(word)}
-                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500">
+                        className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                          hover:bg-gray-100 transition-all duration-300 ease-out">
                         <PencilSquareIcon className="h-5"/>
                         <div >カードを編集</div>
                       </button>
