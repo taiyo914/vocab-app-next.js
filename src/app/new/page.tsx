@@ -77,14 +77,14 @@ export default function AddNewWord() {
 
   return (
     <div >
-      <div className="xs:px-5 px-3 mt-4 mx-auto max-w-3xl">
-        <div className="flex justify-between xs:items-end items-center mb-4 px-1">
+      <div className="px-5 xs:px-3 mt-4 mx-auto max-w-3xl">
+        <div className="flex justify-between items-end xs:items-center mb-3 px-0.5">
           <Link
             href="/"
             className="
               text-gray-500 
-              p-1 px-2 rounded-2xl -mb-1
-              hover:text-gray-700 hover:bg-gray-200 transition duration-200 
+              p-2 rounded-full
+              hover:text-gray-700 hover:bg-gray-100 transition duration-200 
               flex items-center space-x-1"
           >
             <ArrowUturnLeftIcon className="h-4" />
@@ -93,7 +93,7 @@ export default function AddNewWord() {
           <Link
             href="new/import"
             className="
-              p-3 rounded-lg font-semibold
+              px-4 py-2.5 rounded-xl font-semibold
               bg-gray-900 text-white 
               shadow 
               hover:bg-gray-700 transition duration-300
@@ -104,7 +104,7 @@ export default function AddNewWord() {
           </Link>
         </div>
         <form onSubmit={handleSubmit} autoComplete="off">
-          <div className="xs:p-8 p-6 border bg-white rounded-lg shadow-lg">
+          <div className="p-8 xs:py-5 xs:px-6 border bg-white rounded-lg shadow-lg">
             <div className="mb-5">
               <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
                 語句
@@ -219,7 +219,7 @@ export default function AddNewWord() {
                   value={formData.index}
                   onChange={handleSliderChange}
                   className="
-                    w-full bg-gray-200 rounded-lg  cursor-pointer transition-all duration-300"
+                    w-full bg-gray-200 rounded-lg cursor-pointer transition-all duration-300"
                 />
               </div>
             </div>
