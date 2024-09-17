@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 import Link from "next/link";
 import useUserStore from "@/store/userStore";
 import LoadingDots from "@/components/LoadingDots";
-import CustomSlider from "@/app/review/CustomSlider";
+import CustomSlider from "@/components/CustomSlider";
 import { PencilSquareIcon, Cog6ToothIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
 import EditModal from "@/app/review/EditModal";
