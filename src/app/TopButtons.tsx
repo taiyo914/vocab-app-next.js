@@ -7,7 +7,7 @@ import { PlayCircleIcon } from "@heroicons/react/16/solid";
 const TopButtons = () => {
   return (
     <div> {/* Homeコンポーネントのflex-colの影響で、 これがないと画面幅に広がらないので消さないでください*/}
-      <div className="px-3 py-5 xs:py-4 mx-auto max-w-[2000px]">
+      <div className="px-5 xs:px-3 py-5 xs:py-4 mx-auto max-w-[2000px]">
         <div className="flex jusity-center xs:flex-col gap-x-3 xs:gap-y-3 my-0">
           <Link
             href="new"
