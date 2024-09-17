@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Link from "next/link";
 import useUserStore from "@/store/userStore";
-import LoadingDots from "@/app/LoadingDots";
+import LoadingDots from "@/components/LoadingDots";
 import CustomSlider from "@/app/review/CustomSlider";
 import { PencilSquareIcon, Cog6ToothIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
@@ -380,7 +380,7 @@ const Review = () => {
           navigation
           pagination={{ type: "progressbar" }}
           keyboard={{ enabled: true }}
-          mousewheel={{ forceToAxis: true }} 
+          mousewheel={{ forceToAxis: true }}
           modules={[Navigation, Pagination, Keyboard, Mousewheel]}
           className="w-full h-full p-2"
         >
