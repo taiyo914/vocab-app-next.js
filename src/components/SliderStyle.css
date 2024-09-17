@@ -1,3 +1,5 @@
+
+
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -25,4 +27,10 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
   margin-top: -4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 影をつけて立体感を出す */
+}
+
+.slider-ticks {
+  display: grid;
+  grid-template-columns: 1fr repeat(9, 2fr) 1fr;
+  width: 100%;
 }

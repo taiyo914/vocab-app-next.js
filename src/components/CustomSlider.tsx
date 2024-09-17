@@ -43,23 +43,29 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
           } as React.CSSProperties
         }
       />
-        <div className="slider-ticks">
-          <span onClick={()=>  onChange(0)} className="tick-0"   >0</span>
-          <span onClick={()=>  onChange(1)} className="tick-1to9">1</span>
-          <span onClick={()=>  onChange(2)} className="tick-1to9">2</span>
-          <span onClick={()=>  onChange(3)} className="tick-1to9">3</span>
-          <span onClick={()=>  onChange(4)} className="tick-1to9">4</span>
-          <span onClick={()=>  onChange(5)} className="tick-1to9">5</span>
-          <span onClick={()=>  onChange(6)} className="tick-1to9">6</span>
-          <span onClick={()=>  onChange(7)} className="tick-1to9">7</span>
-          <span onClick={()=>  onChange(8)} className="tick-1to9">8</span>
-          <span onClick={()=>  onChange(9)} className="tick-1to9">9</span>
-          <span onClick={()=>  onChange(10)} className="tick-10 " >10</span>
+    <div className="flex">
+      <div className="w-[7.5px]"></div> {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
+      <div className="slider-ticks">
+          <span onClick={()=>  onChange(0)} className={`${commonStyle} -ml-[16px] pl-[7px]`}>0</span>
+          <span onClick={()=>  onChange(1)} className={`${commonStyle} text-center`}>1</span>
+          <span onClick={()=>  onChange(2)} className={`${commonStyle} text-center`}>2</span>
+          <span onClick={()=>  onChange(3)} className={`${commonStyle} text-center`}>3</span>
+          <span onClick={()=>  onChange(4)} className={`${commonStyle} text-center`}>4</span>
+          <span onClick={()=>  onChange(5)} className={`${commonStyle} text-center`}>5</span>
+          <span onClick={()=>  onChange(6)} className={`${commonStyle} text-center`}>6</span>
+          <span onClick={()=>  onChange(7)} className={`${commonStyle} text-center`}>7</span>
+          <span onClick={()=>  onChange(8)} className={`${commonStyle} text-center`}>8</span>
+          <span onClick={()=>  onChange(9)} className={`${commonStyle} text-center`}>9</span>
+          <span onClick={()=>  onChange(10)} className={`${commonStyle} text-end -mr-[16px] pr-[7px]`} >10</span>
       </div>
+      <div className="w-[7.5px]"></div>  {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
+    </div>
+        
     </div>
   );
 }
 
+const commonStyle = "rounded-full transition-all duration-200"
 
         // <div onClick={()=>  onChange(0)}  className="px-2 cursor-pointer hover:bg-gray-100 transition-all duration-200 rounded-full -ml-1.5 mr-0.5">0</div>
         // <div onClick={()=>  onChange(1)}  className="px-2 cursor-pointer hover:bg-gray-100 transition-all duration-200 rounded-full ">1</div>
