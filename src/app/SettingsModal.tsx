@@ -117,7 +117,7 @@ export default function SettingsModal() {
               py-2 px-3 w-full 
               border border-gray-300 rounded-lg
               bg-gray-50
-              font-[500] xs:font-semibold 
+              xs:font-semibold 
               focus:outline-none focus:border-black"
           />
         </div>
@@ -132,7 +132,7 @@ export default function SettingsModal() {
                 appearance-none w-full bg-gray-50
                 border border-gray-300 rounded-lg
                 pl-3 py-2 
-                font-[580] xs:font-semibold
+                xs:font-semibold
                 focus:outline-none focus:border-black "
             >
               <option value="increment">作成日</option>
@@ -151,7 +151,7 @@ export default function SettingsModal() {
                 appearance-none w-full bg-gray-50
                 border border-gray-300 rounded-lg
                 pl-3 py-2 
-                font-[580] xs:font-semibold
+                xs:font-semibold
                 focus:outline-none focus:border-black "
             >
               <option value="ASC">昇順</option>
@@ -201,7 +201,7 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        font-[500] xs:font-semibold 
+                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className=" text-gray-600 min-w-max ">から</span>
@@ -218,7 +218,7 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        font-[500] xs:font-semibold 
+                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className=" text-gray-600 min-w-max">まで</span>
@@ -241,7 +241,7 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        font-[500] xs:font-semibold 
+                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className="min-w-max  text-gray-600">から</span>
@@ -258,7 +258,7 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        font-[500] xs:font-semibold 
+                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className="min-w-max text-gray-600 text-center">まで</span>
@@ -285,7 +285,7 @@ export default function SettingsModal() {
                           appearance-none w-full bg-gray-50
                           border border-gray-300 rounded-lg
                           pl-3 py-2 
-                          font-[580] xs:font-semibold
+                          xs:font-semibold
                           focus:outline-none focus:border-black "
                       >
                         <option value="created_at">作成日</option>
@@ -335,14 +335,14 @@ export default function SettingsModal() {
           <button
             type="submit"
             className="
-              bg-blue-500 text-lg text-white font-[550]
+              bg-blue-500 text-lg text-white xs:font-semibold
               px-3 py-3 rounded-lg hover:bg-blue-600 transition-all w-full"
           >
             設定を保存
           </button>
           <div
             className="
-              bg-gray-500 text-lg text-white font-[550]
+              bg-gray-500 text-lg text-white xs:font-semibold
               px-3 py-3 rounded-lg hover:bg-gray-600 transition-all w-full text-center cursor-pointer"
             onClick={onClose}
           >
