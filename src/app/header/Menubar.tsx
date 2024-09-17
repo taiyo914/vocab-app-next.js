@@ -22,7 +22,7 @@ const Menubar = ({ isMenuOpen, onClose }: MenuProps) => {
         initial={{ x: "120%", opacity:0}}
         animate={{ x: isMenuOpen ? "0%" : "120%", opacity:1 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="fixed top-0 right-0 h-full w-1/2  bg-gray-100 shadow-2xl px-5 py-4 z-40"
+        className="fixed top-0 right-0 h-full w-1/2 min-w-[300px] bg-gray-100 shadow-2xl px-5 py-4 z-40"
       >
         <div className="flex justify-end">
           <XMarkIcon className="h-9 text-gray-400 cursor-pointer hover:bg-gray-200 rounded-full p-1 transition-all duration-300" onClick={onClose} />
