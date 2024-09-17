@@ -9,7 +9,7 @@ import { BsEraser } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiXMark } from "react-icons/hi2";
 import { FaRegCircleXmark } from "react-icons/fa6";
-import Modal from "./Modal";
+import Modal from "../components/Modal";
 
 export default function SettingsModal() {
   const { isOpen, toggleModal } = useOpenModalStore();
