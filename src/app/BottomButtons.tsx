@@ -13,12 +13,12 @@ const BottomButton = () => {
         <button 
           onClick={handleScrollTop} 
           className="
-            bg-gray-500 text-white rounded-full shadow-md
+            text-gray-600 rounded-full shadow border text-sm xs:text-base
             py-2 px-5 
-            hover:bg-gray-600 transition-all duration-300
-            flex space-x-1"
+            hover:bg-gray-100 transition-all duration-300
+            flex gap-0.5 items-center"
         >
-          <FaArrowUp size={20} /> <div>トップに戻る</div>
+          <FaArrowUp /> トップに戻る
         </button>
       </div>
     </div>
