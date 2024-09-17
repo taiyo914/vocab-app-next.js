@@ -12,32 +12,41 @@ import Link from "next/link";
 import useUserStore from "@/store/userStore";
 import LoadingDots from "@/app/LoadingDots";
 import CustomSlider from "@/app/review/CustomSlider";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import {
+  PencilSquareIcon,
+  Cog6ToothIcon,
+  CheckCircleIcon,
+  ArrowUturnLeftIcon,
+} from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
 import EditModal from "@/app/review/EditModal";
-import useReviewSettingsStore from "@/store/reviewSettingsStore"
+import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import ReviewSettingsModal from "./ReviewSettingsModal";
 
 const Review = () => {
   const supabase = createClient();
-  const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの開閉状態
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // モーダルの開閉状態
   const [editWord, setEditWord] = useState<WordType | null>(null); // 編集するwordの状態
-  const {userId, words, wordsSettings, setWords,
-         fetchWords, fetchUserId, fetchUserWordsSettings,} = useUserStore();
-  const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore()
-
+  const {
+    userId,
+    words,
+    wordsSettings,
+    setWords,
+    fetchWords,
+    fetchUserId,
+    fetchUserWordsSettings,
+  } = useUserStore();
+  const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore();
 
   ////////////////////////////////////////////////////////////////////
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   ////////////////////////////////////////////////////////////////////
 
-
-
   // userId の取得（初回のみ実行）
   useEffect(() => {
     if (!userId) {
       fetchUserId(); // userId がキャッシュされていない場合にのみ取得
-      console.log("ユーザーIDの取得", userId)
+      console.log("ユーザーIDの取得", userId);
     }
   }, [userId, fetchUserId]);
 
@@ -45,27 +54,27 @@ const Review = () => {
   useEffect(() => {
     if (userId && !fields && showEmptyCards === null) {
       fetchReviewSettings(userId); // userId が存在し、fields がまだ取得されていない場合に取得
-      console.log("設定の取得", fields, showEmptyCards)
+      console.log("設定の取得", fields, showEmptyCards);
     }
   }, [userId, fields, showEmptyCards, fetchReviewSettings]);
 
   // words の取得
   useEffect(() => {
     const fetchWordsIfNeeded = async () => {
-      if (!words && userId ) {
+      if (!words && userId) {
         const wordsSettingsError = await fetchUserWordsSettings();
         if (wordsSettingsError) {
           console.error("設定の取得中にエラーが発生しました:", wordsSettingsError);
           return;
         }
         await fetchWords(); // userId と wordsSettings が存在する場合のみ words を取得
-        console.log("単語の取得", words)
+        console.log("単語の取得", words);
       }
     };
     fetchWordsIfNeeded();
   }, [words, userId, wordsSettings, fetchUserWordsSettings, fetchWords]);
 
-  if ( !userId || !fields || showEmptyCards === null || !words) {
+  if (!userId || !fields || showEmptyCards === null || !words) {
     return (
       <div className="flex items-center justify-center h-screen">
         <LoadingDots />
@@ -74,7 +83,6 @@ const Review = () => {
   }
 
   const handleSliderChange = (newIndexValue: number, wordId: string) => {
-
     //words状態を更新
     const updatedWords = words!.map((word) =>
       word.id === wordId ? { ...word, index: newIndexValue } : word
@@ -103,13 +111,14 @@ const Review = () => {
   };
 
   /////////////////////////////////////////編集モーダルに関する記述////////////////////////////////////////////
-  const openModal = (word: WordType) => { //wordを受け取り、editWordに初期値として情報をセットしてからモーダルを開く
-    setEditWord(word); 
-    setIsModalOpen(true); // モーダルを開く
+  const openEditModal = (word: WordType) => {
+    //wordを受け取り、editWordに初期値として情報をセットしてからモーダルを開く
+    setEditWord(word);
+    setIsEditModalOpen(true); // モーダルを開く
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false); // モーダルを閉じる
+  const closeEditModal = () => {
+    setIsEditModalOpen(false); // モーダルを閉じる
     setEditWord(null); // 内容をクリア
   };
 
@@ -118,300 +127,308 @@ const Review = () => {
 
     // Supabaseで更新処理
     try {
-      const { error } = await supabase
-        .from('words')
-        .update(editWord)
-        .eq('id', editWord.id);
+      const { error } = await supabase.from("words").update(editWord).eq("id", editWord.id);
 
       if (error) throw new Error(error.message);
 
-      const updateWords = words!.map((word) =>
-        word.id === editWord.id ? { ...editWord } : word
-      );
-  
+      const updateWords = words!.map((word) => (word.id === editWord.id ? { ...editWord } : word));
+
       setWords(updateWords);
 
-      closeModal(); // 保存後にモーダルを閉じる
+      closeEditModal(); // 保存後にモーダルを閉じる
     } catch (err: any) {
-      console.error('更新エラー:', err.message);
+      console.error("更新エラー:", err.message);
     }
   };
 
-  const renderField = (word:WordType, field: string, showEmptyCards:boolean) => {
-    const value = word[field]; 
-    if (!showEmptyCards && !value) {
-      return null;
-    }
+  const renderField = (word: WordType, field: string, showEmptyCards: boolean) => {
 
     switch (field) {
-      case 'word':
+      case "word":
         return (
-          <div className="flex gap-2 border p-3 mb-1">
-            <h3 className="text-red-500">語句</h3>
-            <div>{value || "（未入力)"}</div>
+          <div className="flex flex-col h-full justify-between items-center ">
+            <div className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </div>
+              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">語句</div>
+              <button
+                onClick={() => openEditModal(word)}
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out"
+              >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </button>
+            </div>
+            <div className="f-full flex items-center justify-center text-3xl px-16">
+              <div className="font-bold">{word.word}</div>
+            </div>
+            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
+              <CustomSlider
+                sliderValue={word.index}
+                onChange={(value) => handleSliderChange(value, word.id)}
+              />
+            </div>
           </div>
         );
-      case 'meaning':
+      case "meaning":
         return (
-          <div className="flex gap-2 border p-3 mb-1">
-            <h3 className="text-blue-500">意味</h3>
-            <div>{value || "（未入力）"}</div>
+          <div className="flex flex-col h-full justify-between items-center ">
+            <div className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </div>
+              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">意味</div>
+              <button
+                onClick={() => openEditModal(word)}
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out"
+              >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </button>
+            </div>
+            <div className="f-full flex items-center justify-center text-3xl px-16">
+              <div className="font-bold">{word.meaning}</div>
+            </div>
+            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
+              <CustomSlider
+                sliderValue={word.index}
+                onChange={(value) => handleSliderChange(value, word.id)}
+              />
+            </div>
           </div>
         );
-      case 'example':
+      case "example":
         return (
-          <div className="flex gap-2 border p-3 mb-1">
-            <h3 className="text-green-500">例文</h3>
-            <div>{value || "（未入力）"}</div>
+          <div className="flex flex-col h-full justify-between items-center ">
+            <div className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </div>
+              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">例文</div>
+              <button
+                onClick={() => openEditModal(word)}
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out"
+              >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </button>
+            </div>
+            <div className="f-full flex items-center justify-center text-3xl px-16">
+              <div className="font-bold">{word.example}</div>
+            </div>
+            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
+              <CustomSlider
+                sliderValue={word.index}
+                onChange={(value) => handleSliderChange(value, word.id)}
+              />
+            </div>
           </div>
         );
-      case 'example_translation':
+      case "example_translation":
         return (
-          <div className="flex gap-2 border p-3 mb-1">
-            <h3 className="text-yellow-500">例文訳</h3>
-            <div>{value || "（未入力）"}</div>
+          <div className="flex flex-col h-full justify-between items-center ">
+            <div className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </div>
+              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">例文訳</div>
+              <button
+                onClick={() => openEditModal(word)}
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out"
+              >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </button>
+            </div>
+            <div className="f-full flex items-center justify-center text-3xl px-16">
+              <div className="font-bold">{word.example_translation}</div>
+            </div>
+            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
+              <CustomSlider
+                sliderValue={word.index}
+                onChange={(value) => handleSliderChange(value, word.id)}
+              />
+            </div>
           </div>
         );
-      case 'memo':
+      case "memo":
         return (
-          <div className="flex gap-2 border p-3 mb-1">
-            <h3 className="text-purple-500">メモ</h3>
-            <div>{value || "（未入力）"}</div>
+          <div className="flex flex-col h-full justify-between items-center ">
+            <div className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </div>
+              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">メモ</div>
+              <button
+                onClick={() => openEditModal(word)}
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out"
+              >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </button>
+            </div>
+            <div className="f-full flex items-center justify-center text-3xl px-16">
+              <div className="font-bold">{word.memo}</div>
+            </div>
+            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
+              <CustomSlider
+                sliderValue={word.index}
+                onChange={(value) => handleSliderChange(value, word.id)}
+              />
+            </div>
           </div>
         );
       default:
         return null;
     }
   };
-  
-  
+
   return (
     <>
-      <div>
-        {words!.map((word) => (
-          <div key={word.id}>
-            {fields
-              .filter((field) => !field.startsWith('-')) // 非表示項目はスキップ
-              .map((field ) => (
-                <div key={`${word.id}-${field}`}>
-                  {renderField(word, field, showEmptyCards)}
-                </div>
-              ))}
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center items-center h-screen">
-      <button 
-          onClick={() => setIsSettingsModalOpen(true)} 
-          className="py-2 px-4 bg-gray-800 text-white rounded"
-        >
-          表示設定
-        </button>
+      <div className="fixed inset-0 p-3 pt-2 short:p-0 flex flex-col items-center ">
+        <div className="w-full short:px-2">
+          <div className="flex justify-between items-center mb-1 short:mb-0 short:mt-1 space-x-3">
+            <Link
+              href="/"
+              className="
+              text-gray-500 text-lg 
+              p-1 px-2 
+              rounded-2xl
+              hover:text-gray-700 hover:bg-gray-200 transition duration-200 
+              flex items-center space-x-1"
+            >
+              <ArrowUturnLeftIcon className="h-4" />
+              <div>戻る</div>
+            </Link>
 
-        {/* モーダルの表示 */}
-        <ReviewSettingsModal 
-          isOpen={isSettingsModalOpen} 
-          onClose={() => setIsSettingsModalOpen(false)} 
-        />
+            <button
+              onClick={() => setIsSettingsModalOpen(true)}
+              className="
+                text-gray-500 text-lg 
+                p-1 px-2
+                rounded-2xl
+                hover:text-gray-700 hover:bg-gray-200 transition duration-200 
+                flex items-center gap-0.5"
+            >
+              <Cog6ToothIcon className="h-5" />
+              設定
+            </button>
+          </div>
+        </div>
+        <Swiper
+          navigation
+          pagination={{ type: "progressbar" }}
+          keyboard={{ enabled: true }}
+          mousewheel={{ forceToAxis: true }} //設定で縦スクロールも選べるようにするとよい
+          modules={[Navigation, Pagination, Keyboard, Mousewheel]}
+          className="w-full h-full border p-2 rounded-lg short:border-none  short:rounded-none"
+        >
+          <SwiperSlide>
+            <div className="h-full flex flex-col items-center justify-center text-3xl text-gray-500 opacity-20">
+              <div className="text-3xl font-bold mb-4">Let's get started ! ➞</div>
+            </div>
+          </SwiperSlide>
+          <div>
+            {words!.map((word) => (
+              <div key={word.id}>
+                {fields
+                  .filter((field) => !field.startsWith("-")) // 非表示項目はスキップ
+                  .map((field) => (
+                    (showEmptyCards || word[field]) &&
+                    <SwiperSlide key={`${word.id}-${field}`}>
+                      {renderField(word, field, showEmptyCards)}
+                    </SwiperSlide>
+                  ))}
+              </div>
+            ))}
+          </div>
+          <SwiperSlide>
+            <div className="h-full flex flex-col items-center justify-center   bg-gradient-to-t from-yellow-300 to-orange-400 text-gray-100 p-8 rounded-lg shadow-xl">
+              <div className="flex space-x-2 text-3xl">
+                <div className="w-7 h-1"></div>
+                <div className="font-bold mb-3">Great job !</div>
+                <div className="animate-bounce"> 🎉</div>
+              </div>
+              <div className="text-lg">すべてのカードを復習しました！</div>
+              <div>
+                →{" "}
+                <Link href="/" className="underline underline-offset-2">
+                  Home
+                </Link>{" "}
+                へ戻る
+              </div>
+            </div>
+          </SwiperSlide>
+        </Swiper>
       </div>
+
+      {/* モーダル */}
+      <EditModal
+        isModalOpen={isEditModalOpen}
+        closeModal={closeEditModal}
+        editWord={editWord}
+        setEditWord={setEditWord}
+      />
+      <ReviewSettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+      />
     </>
   );
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // return (
-  //   <>
-  //     <div className="h-screen p-4  short:p-0 flex flex-col items-center ">
-      
-  //       <div className="w-full">
-  //         <div className="flex justify-between items-center mb-3 short:mb-0 space-x-3">
-  //           <Link
-  //             href="/" //今は簡易的にリンクを付けているが、データベースに状態を更新してから戻る
-  //             className="
-  //               w-full
-  //               py-2 
-  //               border rounded-md shadow
-  //               short:border-none short:bg-blue-100 short:rounded-none
-  //               font-semibold text-center
-  //               hover:bg-blue-500 hover:text-white transition-colors duration-300 ease-out
-  //               short:py-1 "
-  //           >
-  //             完 了
-  //           </Link>
-  //         </div>
-  //       </div>
-  //       <Swiper
-  //         navigation
-  //         pagination={{ type: "progressbar" }}
-  //         keyboard={{ enabled: true }}
-  //         mousewheel={{ forceToAxis: true }} //設定で縦スクロールも選べるようにするとよい
-  //         modules={[Navigation, Pagination, Keyboard, Mousewheel]}
-  //         spaceBetween={30}
-  //         className="w-full h-full border p-2 rounded-lg short:border-none  short:rounded-none"
-  //       >
-  //         <SwiperSlide>
-  //           <div className="h-full flex flex-col items-center justify-center text-3xl text-gray-500 opacity-20">
-  //             <div className="text-3xl font-bold mb-4">Let's get started ! ➞</div>
-  //           </div>
-  //         </SwiperSlide>
-  //         {words!.map((word) => (
-  //           <div key={word.id}>
-  //             {word.word && (
-  //               <SwiperSlide key={`${word.id}-word`}>
-  //                 <div className="flex flex-col h-full justify-between items-center ">
-  //                   <div className="flex justify-between items-center px-5 pt-4 w-full">
-  //                     <div className="text-gray-400 xs:text-2xl">語句</div>
-  //                     <button 
-  //                       onClick={() => openModal(word)}
-  //                       className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-  //                       hover:bg-gray-100 transition-all duration-300 ease-out">
-  //                       <PencilSquareIcon className="h-5"/>
-  //                       <div >カードを編集</div>
-  //                     </button>
-  //                   </div>
-  //                   <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
-  //                     <div className="font-bold">{word.word}</div>
-  //                   </div>
-  //                   <div className="xs:w-2/3 w-5/6 mb-2">
-  //                     <CustomSlider
-  //                       sliderValue={word.index}
-  //                       onChange={(value) => handleSliderChange(value, word.id)}
-  //                     />
-  //                   </div>
-  //                 </div>
-  //               </SwiperSlide>
-  //             )}
-  //             {word.meaning && (
-  //               <SwiperSlide key={`${word.id}-meaning`}>
-  //                 <div className="flex flex-col h-full justify-between items-center ">
-  //                   <div className="flex justify-between items-center px-5 pt-4 w-full">
-  //                     <div className="text-gray-400 xs:text-2xl">意味</div>
-  //                     <button 
-  //                       onClick={() => openModal(word)}
-  //                       className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-  //                         hover:bg-gray-100 transition-all duration-300 ease-out">
-  //                       <PencilSquareIcon className="h-5"/>
-  //                       <div >カードを編集</div>
-  //                     </button>
-  //                   </div>
-  //                   <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
-  //                     <div className="font-bold">{word.meaning}</div>
-  //                   </div>
-  //                   <div className="xs:w-2/3 w-5/6 mb-2">
-  //                     <CustomSlider
-  //                       sliderValue={word.index}
-  //                       onChange={(value) => handleSliderChange(value, word.id)}
-  //                     />
-  //                   </div>
-  //                 </div>
-  //               </SwiperSlide>
-  //             )}
-  //             {word.example && (
-  //               <SwiperSlide key={`${word.id}-example`}>
-  //                 <div className="flex flex-col h-full justify-between items-center ">
-  //                   <div className="flex justify-between items-center px-5 pt-4 w-full">
-  //                     <div className="text-gray-400 xs:text-2xl">例文</div>
-  //                     <button 
-  //                       onClick={() => openModal(word)}
-  //                       className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-  //                         hover:bg-gray-100 transition-all duration-300 ease-out">
-  //                       <PencilSquareIcon className="h-5"/>
-  //                       <div >カードを編集</div>
-  //                     </button>
-  //                   </div>
-  //                   <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
-  //                     <div className="font-bold">{word.example}</div>
-  //                   </div>
-  //                   <div className="xs:w-2/3 w-5/6 mb-2">
-  //                     <CustomSlider
-  //                       sliderValue={word.index}
-  //                       onChange={(value) => handleSliderChange(value, word.id)}
-  //                     />
-  //                   </div>
-  //                 </div>
-  //             </SwiperSlide>
-  //             )}
-  //             {word.example_translation && (
-  //               <SwiperSlide key={`${word.id}-example_translation`}>
-  //                 <div className="flex flex-col h-full justify-between items-center ">
-  //                   <div className="flex justify-between items-center px-5 pt-4 w-full">
-  //                     <div className="text-gray-400 xs:text-2xl">例文訳</div>
-  //                     <button 
-  //                       onClick={() => openModal(word)}
-  //                       className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-  //                         hover:bg-gray-100 transition-all duration-300 ease-out">
-  //                       <PencilSquareIcon className="h-5"/>
-  //                       <div >カードを編集</div>
-  //                     </button>
-  //                   </div>
-  //                   <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
-  //                     <div className="font-bold">{word.example_translation}</div>
-  //                   </div>
-  //                   <div className="xs:w-2/3 w-5/6 mb-2">
-  //                     <CustomSlider
-  //                       sliderValue={word.index}
-  //                       onChange={(value) => handleSliderChange(value, word.id)}
-  //                     />
-  //                   </div>
-  //                 </div>
-  //             </SwiperSlide>
-  //             )}
-  //             {word.memo && (
-  //               <SwiperSlide key={`${word.id}-memo`}>
-  //                 <div className="flex flex-col h-full justify-between items-center ">
-  //                   <div className="flex justify-between items-center px-5 pt-4 w-full">
-  //                     <div className="text-gray-400 xs:text-2xl">メモ</div>
-  //                     <button 
-  //                       onClick={() => openModal(word)}
-  //                       className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-  //                         hover:bg-gray-100 transition-all duration-300 ease-out">
-  //                       <PencilSquareIcon className="h-5"/>
-  //                       <div >カードを編集</div>
-  //                     </button>
-  //                   </div>
-  //                   <div className="f-full flex items-center justify-center text-3xl pl-16 pr-20">
-  //                     <div className="font-bold">{word.memo}</div>
-  //                   </div>
-  //                   <div className="xs:w-2/3 w-5/6 mb-2">
-  //                     <CustomSlider
-  //                       sliderValue={word.index}
-  //                       onChange={(value) => handleSliderChange(value, word.id)}
-  //                     />
-  //                   </div>
-  //                 </div>
-  //               </SwiperSlide>
-  //             )}
-  //           </div>
-  //         ))}
-
-  //         <SwiperSlide>
-  //           <div className="h-full flex flex-col items-center justify-center   bg-gradient-to-t from-yellow-300 to-orange-400 text-gray-100 p-8 rounded-lg shadow-xl">
-  //             <div className="flex space-x-2 text-3xl">
-  //               <div className="w-7 h-1"></div>
-  //               <div className="font-bold mb-3">Great job !</div>
-  //               <div className="animate-bounce"> 🎉</div>
-  //             </div>
-  //             <div className="text-lg">すべてのカードを復習しました！</div>
-  //             <div>
-  //               →{" "}
-  //               <Link href="/" className="underline underline-offset-2">
-  //                 Home
-  //               </Link>{" "}
-  //               へ戻る
-  //             </div>
-  //           </div>
-  //         </SwiperSlide>
-  //       </Swiper>
-  //     </div>
-          
-  //      {/* モーダル */}
-  //       <EditModal
-  //         isModalOpen={isModalOpen}
-  //         closeModal={closeModal}
-  //         editWord={editWord}
-  //         setEditWord={setEditWord}
-  //       />
-  //   </>
-  // );
 };
 
 export default Review;
+
+// <div>
+//   {words!.map((word) => (
+//     <div key={word.id}>
+//       {fields
+//         .filter((field) => !field.startsWith('-')) // 非表示項目はスキップ
+//         .map((field ) => (
+//           <div key={`${word.id}-${field}`}>
+//             {renderField(word, field, showEmptyCards)}
+//           </div>
+//         ))}
+//     </div>
+//   ))}
+// </div>
+// <div className="flex justify-center items-center h-screen">
+// <button
+//     onClick={() => setIsSettingsModalOpen(true)}
+//     className="py-2 px-4 bg-gray-800 text-white rounded"
+//   >
+//     表示設定
+//   </button>
+
+//   {/* モーダルの表示 */}
+//   <ReviewSettingsModal
+//     isOpen={isSettingsModalOpen}
+//     onClose={() => setIsSettingsModalOpen(false)}
+//   />
+// </div>
