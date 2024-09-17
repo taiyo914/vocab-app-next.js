@@ -16,7 +16,7 @@ const config: Config = {
       screens: {
         'xs': '480px', 
         // 'xs': {'max': '450px'}, これで大改革してやる
-        'short': { 'raw': '(max-height: 450px)' },
+        'short': { 'raw': '(max-height: 430px)' },
       },
     },
   },
