@@ -75,7 +75,7 @@ const DisplayContent = () => {
 
   return (
     <div className="border rounded rounded-tl-none shadow">
-      <div className="flex justify-end items-start xs:mt-3 xs:mr-2 mt-2 mr-1 mb-2">
+      <div className="flex justify-end items-start mt-2 mr-1 mb-0.5 ">
         <Pagination/>
       </div>
       {currentTab === 'cards' ? (
@@ -83,7 +83,7 @@ const DisplayContent = () => {
       ) : (
         <TableDisplay key={fetchingKey}  words = {words}/>
       )}
-      <div className="flex justify-end items-start xs:mb-3 xs:mr-2 mb-2 mr-1 mt-3">
+      <div className="flex justify-end items-start mb-2 mr-1 mt-0.5 ">
         <Pagination/>
       </div>
     </div>
