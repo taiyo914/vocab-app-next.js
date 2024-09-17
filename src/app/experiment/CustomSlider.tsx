@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import "./style.css"; // CSSは別ファイルで管理
 
