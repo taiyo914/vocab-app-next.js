@@ -1,6 +1,6 @@
-"use client"
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect } from 'react';
+"use client";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,16 +9,15 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
-
   //後ろの画面をスクロールできなくする設定
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -29,18 +28,18 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
           {/* オーバーレイ */}
           <motion.div
             className="absolute inset-0 bg-black z-40"
-            initial={{ opacity: 0 }}    
-            animate={{ opacity: 0.5 }}   
-            exit={{ opacity: 0 }}        
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
           ></motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: -50 }}  
-            animate={{ opacity: 1, y: 0 }}    
-            exit={{ opacity: 0, y: -50 }}      
-            transition={{ duration: 0.3 }}  
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.3 }}
             className="
               border shadow-lg rounded-2xl
               z-50
