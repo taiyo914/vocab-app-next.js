@@ -8,7 +8,7 @@ const VocabListItem = ({ word } : {word : WordType}) => {
       whileHover={{ scale: 1.01}} 
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      <div className="flex-1 grid grid-cols-5 border-gray-200 bg-white border  xs:shadow-sm shadow rounded-xl py-3 hover:shadow-md transition-all duration-300">
+      <div className="flex-1 grid grid-cols-5 border-gray-200 bg-white border shadow-sm xs:shadow rounded-xl py-3 hover:shadow-md transition-all duration-300">
         <div className="col-span-1 flex items-center border-r border-gray-200 pl-3 pr-3 font-bold text-lg ">
           <div className="flex justify-center items-center min-h-10 min-w-10 bg-gray-300 rounded-full text-lg font-bold mr-3 ">
             {word.index}
