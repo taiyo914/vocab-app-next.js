@@ -9,7 +9,7 @@ const BottomButton = () => {
 
   return (
     <div className="flex-grow"> {/* 親コンポーネントにflex-colがついているので、スクリーンが長いときはここが伸びます */}
-      <div className="flex justify-center mt-5 mb-9 flex-grow">
+      <div className="flex justify-center my-5 flex-grow">
         <button 
           onClick={handleScrollTop} 
           className="
