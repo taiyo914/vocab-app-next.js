@@ -43,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             className="
               border shadow-lg rounded-2xl
               z-50
-              w-1/2 max-w-2xl min-w-[340px] 
+              w-3/5 max-w-2xl min-w-[340px] 
               overflow-hidden
               max-h-[75vh]
               relative"
