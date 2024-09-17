@@ -61,14 +61,14 @@ const DataForm: React.FC = () => {
   };
 
   return (
-    <div className="py-4 xs:px-5 px-3 mx-auto max-w-3xl">
-      <div className="px-1 my-2">
+    <div className="py-4 px-5 xs:p-0 mx-auto max-w-3xl">
+      <div className="mb-1 xs:mb-0 xs:ml-3 xs:mt-3">
         <Link
           href="/new"
           className="
-              text-gray-500 rounded-2xl
-              p-1 px-2 w-fit
-              hover:text-gray-700 hover:bg-gray-200 transition duration-200 
+              text-gray-500 rounded-full
+              py-2 px-3 w-fit
+              hover:text-gray-700 hover:bg-gray-100 transition duration-200 
               flex items-center space-x-1"
         >
           <ArrowUturnLeftIcon className="h-4" />
@@ -77,7 +77,7 @@ const DataForm: React.FC = () => {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center p-6 bg-white text-black rounded-md shadow-lg border"
+        className="flex flex-col items-center p-6 xs:pt-0 bg-white text-black rounded-md shadow-lg xs:shadow-none border xs:border-none"
       >
         <div className="flex items-center mb-3 space-x-2">
           <button
