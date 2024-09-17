@@ -77,8 +77,8 @@ export default function AddNewWord() {
 
   return (
     <div >
-      <div className="px-5 xs:px-3 mt-4 mx-auto max-w-3xl">
-        <div className="flex justify-between items-end xs:items-center mb-3 px-0.5">
+      <div className="px-5 xs:p-0 mt-4 mx-auto max-w-3xl">
+        <div className="flex justify-between items-center mb-3 px-0.5 xs:pr-5 xs:pl-3">
           <Link
             href="/"
             className="
@@ -93,7 +93,8 @@ export default function AddNewWord() {
           <Link
             href="new/import"
             className="
-              px-4 py-2.5 rounded-xl font-semibold
+              px-4 py-2.5
+              rounded-xl font-semibold
               bg-gray-900 text-white 
               shadow 
               hover:bg-gray-700 transition duration-300
@@ -104,7 +105,7 @@ export default function AddNewWord() {
           </Link>
         </div>
         <form onSubmit={handleSubmit} autoComplete="off">
-          <div className="p-8 xs:py-5 xs:px-6 border bg-white rounded-lg shadow-lg">
+          <div className="p-8 xs:py-2 xs:px-5 border xs:border-none bg-white rounded-lg shadow-lg xs:shadow-none">
             <div className="mb-5">
               <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
                 語句
@@ -225,7 +226,7 @@ export default function AddNewWord() {
             </div>
           </div>
 
-          <div className="flex justify-center space-x-3 my-4">
+          <div className="flex justify-center space-x-3 my-4 xs:px-5">
             <button
               type="submit"
               className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-full transition duration-300"
@@ -237,7 +238,7 @@ export default function AddNewWord() {
               onClick={handleSubmitAndContinue}
               className="w-full py-3 px-4 bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full transition duration-300"
             >
-              追加して新規作成
+              追加 & 新規作成
             </button>
           </div>
         </form>
