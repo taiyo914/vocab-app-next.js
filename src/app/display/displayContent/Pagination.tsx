@@ -12,7 +12,7 @@ const Pagination = () => {
         <button
           onClick={decrementOffset}
           disabled={pageOffset === 1}
-          className={`p-1 rounded-full transition duration-200 ${
+          className={`p-2 rounded-full transition duration-200 ${
             pageOffset === 1 ? "opacity-30" : "hover:bg-gray-100"
           }`}
         >
@@ -28,7 +28,7 @@ const Pagination = () => {
         <button
           onClick={incrementOffset}
           disabled={pageOffset * displayCount >= totalWords}
-          className={`p-1 rounded-full transition duration-200 ${
+          className={`p-2 rounded-full transition duration-200 ${
             totalWords !== 0 && pageOffset * displayCount >= totalWords
               ? "opacity-30"
               : "hover:bg-gray-100"
