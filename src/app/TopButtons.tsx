@@ -13,7 +13,8 @@ const TopButtons = () => {
             href="new"
             className="
               text-center font-semibold
-              w-full py-2
+              xs:font-bold xs:text-lg
+              w-full py-2 
               border rounded-md shadow-md 
               hover:bg-gray-200  transition-all duration-300 
               flex items-center justify-center gap-1 xs:gap-0"
@@ -25,7 +26,8 @@ const TopButtons = () => {
           <Link
             href="review"
             className="
-              text-center font-semibold 
+              text-center font-semibold
+              xs:font-bold xs:text-lg
               w-full py-2 
               bg-blue-500 text-white
               rounded-md shadow-md 
