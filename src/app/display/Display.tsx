@@ -9,7 +9,7 @@ export default function Display() {
 
   return (
     <div> {/* Homeコンポーネントのflex-colの影響で、 これがないと画面幅に広がらないので消さないでください*/}
-      <div className="px-3 xs:px-5 max-w-[2000px] mx-auto">
+      <div className="px-5 xs:px-3 max-w-[2000px] mx-auto">
         <DisplayHeader/>
         <DisplayContent />
       </div>
