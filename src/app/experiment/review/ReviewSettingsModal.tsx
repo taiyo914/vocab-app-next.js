@@ -20,6 +20,7 @@ import { FiLayers } from "react-icons/fi";
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  goToFirstSlide: ()=> void;
 }
 
 const fieldLabelMap: { [key: string]: string } = {
@@ -32,7 +33,7 @@ const fieldLabelMap: { [key: string]: string } = {
 
 const sortOrder = ["word", "meaning", "example", "example_translation", "memo"];
 
-const ReviewSettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
+const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalProps) => {
   // const ReviewSettingsModal = () => {
   const { userId } = useUserStore()
   const { fields, showEmptyCards, setFields, saveReviewSettings, setShowEmptyCards } = useReviewSettingsStore();
@@ -105,7 +106,8 @@ const ReviewSettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
     }
     try{
       await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards);
-      alert("設定の保存に成功しました！")
+      // alert("設定の保存に成功しました！")
+      goToFirstSlide()
       onClose(); 
     } catch (err) {
       setError("設定の保存中にエラーが発生しました");

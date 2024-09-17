@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Keyboard, Mousewheel } from "swiper/modules";
@@ -12,16 +12,12 @@ import Link from "next/link";
 import useUserStore from "@/store/userStore";
 import LoadingDots from "@/app/LoadingDots";
 import CustomSlider from "@/app/review/CustomSlider";
-import {
-  PencilSquareIcon,
-  Cog6ToothIcon,
-  CheckCircleIcon,
-  ArrowUturnLeftIcon,
-} from "@heroicons/react/24/outline";
+import { PencilSquareIcon, Cog6ToothIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
 import EditModal from "@/app/review/EditModal";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import ReviewSettingsModal from "./ReviewSettingsModal";
+import { BiHomeAlt2 } from "react-icons/bi";
 
 const Review = () => {
   const supabase = createClient();
@@ -37,10 +33,11 @@ const Review = () => {
     fetchUserWordsSettings,
   } = useUserStore();
   const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore();
-
-  ////////////////////////////////////////////////////////////////////
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  ////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////
+  const swiperRef = useRef<any>(null); // Swiperインスタンスを保持するuseRef
+  //////////////////////////////////////
 
   // userId の取得（初回のみ実行）
   useEffect(() => {
@@ -141,17 +138,25 @@ const Review = () => {
     }
   };
 
-  const renderField = (word: WordType, field: string, showEmptyCards: boolean) => {
+  const goToFirstSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(0); // 最初のスライドに戻る
+    }
+  };
 
+  const renderField = (word: WordType, field: string, showEmptyCards: boolean) => {
     switch (field) {
       case "word":
         return (
           <div className="flex flex-col h-full justify-between items-center ">
-            <div className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+            <div
+              className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
+            >
               <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
                 className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible"
+              >
                 <PencilSquareIcon className="h-5" />
                 <div>カードを編集</div>
               </div>
@@ -179,11 +184,13 @@ const Review = () => {
       case "meaning":
         return (
           <div className="flex flex-col h-full justify-between items-center ">
-            <div className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+            <div
+              className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
+            >
               <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500 invisible"
+              >
                 <PencilSquareIcon className="h-5" />
                 <div>カードを編集</div>
               </div>
@@ -211,11 +218,14 @@ const Review = () => {
       case "example":
         return (
           <div className="flex flex-col h-full justify-between items-center ">
-            <div className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+            <div
+              className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
+            >
               <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
                 className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible"
+              >
                 <PencilSquareIcon className="h-5" />
                 <div>カードを編集</div>
               </div>
@@ -243,11 +253,14 @@ const Review = () => {
       case "example_translation":
         return (
           <div className="flex flex-col h-full justify-between items-center ">
-            <div className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+            <div
+              className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
+            >
               <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
                 className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible"
+              >
                 <PencilSquareIcon className="h-5" />
                 <div>カードを編集</div>
               </div>
@@ -275,11 +288,14 @@ const Review = () => {
       case "memo":
         return (
           <div className="flex flex-col h-full justify-between items-center ">
-            <div className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3">
+            <div
+              className="flex justify-between items-center w-full
+                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
+            >
               <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
                 className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out invisible" >
+                        hover:bg-gray-100 transition-all duration-300 ease-out invisible"
+              >
                 <PencilSquareIcon className="h-5" />
                 <div>カードを編集</div>
               </div>
@@ -311,30 +327,46 @@ const Review = () => {
 
   return (
     <>
-      <div className="fixed inset-0 p-3 pt-2 short:p-0 flex flex-col items-center ">
-        <div className="w-full short:px-2">
-          <div className="flex justify-between items-center mb-1 short:mb-0 short:mt-1 space-x-3">
-            <Link
-              href="/"
+      <div className="fixed inset-0 flex flex-col items-center ">
+        <div className="w-full short:hidden">
+          <div className="flex justify-between items-center">
+            <div className="w-full">
+              <Link
+                href="/"
+                className="
+                  text-gray-600 text-lg short:text-base
+                  w-full bg-gray-100
+                  py-3
+                  hover:bg-gray-200 hover:shadow-sm
+                  transition duration-200 ease-in-out
+                  flex items-center justify-center gap-1"
+              >
+                <BiHomeAlt2 />
+                <div>ホームへ</div>
+              </Link>
+            </div>
+            <button
+              onClick={goToFirstSlide}
               className="
-              text-gray-500 text-lg 
-              p-1 px-2 
-              rounded-2xl
-              hover:text-gray-700 hover:bg-gray-200 transition duration-200 
-              flex items-center space-x-1"
+                text-gray-600 text-lg short:text-base 
+                w-full bg-gray-100 border-x-2
+                py-3
+                hover:bg-gray-200 hover:shadow-sm
+                transition duration-200 ease-in-out
+                flex items-center justify-center gap-1"
             >
               <ArrowUturnLeftIcon className="h-4" />
-              <div>戻る</div>
-            </Link>
-
+              最初から
+            </button>
             <button
               onClick={() => setIsSettingsModalOpen(true)}
               className="
-                text-gray-500 text-lg 
-                p-1 px-2
-                rounded-2xl
-                hover:text-gray-700 hover:bg-gray-200 transition duration-200 
-                flex items-center gap-0.5"
+                text-gray-600 text-lg short:text-base
+                w-full bg-gray-100
+                py-3
+                hover:bg-gray-200 hover:shadow-sm
+                transition duration-200 ease-in-out
+                flex items-center justify-center gap-1"
             >
               <Cog6ToothIcon className="h-5" />
               設定
@@ -342,12 +374,15 @@ const Review = () => {
           </div>
         </div>
         <Swiper
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper; // Swiperのインスタンスを取得
+          }}
           navigation
           pagination={{ type: "progressbar" }}
           keyboard={{ enabled: true }}
-          mousewheel={{ forceToAxis: true }} //設定で縦スクロールも選べるようにするとよい
+          mousewheel={{ forceToAxis: true }} 
           modules={[Navigation, Pagination, Keyboard, Mousewheel]}
-          className="w-full h-full border p-2 rounded-lg short:border-none  short:rounded-none"
+          className="w-full h-full p-2"
         >
           <SwiperSlide>
             <div className="h-full flex flex-col items-center justify-center text-3xl text-gray-500 opacity-20">
@@ -359,12 +394,14 @@ const Review = () => {
               <div key={word.id}>
                 {fields
                   .filter((field) => !field.startsWith("-")) // 非表示項目はスキップ
-                  .map((field) => (
-                    (showEmptyCards || word[field]) &&
-                    <SwiperSlide key={`${word.id}-${field}`}>
-                      {renderField(word, field, showEmptyCards)}
-                    </SwiperSlide>
-                  ))}
+                  .map(
+                    (field) =>
+                      (showEmptyCards || word[field]) && (
+                        <SwiperSlide key={`${word.id}-${field}`}>
+                          {renderField(word, field, showEmptyCards)}
+                        </SwiperSlide>
+                      )
+                  )}
               </div>
             ))}
           </div>
@@ -398,37 +435,10 @@ const Review = () => {
       <ReviewSettingsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
+        goToFirstSlide={goToFirstSlide}
       />
     </>
   );
 };
 
 export default Review;
-
-// <div>
-//   {words!.map((word) => (
-//     <div key={word.id}>
-//       {fields
-//         .filter((field) => !field.startsWith('-')) // 非表示項目はスキップ
-//         .map((field ) => (
-//           <div key={`${word.id}-${field}`}>
-//             {renderField(word, field, showEmptyCards)}
-//           </div>
-//         ))}
-//     </div>
-//   ))}
-// </div>
-// <div className="flex justify-center items-center h-screen">
-// <button
-//     onClick={() => setIsSettingsModalOpen(true)}
-//     className="py-2 px-4 bg-gray-800 text-white rounded"
-//   >
-//     表示設定
-//   </button>
-
-//   {/* モーダルの表示 */}
-//   <ReviewSettingsModal
-//     isOpen={isSettingsModalOpen}
-//     onClose={() => setIsSettingsModalOpen(false)}
-//   />
-// </div>
