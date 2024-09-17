@@ -1,4 +1,6 @@
+"use client"
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -7,6 +9,19 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+
+  //後ろの画面をスクロールできなくする設定
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -29,13 +44,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             className="
               border shadow-lg rounded-2xl
               z-50
-              xs:m-7 m-5 
-              w-1/2 max-w-2xl xs:min-w-[400px] min-w-[300px] 
+              w-1/2 max-w-2xl min-w-[340px] 
               overflow-hidden
-              max-h-[90vh]
+              max-h-[75vh]
               relative"
           >
-            <div className="bg-white p-5 xs:px-10 xs:py-7 max-h-[90vh] overflow-y-auto">
+            <div className="bg-white px-10 xs:px-7 py-7 max-h-[75vh] overflow-y-auto">
               {children}
             </div>
           </motion.div>
