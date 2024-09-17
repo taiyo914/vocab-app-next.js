@@ -6,7 +6,7 @@ const CardsItem = ({ word }:{ word: WordType}) => {
   return (
     <motion.div
       className="
-        xs:shadow-md shadow
+        shadow-md 
         px-4 py-6 
         rounded-lg border border-gray-200 
         flex items-center justify-center"
