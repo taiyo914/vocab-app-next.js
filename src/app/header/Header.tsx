@@ -12,7 +12,7 @@ const Header = () => {
   };
   return (
     <header className="bg-white shadow-md">
-      <div className="max-w-[2000px] mx-auto xs:py-4 py-3 xs:px-5 px-3 flex justify-between items-center">
+      <div className="max-w-[2000px] mx-auto py-4 xs:py-3 px-5 xs:px-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">
           <Link href="/">Vocab Deck</Link>
         </h1>
