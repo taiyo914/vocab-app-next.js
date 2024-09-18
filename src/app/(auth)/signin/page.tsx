@@ -25,24 +25,21 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center">
-      <div className="rounded-lg border p-8 shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Sign In</h1>
+    <div className="h-screen flex flex-col justify-center items-center">
+      <div className="p-8 w-full max-w-md">
+        <h1 className="text-3xl font-bold mb-8 text-center">ログイン</h1>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="mb-4 border border-gray-300 w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" />
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="mb-4 border border-gray-300 w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" />
-        <button onClick={handleSignIn} className="w-full bg-blue-500 text-white p-3 rounded-lg hover:opacity-80 transition duration-300">
-          <span className="font-semibold">Sign In</span>
+        <button onClick={handleSignIn} className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300">
+          <span className="font-semibold">ログイン</span>
         </button>
         <p className="text-red-500 mt-2">{message}</p>
-        <div className="block text-center mt-4 ">
-          <p className="text-sm text-gray-400">You don't have your account?</p>
-          <p>
-            {" "}
-            →{" "}
-            <Link href="/signup" className="text-gray-500 hover:underline  transition-all">
-              Sing Up
-            </Link>
+        <div className="flex flex-col justify-center items-center mt-4 gap-1">
+          <p className="text-sm text-gray-400">アカウントを持っていない方は{" "}
           </p>
+          <Link href="/signup" className="text-gray-500 underline  transition-all">
+            新規アカウント登録
+          </Link>
         </div>
       </div>
     </div>
