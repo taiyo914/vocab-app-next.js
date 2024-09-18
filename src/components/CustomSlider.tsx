@@ -27,23 +27,26 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
   return "rgb(253, 83, 83)"; 
   };
 
+  function ticks1to9(i:number){
+    return(
+      <div onClick={()=>  onChange(i)} className=" pt-[10px] pb-[20px] z-10">
+        <div className={`${commonStyle} text-center hover:bg-sliderColor-${i}`}>{i}</div>
+      </div>
+    )
+  }
   return (
     <div className="w-full">  {/* 親要素の幅を変えることで調整できます */}
       
-      <div className="flex -mb-1.5">
+      <div className="flex -mb-[30px]">
         <div className="w-[7.5px]"></div> {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
         <div className="slider-ticks">
-            <div onClick={()=>  onChange(0)} className={`${commonStyle} -ml-[16px] pl-[7px] hover:bg-sliderColor-0`}>0</div>
-            <div onClick={()=>  onChange(1)} className={`${commonStyle} text-center hover:bg-sliderColor-1`}>1</div>
-            <div onClick={()=>  onChange(2)} className={`${commonStyle} text-center hover:bg-sliderColor-2`}>2</div>
-            <div onClick={()=>  onChange(3)} className={`${commonStyle} text-center hover:bg-sliderColor-3`}>3</div>
-            <div onClick={()=>  onChange(4)} className={`${commonStyle} text-center hover:bg-sliderColor-4`}>4</div>
-            <div onClick={()=>  onChange(5)} className={`${commonStyle} text-center hover:bg-sliderColor-5`}>5</div>
-            <div onClick={()=>  onChange(6)} className={`${commonStyle} text-center hover:bg-sliderColor-6`}>6</div>
-            <div onClick={()=>  onChange(7)} className={`${commonStyle} text-center hover:bg-sliderColor-7`}>7</div>
-            <div onClick={()=>  onChange(8)} className={`${commonStyle} text-center hover:bg-sliderColor-8`}>8</div>
-            <div onClick={()=>  onChange(9)} className={`${commonStyle} text-center hover:bg-sliderColor-9`}>9</div>
-            <div onClick={()=>  onChange(10)} className={`${commonStyle} text-end -mr-[16px] pr-[7px] hover:bg-sliderColor-10`} >10</div>
+            <div onClick={()=>  onChange(0)} className=" -ml-[16px] pl-[7px] pt-[10px] pb-[20px] z-10">
+              <div className={`${commonStyle} hover:bg-sliderColor-0`}>0</div>
+            </div>
+            {Array.from({ length: 9 }, (_, i) => i + 1).map(i => ticks1to9(i))}
+            <div onClick={()=>  onChange(10)} className="-mr-[16px] pr-[7px] text-end pt-[10px] pb-[20px] z-10">
+              <div className={`${commonStyle} hover:bg-sliderColor-10`}>10</div>
+            </div>
         </div>
         <div className="w-[7.5px]"></div>  {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
       </div>
@@ -67,4 +70,4 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
   );
 }
 
-const commonStyle = "rounded-full transition-all duration-200 hover:bg-opacity-30 cursor-pointer py-0.5"
+const commonStyle = "rounded-full transition-all duration-200 hover:bg-opacity-30 cursor-pointer text-gray-400"
