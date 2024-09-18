@@ -144,20 +144,25 @@ const Review = () => {
     }
   };
 
-
-  const commonDisplay = (word: WordType, label: string, content: string, additionalSettings: string ) => {
+  const commonDisplay = (
+    word: WordType,
+    label: string,
+    content: string,
+    additionalSettings: string
+  ) => {
     return (
       <div className="flex flex-col h-full justify-between items-center w-full">
-
         {/* カードのヘッダー */}
-        <div className="
+        <div
+          className="
           flex justify-between items-center w-full
-          px-4 xs:px-2 pt-4 short:pt-2 short:px-3"
+          px-4 xs:px-2 pt-4 short:pt-2 short:px-3 mb-[23px]"
         >
           {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
-            <div className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500 invisible">
-              <PencilSquareIcon className="h-5" /><div>カードを編集</div>
-            </div>
+          <div className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500 invisible">
+            <PencilSquareIcon className="h-5" />
+            <div>カードを編集</div>
+          </div>
           {/* ----------------------------------------------------------*/}
 
           <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">{label}</div>
@@ -172,8 +177,8 @@ const Review = () => {
         </div>
 
         {/* コンテンツ */}
-        <div className="f-full flex items-center justify-center text-3xl px-16">
-          <div className="font-bold">{content}</div>
+        <div className={`f-full flex items-center justify-center px-16 ${additionalSettings}`}>
+          {content}
         </div>
 
         {/* カスタムスライダー */}
@@ -184,32 +189,21 @@ const Review = () => {
           />
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderField = (word: WordType, field: string) => {
     switch (field) {
       case "word":
-        return (
-         commonDisplay(word, "語句", word.word, "")
-        );
+        return commonDisplay(word, "語句", word.word, "text-5xl font-bold");
       case "meaning":
-        return (
-          commonDisplay(word, "意味", word.meaning, "")
-        );
+        return commonDisplay(word, "意味", word.meaning, "text-5xl font-bold");
       case "example":
-        return (
-          commonDisplay(word, "例文", word.example, "")
-        );
+        return commonDisplay(word, "例文", word.example, "text-4xl font-semibold");
       case "example_translation":
-        return (
-          commonDisplay(word, "例文訳", word.example_translation, "")
-        );
+        return commonDisplay(word, "例文訳", word.example_translation, "text-4xl font-semibold");
       case "memo":
-        return (
-          commonDisplay(word, "メモ", word.memo, "")
-        );
-      
+        return commonDisplay(word, "メモ", word.memo, "text-3xl text-gray-600");
       default:
         return null;
     }
@@ -281,7 +275,7 @@ const Review = () => {
           </SwiperSlide>
           <div>
             {words!.map((word) => (
-              <div key={word.id} >
+              <div key={word.id}>
                 {fields
                   .filter((field) => !field.startsWith("-")) // 非表示項目はスキップ
                   .map(
