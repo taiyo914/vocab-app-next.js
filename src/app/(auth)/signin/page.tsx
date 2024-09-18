@@ -1,17 +1,20 @@
 "use client";
 import { useState } from "react";
-import { createClient } from "../../../utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import LoadingDots from "@/components/LoadingDots";
 
 export default function SignIn() {
+  const supabase = createClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
   const handleSignIn = async () => {
-    const supabase = createClient();
+    setLoading(true);  
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -19,12 +22,23 @@ export default function SignIn() {
 
     if (error) {
       setMessage(`Error: ${error.message}`);
+      setLoading(false);  
     } else {
       router.push("/");
     }
   };
 
   return (
+  <>
+    {loading && (
+      <div className="fixed inset-0 bg-black opacity-40 flex flex-col items-center justify-center gap-2">
+        <div className="text-center">
+          <div className="text-white">ログイン中...</div>
+          <div className="text-white">しばらくお待ち下さい</div>
+        </div>
+        <LoadingDots/>
+      </div>
+    )}
     <div className="h-screen flex flex-col justify-center items-center">
       <div className="p-8 w-full max-w-md">
         <h1 className="text-3xl font-bold mb-8 text-center">ログイン</h1>
@@ -43,5 +57,6 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+  </>
   );
 }
