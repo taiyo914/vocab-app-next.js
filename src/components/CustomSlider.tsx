@@ -65,4 +65,4 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
   );
 }
 
-const commonStyle = "rounded-full transition-all duration-200 hover:bg-opacity-30"
+const commonStyle = "rounded-full transition-all duration-200 hover:bg-opacity-30 cursor-pointer"
