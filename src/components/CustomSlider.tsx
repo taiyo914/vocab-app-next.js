@@ -37,15 +37,15 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
   return (
     <div className="w-full">  {/* 親要素の幅を変えることで調整できます */}
       
-      <div className="flex -mb-[30px]">
+      <div className="flex -mb-[27px] short:-mb-[25px]">
         <div className="w-[7.5px]"></div> {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
         <div className="slider-ticks">
-            <div onClick={()=>  onChange(0)} className=" -ml-[16px] pl-[7px] pt-[10px] pb-[20px] z-10">
-              <div className={`${commonStyle} hover:bg-sliderColor-0`}>0</div>
+            <div onClick={()=>  onChange(0)} className=" -ml-[14px] pt-[10px] pb-[20px] z-10">
+              <div className={`${commonStyle} hover:bg-sliderColor-0 pl-[10px]`}>0</div>
             </div>
             {Array.from({ length: 9 }, (_, i) => i + 1).map(i => ticks1to9(i))}
-            <div onClick={()=>  onChange(10)} className="-mr-[16px] pr-[7px] text-end pt-[10px] pb-[20px] z-10">
-              <div className={`${commonStyle} hover:bg-sliderColor-10`}>10</div>
+            <div onClick={()=>  onChange(10)} className="-mr-[14px] text-end pt-[10px] pb-[20px] z-10">
+              <div className={`${commonStyle} hover:bg-sliderColor-10 pr-[7px]`}>10</div>
             </div>
         </div>
         <div className="w-[7.5px]"></div>  {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
