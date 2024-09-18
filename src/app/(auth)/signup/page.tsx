@@ -1,25 +1,28 @@
 "use client";
 import { useState } from "react";
-import { createClient } from "../../../utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
+import LoadingDots from "@/components/LoadingDots";
 
 export default function SignIn() {
+  const supabase = createClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
   const handleSignUp = async () => {
-    const supabase = createClient();
+    setLoading(true); // 
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
-
     if (error) {
       setMessage(`Error: ${error.message}`);
+      setLoading(false); 
     } else {
       const { error: profileError } = await supabase.from("profiles").insert([{ user_id: data.user?.id, user_name: data.user?.email, icon: "" }]);
 
@@ -31,10 +34,13 @@ export default function SignIn() {
 
       if (profileError) {
         setMessage(`Error: ${profileError.message}`);
+        setLoading(false);
       } else if (settingsError) {
         setMessage(`Error: ${settingsError.message}`);
+        setLoading(false);
       } else if (reviewSettingsError) {
         setMessage(`Error: ${reviewSettingsError.message}`);
+        setLoading(false);
       } else {
         router.push("/");
       }
@@ -42,12 +48,27 @@ export default function SignIn() {
   };
 
   return (
+  <>
+    {loading && (
+      <div className="fixed inset-0 bg-black opacity-40 flex flex-col items-center justify-center gap-2">
+        <div className="text-center">
+          <div className="text-white">アカウント作成中...</div>
+          <div className="text-white">しばらくお待ち下さい</div>
+        </div>
+        <LoadingDots/>
+      </div>
+    )}
     <div className="h-screen flex flex-col justify-center items-center">
       <div className="rounded-lg p-8 w-full max-w-md ">
         <h1 className="text-3xl font-bold mb-8 text-center">新規アカウント登録</h1>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="mb-4 border border-gray-300 w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" />
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="mb-4 border border-gray-300 w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" />
-        <button onClick={handleSignUp} className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300">
+        <button onClick={handleSignUp} 
+          className={`w-full text-white p-3 rounded-lg transition duration-300 ${
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+          }`}
+          disabled={loading}
+        >
           <span className="font-semibold">新規アカウント登録</span>
         </button>
         <p className="text-red-500 mt-2">{message}</p>
@@ -61,5 +82,6 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+  </>
   );
 }
