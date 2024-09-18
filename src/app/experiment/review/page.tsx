@@ -155,25 +155,29 @@ const Review = () => {
         {/* カードのヘッダー */}
         <div
           className="
-          flex justify-between items-center w-full
-          px-4 xs:px-2 pt-4 short:pt-2 short:px-3 mb-[23px]"
+          flex justify-between items-start w-full h-[81px]"
+          // px-4 xs:px-2 pt-4 short:pt-2 short:px-3 
         >
           {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
-          <div className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500 invisible">
-            <PencilSquareIcon className="h-5" />
-            <div>カードを編集</div>
+          <div className="invisible xs:hidden pt-[20px] pr-[17px]">
+            <div className="flex items-center border rounded-3xl px-3 py-1 mt-1 ">
+              <PencilSquareIcon className="h-5" />
+              <div>カードを編集</div>
+            </div>
           </div>
           {/* ----------------------------------------------------------*/}
 
-          <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">{label}</div>
-          <button
-            onClick={() => openEditModal(word)}
-            className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                    hover:bg-gray-100 transition-all duration-300 ease-out"
-          >
-            <PencilSquareIcon className="h-5" />
-            <div>カードを編集</div>
-          </button>
+          <div className="text-gray-400 text-2xl pt-[21px] xs:pl-[20px]">{label}</div>
+          <div className="pt-[20px] pr-[17px]">
+            <button
+              onClick={() => openEditModal(word)}
+              className="flex items-center border rounded-3xl px-3 py-1  text-gray-500
+                      hover:bg-gray-100 transition-all duration-300 ease-out"
+            >
+              <PencilSquareIcon className="h-5" />
+              <div>カードを編集</div>
+            </button>
+          </div>
         </div>
 
         {/* コンテンツ */}
@@ -182,7 +186,7 @@ const Review = () => {
         </div>
 
         {/* カスタムスライダー */}
-        <div className="w-5/6 xs:w-full xs:px-5 mb-7">
+        <div className="w-5/6 xs:w-full xs:px-5 mb-[30px]">
           <CustomSlider
             sliderValue={word.index}
             onChange={(value) => handleSliderChange(value, word.id)}
