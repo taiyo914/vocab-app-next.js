@@ -145,19 +145,20 @@ const Review = () => {
   };
 
 
-  const commonDisplay = (word: WordType, label: string, content: string, fontSize: string ) => {
+  const commonDisplay = (word: WordType, label: string, content: string, additionalSettings: string ) => {
     return (
       <div className="flex flex-col h-full justify-between items-center w-full">
+
+        {/* カードのヘッダー */}
         <div className="
           flex justify-between items-center w-full
           px-4 xs:px-2 pt-4 short:pt-2 short:px-3"
         >
-          {/*  長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。 */}
+          {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
             <div className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500 invisible">
-              <PencilSquareIcon className="h-5" />
-              <div>カードを編集</div>
+              <PencilSquareIcon className="h-5" /><div>カードを編集</div>
             </div>
-          {/*  長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。 */}
+          {/* ----------------------------------------------------------*/}
 
           <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">{label}</div>
           <button
@@ -169,9 +170,13 @@ const Review = () => {
             <div>カードを編集</div>
           </button>
         </div>
+
+        {/* コンテンツ */}
         <div className="f-full flex items-center justify-center text-3xl px-16">
           <div className="font-bold">{content}</div>
         </div>
+
+        {/* カスタムスライダー */}
         <div className="w-5/6 xs:w-full xs:px-5 mb-7">
           <CustomSlider
             sliderValue={word.index}
@@ -190,143 +195,21 @@ const Review = () => {
         );
       case "meaning":
         return (
-          <div className="flex flex-col h-full justify-between items-center ">
-            <div
-              className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
-            >
-              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500 invisible"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </div>
-              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">意味</div>
-              <button
-                onClick={() => openEditModal(word)}
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </button>
-            </div>
-            <div className="f-full flex items-center justify-center text-3xl px-16">
-              <div className="font-bold">{word.meaning}</div>
-            </div>
-            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
-              <CustomSlider
-                sliderValue={word.index}
-                onChange={(value) => handleSliderChange(value, word.id)}
-              />
-            </div>
-          </div>
+          commonDisplay(word, "意味", word.meaning, "")
         );
       case "example":
         return (
-          <div className="flex flex-col h-full justify-between items-center ">
-            <div
-              className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
-            >
-              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        invisible"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </div>
-              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">例文</div>
-              <button
-                onClick={() => openEditModal(word)}
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </button>
-            </div>
-            <div className="f-full flex items-center justify-center text-3xl px-16">
-              <div className="font-bold">{word.example}</div>
-            </div>
-            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
-              <CustomSlider
-                sliderValue={word.index}
-                onChange={(value) => handleSliderChange(value, word.id)}
-              />
-            </div>
-          </div>
+          commonDisplay(word, "例文", word.example, "")
         );
       case "example_translation":
         return (
-          <div className="flex flex-col h-full justify-between items-center ">
-            <div
-              className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
-            >
-              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        invisible"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </div>
-              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">例文訳</div>
-              <button
-                onClick={() => openEditModal(word)}
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </button>
-            </div>
-            <div className="f-full flex items-center justify-center text-3xl px-16">
-              <div className="font-bold">{word.example_translation}</div>
-            </div>
-            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
-              <CustomSlider
-                sliderValue={word.index}
-                onChange={(value) => handleSliderChange(value, word.id)}
-              />
-            </div>
-          </div>
+          commonDisplay(word, "例文訳", word.example_translation, "")
         );
       case "memo":
         return (
-          <div className="flex flex-col h-full justify-between items-center ">
-            <div
-              className="flex justify-between items-center w-full
-                      xs:px-3 px-2 pt-4 short:pt-2 short:px-3"
-            >
-              <div // 長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        invisible"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </div>
-              <div className="text-gray-400 text-2xl ml-3 mr-4 mt-1">メモ</div>
-              <button
-                onClick={() => openEditModal(word)}
-                className="flex items-center border rounded-3xl px-3 py-1 mt-1 text-gray-500
-                        hover:bg-gray-100 transition-all duration-300 ease-out"
-              >
-                <PencilSquareIcon className="h-5" />
-                <div>カードを編集</div>
-              </button>
-            </div>
-            <div className="f-full flex items-center justify-center text-3xl px-16">
-              <div className="font-bold">{word.memo}</div>
-            </div>
-            <div className="xs:w-5/6 lg:w-2/3  w-full px-4 mb-2 mb-5">
-              <CustomSlider
-                sliderValue={word.index}
-                onChange={(value) => handleSliderChange(value, word.id)}
-              />
-            </div>
-          </div>
+          commonDisplay(word, "メモ", word.memo, "")
         );
+      
       default:
         return null;
     }
