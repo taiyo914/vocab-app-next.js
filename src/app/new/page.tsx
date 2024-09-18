@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { createClient } from "../../utils/supabase/client";
 import useUserStore from "@/store/userStore";
 import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+import CustomSlider from "@/components/CustomSlider"; 
+
 
 interface FormData {
   word: string;
@@ -211,17 +213,8 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold mb-1 ml-1">優先度 </label>
                 <div className="text-gray-500  pl-2">{formData.index}</div>
               </div>
-              <div className="flex">
-                <input
-                  type="range"
-                  name="index"
-                  min="0"
-                  max="10"
-                  value={formData.index}
-                  onChange={handleSliderChange}
-                  className="
-                    w-full bg-gray-200 rounded-lg cursor-pointer transition-all duration-300"
-                />
+              <div className="flex w-full px-0.5">
+                <CustomSlider sliderValue={formData.index} onChange={(value) => setFormData({ ...formData, index: value })} />
               </div>
             </div>
           </div>
