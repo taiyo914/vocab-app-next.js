@@ -19,6 +19,7 @@ import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import ReviewSettingsModal from "./ReviewSettingsModal";
 import ReviewTopButtons from "./ReviewTopButtons";
 import SpeechButton from "@/components/SpeechButton";
+import "./swiper-style.css"
 
 const Review = () => {
   const supabase = createClient();

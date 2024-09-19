@@ -1,0 +1,16 @@
+/* 450px以下の画面に対するメディアクエリ */
+@media (max-width: 450px) {
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 32px;
+    font-weight: 600;
+  }
+
+  .swiper-button-prev {
+    left: 5px; /* 左の余白を小さくする */
+  }
+
+  .swiper-button-next {
+    right: 5px; /* 右の余白を小さくする */
+  }
+}
