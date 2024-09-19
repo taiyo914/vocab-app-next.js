@@ -8,11 +8,10 @@ import "swiper/swiper-bundle.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import Link from "next/link";
 import useUserStore from "@/store/userStore";
 import LoadingDots from "@/components/LoadingDots";
 import CustomSlider from "@/components/CustomSlider";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
 import EditModal from "@/app/review/EditModal";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
@@ -219,6 +218,9 @@ const Review = () => {
           className="w-full h-full p-2"
         >
           <div>
+            <SwiperSlide>
+              <StartSlide/>
+            </SwiperSlide>
             {words!.map((word) => (
               <div key={word.id}>
                 {fields
@@ -235,18 +237,7 @@ const Review = () => {
             ))}
           </div>
           <SwiperSlide>
-            <div className="h-full flex flex-col items-center justify-center bg-gradient-to-t from-yellow-300 to-orange-400 text-gray-100 p-8 rounded-lg">
-              <div className="flex space-x-2 text-3xl">
-                <div className="w-7 h-1"></div>
-                <h1 className="font-bold mb-3">Great job !</h1>
-                <div className="animate-bounce"> 🎉</div>
-              </div>
-              <p className="text-xl xs:text-lg mb-6">すべてのカードを復習しました！</p>
-              <button className="mb-2 py-2 w-32 bg-blue-500 rounded-full font-semibold hover:bg-blue-600 transition-all duration-200">完 了</button>
-              <p className="text-sm">
-                復習回数が +1 されます
-              </p>
-            </div>
+            <EndSlide/>
           </SwiperSlide>
         </Swiper>
       </div>
@@ -268,3 +259,44 @@ const Review = () => {
 };
 
 export default Review;
+
+const StartSlide = () => {
+  return (
+      <div className="flex items-center justify-center h-full w-full bg-gray-50">
+        <div className="flex flex-col justify-center items-center">
+          <h1 className="text-4xl font-bold mb-4 flex items-center gap-2">
+            Let’s Get Started
+            <ArrowRightIcon className="h-7"/>
+          </h1>
+          <p className="text-gray-400 mb-2 text-center notxs:hidden">
+            画面をスワイプ、または左右をタップ
+          </p>
+          <p className="text-gray-400 mb-2 text-center xs:hidden">
+            画面スワイプ、左右のボタン、矢印キーで操作できます。
+          </p>
+        </div>
+      </div>
+  );
+};
+
+const EndSlide = () => {
+  return (
+    <div className="flex items-center justify-center h-full w-full text-white bg-gradient-to-t from-yellow-200 to-orange-400">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold flex gap-3">
+            <div>Great Job!</div>
+            <div className="animate-bounce"> 🎉</div>
+        </h1>
+        <p className="text-lg mb-5">
+          
+        </p>
+        <button className="bg-white text-gray-700  px-6 py-2 font-semibold rounded-full hover:bg-gray-200 transition duration-300 mb-3">
+          復習完了
+        </button>
+        <p className="text-sm text-gray-100">
+        復習回数がカウントされます
+      </p>
+      </div>
+    </div>
+  );
+};
