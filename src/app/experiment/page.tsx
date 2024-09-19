@@ -7,11 +7,12 @@ import Exercise from "./Exercise";
 import TaskManager from "./TaskManager";
 import ReviewSettingsModal from "../review/ReviewSettingsModal";
 import WordSpeaker from "./WordSpeaker";
+import SpeechButton from "@/components/SpeechBotton";
 
 export default function page() {
   return (
     <>
-      <WordSpeaker/>
+      <SpeechButton word="Hello" accent = "en-US"/>
       {/* <CustomSlider/> */}
       {/* <DND/> */}
       {/* <DndKit /> */}
