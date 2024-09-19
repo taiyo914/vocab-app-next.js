@@ -15,6 +15,7 @@ const config: Config = {
       },
       screens: {
         'xs': {'max': '450px'}, 
+        'notxs': '450.1px',
         'short': { 'raw': '(max-height: 430px)' },
       },
       colors: {
