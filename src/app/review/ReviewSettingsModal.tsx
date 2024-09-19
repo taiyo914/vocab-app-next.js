@@ -16,6 +16,7 @@ import useUserStore from "@/store/userStore";
 import {  EyeSlashIcon, ArrowsUpDownIcon, XMarkIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { FiLayers } from "react-icons/fi";
 import Modal from "@/components/Modal";
+import { RiDraggable } from "react-icons/ri";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -224,15 +225,18 @@ const SortableItem = ({ field, toggleVisibility }: SortableItemProps) => {
       {...listeners}
       style={style}
       className="
-        py-2 pl-4 pr-3 mb-2
+        py-2 pl-1 pr-3 mb-2
         rounded shadow border
-        w-full font-semibold
+        w-full font-[550] xs:font-semibold
         flex justify-between items-center 
         focus:bg-gray-100
         cursor-grab
         select-none"
     >
-      {fieldLabelMap[field]}
+      <div className="flex items-center gap-1">
+        <RiDraggable className="hover:bg-gray-200 rounded-full p-1.5 size-8 text-gray-500 transition-colors duration-200"/>
+        {fieldLabelMap[field]}
+      </div>
       <button
         onClick={(e) => {
           e.stopPropagation(); // クリックイベントがドラッグとして認識されないようにする
