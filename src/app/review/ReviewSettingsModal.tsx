@@ -40,12 +40,14 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
   const [error, setError] = useState<string | null>(null); 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
-      distance: 10, // マウスが10px以上移動したらドラッグを開始(クリックとドラッグを区別するため)
+      delay:100, 
+      tolerance: 5,
     },
   });
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      distance: 10, // マウスが10px以上移動したらドラッグを開始(クリックとドラッグを区別するため)
+      delay:100, 
+      tolerance: 5,
     },
   });
   const sensors = useSensors(mouseSensor, touchSensor);
@@ -212,8 +214,8 @@ const SortableItem = ({ field, toggleVisibility }: SortableItemProps) => {
     id: field,
   });
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: transition ? `transform 0.3s ease ` : undefined,
+    transform: `translate3d(${transform ? transform.x : 0}px, ${transform ? transform.y : 0}px, 0) scale(${isDragging ? 1.03 : 1})`,
+    transition: transition ? `transform 0.4s ease ` : undefined,
     opacity: isDragging ? 0.6 : 1,
   };
   return (
@@ -228,7 +230,8 @@ const SortableItem = ({ field, toggleVisibility }: SortableItemProps) => {
         w-full font-semibold
         flex justify-between items-center 
         focus:bg-gray-100
-        cursor-grab"
+        cursor-grab
+        select-none"
     >
       {fieldLabelMap[field]}
       <button
