@@ -18,7 +18,7 @@ export default function ReviewTopButtons({goToFirstSlide, toggleSettingsModal}: 
                 href="/"
                 className="
                   text-gray-600 text-lg short:text-base
-                  w-full bg-gray-100
+                  w-full bg-gray-50
                   py-3
                   hover:bg-gray-200 hover:shadow-sm
                   transition duration-200 ease-in-out
@@ -32,7 +32,7 @@ export default function ReviewTopButtons({goToFirstSlide, toggleSettingsModal}: 
               onClick={goToFirstSlide}
               className="
                 text-gray-600 text-lg short:text-base 
-                w-full bg-gray-100 border-x-2
+                w-full bg-gray-50 border-x-2
                 py-3
                 hover:bg-gray-200 hover:shadow-sm
                 transition duration-200 ease-in-out
@@ -45,7 +45,7 @@ export default function ReviewTopButtons({goToFirstSlide, toggleSettingsModal}: 
               onClick={toggleSettingsModal}
               className="
                 text-gray-600 text-lg short:text-base
-                w-full bg-gray-100
+                w-full bg-gray-50
                 py-3
                 hover:bg-gray-200 hover:shadow-sm
                 transition duration-200 ease-in-out
