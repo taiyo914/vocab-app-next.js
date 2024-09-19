@@ -231,7 +231,6 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
 };
 
 import { CSS } from "@dnd-kit/utilities";
-import Modal from "./Modal";
 
 interface SortableItemProps {
   field: string;
