@@ -31,15 +31,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.5}}
             onClick={onClose}
           ></motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: -50 }}
+            initial={{ opacity: 0, y: -100 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, y: -100 }}
+            transition={{ duration: 0.5}}
             className="
               rounded-2xl shadow-lg
               z-50
