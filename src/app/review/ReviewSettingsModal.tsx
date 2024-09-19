@@ -13,7 +13,7 @@ import { useSortable, SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import useUserStore from "@/store/userStore";
-import {  EyeSlashIcon, ArrowsUpDownIcon, XMarkIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import {  EyeSlashIcon, ArrowsUpDownIcon, XMarkIcon, XCircleIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline";
 import { FiLayers } from "react-icons/fi";
 import Modal from "@/components/Modal";
 import { RiDraggable } from "react-icons/ri";
@@ -37,7 +37,7 @@ const sortOrder = ["word", "meaning", "example", "example_translation", "memo"];
 const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalProps) => {
   // const ReviewSettingsModal = () => {
   const { userId } = useUserStore()
-  const { fields, showEmptyCards, saveReviewSettings } = useReviewSettingsStore();
+  const { fields, showEmptyCards, accent, saveReviewSettings } = useReviewSettingsStore();
   const [error, setError] = useState<string | null>(null); 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -59,13 +59,15 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
   //一時的なfieldsとshowEmptyCardsを設定し、useEffectで初期値をセット（
   const [temporaryFields, setTemporaryFields] = useState<string[]>([]);  
   const [temporaryShowEmptyCards, setTemporaryShowEmptyCards] = useState<boolean>(false);  
+  const [temporaryAccent, setTemporaryAccent] = useState<string>("en-US");
   useEffect(() => {
     if (isOpen) {
       setTemporaryFields(fields);
       setTemporaryShowEmptyCards(showEmptyCards);
+      setTemporaryAccent(accent || "en-US");
     }
     console.log("復習設定モーダルのuseEffectが走りました")
-  }, [isOpen, fields, showEmptyCards]);
+  }, [isOpen, fields, showEmptyCards, accent]);
 
 
   const visibleFields = temporaryFields.filter((field: string) => !field.startsWith("-"));
@@ -107,7 +109,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
       return
     }
     try{
-      await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards);
+      await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards, temporaryAccent);
       // alert("設定の保存に成功しました！")
       goToFirstSlide()
       onClose(); 
@@ -119,8 +121,13 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
   const handleCancel = () => {
     setTemporaryFields(fields); // Zustandの値に戻す
     setTemporaryShowEmptyCards(showEmptyCards);
+    setTemporaryAccent(accent || "en-US");
     setError(null)
-    onClose(); // モーダルを閉じる
+    onClose(); 
+  };
+
+  const handleAccentSelect = (accent: string) => {
+    setTemporaryAccent(accent);
   };
 
   return (
@@ -143,47 +150,100 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
             <SortableItem key={field} field={field} toggleVisibility={toggleVisibility} />
           ))}
         </SortableContext>
-      
-        <div className="mb-7">
-          <h4 className=" ml-1 mt-6 font-semibold flex items-center gap-1 mb-1">
-            <EyeSlashIcon className="h-5"/>
-            非表示
-          </h4>
-          {hiddenFields.length === 0 && (
-            <div className="text-sm pl-3 my-2 text-gray-400 border-l">右の<XCircleIcon className="h-5 inline mb-0.5"/>ボタンで非表示にできます</div>
-          )} 
-          {hiddenFields.map((field: string) => (
-            <div
-              key={field}
-              className="
-                py-2 pl-4 pr-3 mb-2 w-full 
-                bg-gray-100 rounded border
-                flex justify-between items-center 
-                text-gray-400 font-semibold"
-            >
-              {fieldLabelMap[field]}
-              <button
-                onClick={() => toggleVisibility(field)}
-                className="py-1 px-3 rounded-full shadow bg-gray-300 text-gray-700 font-[550] hover:opacity-70 flex items-center"
-              >
-                表示
-              </button>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-between items-center mb-7">
-          <h4 className="ml-1 font-semibold flex items-center gap-1.5">
-            <FiLayers className="text-lg"/>
-            未入力のカードも表示
-          </h4>
-          <label className="relative inline-flex items-center cursor-pointer mr-0.5">
-            <input type="checkbox" checked={temporaryShowEmptyCards} onChange={()=>setTemporaryShowEmptyCards(!temporaryShowEmptyCards)} className="sr-only peer" />
-            <div className="
-              w-11 h-6 bg-gray-200 rounded-full 
-              peer  dark:bg-gray-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all duration-300 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
-          </label>
-        </div>
       </DndContext>
+      
+      <div className="mb-8">
+        <h4 className=" ml-1 mt-6 font-semibold flex items-center gap-1 mb-1">
+          <EyeSlashIcon className="h-5"/>
+          非表示
+        </h4>
+        {hiddenFields.length === 0 && (
+          <div className="text-sm pl-3 my-2 text-gray-400 border-l">右の<XCircleIcon className="h-5 inline mb-0.5"/>ボタンで非表示にできます</div>
+        )} 
+        {hiddenFields.map((field: string) => (
+          <div
+            key={field}
+            className="
+              py-2 pl-4 pr-3 mb-2 w-full 
+              bg-gray-100 rounded border
+              flex justify-between items-center 
+              text-gray-400 font-semibold"
+          >
+            {fieldLabelMap[field]}
+            <button
+              onClick={() => toggleVisibility(field)}
+              className="py-1 px-3 rounded-full shadow bg-gray-300 text-gray-700 font-[550] hover:opacity-70 flex items-center"
+            >
+              表示
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex justify-between items-center mb-8">
+        <h4 className="ml-1 font-semibold flex items-center gap-1.5">
+          <FiLayers className="text-lg"/>
+          未入力のカードも表示
+        </h4>
+        <label className="relative inline-flex items-center cursor-pointer mr-0.5">
+          <input type="checkbox" checked={temporaryShowEmptyCards} onChange={()=>setTemporaryShowEmptyCards(!temporaryShowEmptyCards)} className="sr-only peer" />
+          <div className="
+            w-11 h-6 bg-gray-200 rounded-full 
+            peer  dark:bg-gray-700 peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all duration-300 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+        </label>
+      </div>
+
+      <div className="mb-8">
+        <h4 className="ml-1 font-semibold flex items-center gap-1.5">
+          <SpeakerWaveIcon className="h-5"/>
+          読み上げのアクセント
+        </h4>
+        <div className="flex gap-1.5 mt-2">
+          <button
+            onClick={() => handleAccentSelect("en-US")}
+            className={`
+              p-1 w-full text-center rounded-lg
+              border transition duration-200
+              flex justify-center items-center gap-1 ${
+              temporaryAccent === "en-US"
+                ? "bg-gray-200"
+                : "hover:bg-gray-100 "
+            }`}
+          >
+            <img src = "/images/icon-us.png" className="h-4 w-4 mb-0.5"/>
+            US
+          </button>
+          <button
+            onClick={() => handleAccentSelect("en-GB")}
+            className={` 
+                p-1 w-full text-center rounded-lg
+                border transition duration-200
+                flex justify-center items-center gap-1 ${
+              temporaryAccent === "en-GB"
+                ? "bg-gray-200"
+                : "hover:bg-gray-100  "
+            }`}
+          >
+            <img src = "/images/icon-uk.png" className="h-4 w-4 mb-0.5"/>
+            UK
+          </button>
+          <button
+            onClick={() => handleAccentSelect("en-AU")}
+            className={` 
+                p-1 w-full text-center rounded-lg
+                border transition duration-200
+                flex justify-center items-center gap-1 ${
+              temporaryAccent === "en-AU"
+                ? "bg-gray-200"
+                : "hover:bg-gray-100"
+            }`}
+          >
+            <img src = "/images/icon-aus.png" className="h-4 w-4 mb-0.5"/>
+            AUS
+          </button>
+      </div>
+      </div>
+        
       <div className="flex mt-3 gap-3">
         <button
           onClick={handleSave}
