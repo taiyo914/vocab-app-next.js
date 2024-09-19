@@ -7,9 +7,12 @@ export default function SignOutBtn() {
   const router = useRouter()
   const singOut = async () =>{
     const  { error } = await supabase.auth.signOut()
-    router.push("/signin")
+   
     if(error){
       alert(`ログアウトできませんでした: ${error.message}`)
+    }else{
+      router.push("/signin")
+      window.location.reload(); //すべての状態を初期化
     }
   }
   return (
