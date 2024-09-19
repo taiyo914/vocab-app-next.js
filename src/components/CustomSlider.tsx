@@ -29,7 +29,7 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
 
   function ticks1to9(i:number){
     return(
-      <div onClick={()=>  onChange(i)} className=" pt-[10px] pb-[20px] z-10">
+      <div key={i} onClick={()=>  onChange(i)} className=" pt-[10px] pb-[20px] xs:z-10 ">
         <div className={`${commonStyle} text-center hover:bg-sliderColor-${i}`}>{i}</div>
       </div>
     )
