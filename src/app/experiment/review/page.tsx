@@ -16,13 +16,12 @@ import { PencilSquareIcon, Cog6ToothIcon, ArrowUturnLeftIcon } from "@heroicons/
 import { WordType } from "@/types/Types";
 import EditModal from "@/app/review/EditModal";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
-import ReviewSettingsModal from "./ReviewSettingsModal";
+import ReviewSettingsModal from "../../review/ReviewSettingsModal";
 import { BiHomeAlt2 } from "react-icons/bi";
 
 const Review = () => {
   const supabase = createClient();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // モーダルの開閉状態
-  const [editWord, setEditWord] = useState<WordType | null>(null); // 編集するwordの状態
+  const swiperRef = useRef<any>(null); // Swiperインスタンスを保持するuseRef
   const {
     userId,
     words,
@@ -33,13 +32,11 @@ const Review = () => {
     fetchUserWordsSettings,
   } = useUserStore();
   const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore();
+  const [editWord, setEditWord] = useState<WordType | null>(null); // 編集するwordの状態
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // モーダルの開閉状態
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
-  //////////////////////////////////////
-  const swiperRef = useRef<any>(null); // Swiperインスタンスを保持するuseRef
-  //////////////////////////////////////
-
-  // userId の取得（初回のみ実行）
+  // userId の取得（存在しないときのみ実行）
   useEffect(() => {
     if (!userId) {
       fetchUserId(); // userId がキャッシュされていない場合にのみ取得
@@ -47,7 +44,7 @@ const Review = () => {
     }
   }, [userId, fetchUserId]);
 
-  // fields と showEmptyCards の取得（初回のみ）
+  // fields と showEmptyCards の取得（存在しないときのみ実行）
   useEffect(() => {
     if (userId && !fields && showEmptyCards === null) {
       fetchReviewSettings(userId); // userId が存在し、fields がまだ取得されていない場合に取得
@@ -55,7 +52,7 @@ const Review = () => {
     }
   }, [userId, fields, showEmptyCards, fetchReviewSettings]);
 
-  // words の取得
+  // words の取得 （存在しないときのみ実行）
   useEffect(() => {
     const fetchWordsIfNeeded = async () => {
       if (!words && userId) {
@@ -107,35 +104,15 @@ const Review = () => {
     updateWordIndex();
   };
 
-  /////////////////////////////////////////編集モーダルに関する記述////////////////////////////////////////////
   const openEditModal = (word: WordType) => {
     //wordを受け取り、editWordに初期値として情報をセットしてからモーダルを開く
     setEditWord(word);
-    setIsEditModalOpen(true); // モーダルを開く
+    setIsEditModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setIsEditModalOpen(false); // モーダルを閉じる
-    setEditWord(null); // 内容をクリア
-  };
-
-  const handleSaveChanges = async () => {
-    if (!editWord) return;
-
-    // Supabaseで更新処理
-    try {
-      const { error } = await supabase.from("words").update(editWord).eq("id", editWord.id);
-
-      if (error) throw new Error(error.message);
-
-      const updateWords = words!.map((word) => (word.id === editWord.id ? { ...editWord } : word));
-
-      setWords(updateWords);
-
-      closeEditModal(); // 保存後にモーダルを閉じる
-    } catch (err: any) {
-      console.error("更新エラー:", err.message);
-    }
+    setIsEditModalOpen(false);
+    setEditWord(null);
   };
 
   const goToFirstSlide = () => {
@@ -156,7 +133,7 @@ const Review = () => {
         <div
           className="
           flex justify-between items-start w-full h-[81px]"
-          // px-4 xs:px-2 pt-4 short:pt-2 short:px-3 
+          // px-4 xs:px-2 pt-4 short:pt-2 short:px-3
         >
           {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
           <div className="invisible xs:hidden pt-[20px] pr-[17px]">
