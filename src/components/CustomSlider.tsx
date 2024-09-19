@@ -6,12 +6,13 @@ import "./SliderStyle.css"
 interface CustomSliderProps {
   sliderValue: number;
   onChange: (value: number) => void;
-}
+} 
 
 export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps) {
   const handleSliderChange = (e: any) => {
     onChange(Number(e.target.value)); // スライダーの値を更新
   };
+
 
   const getSliderColor = () => {
   if (sliderValue == 0) return "#D3D3D3"; 
@@ -29,8 +30,8 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
 
   function ticks1to9(i:number){
     return(
-      <div key={i} onClick={()=>  onChange(i)} className=" pt-[10px] pb-[20px] xs:z-10 ">
-        <div className={`${commonStyle} text-center hover:bg-sliderColor-${i}`}>{i}</div>
+      <div key={i} onClick={()=>  onChange(i)} className=" pt-[10px] pb-[20px] xs:z-10">
+        <div className={`${commonStyle} text-center hover:bg-[backgroundColor]`}>{i}</div>
       </div>
     )
   }
@@ -43,7 +44,33 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
             <div onClick={()=>  onChange(0)} className=" -ml-[14px] pt-[10px] pb-[20px] z-10">
               <div className={`${commonStyle} hover:bg-sliderColor-0 pl-[10px]`}>0</div>
             </div>
-            {Array.from({ length: 9 }, (_, i) => i + 1).map(i => ticks1to9(i))}
+            <div onClick={()=>  onChange(1)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-1`}>1</div>
+            </div>
+            <div onClick={()=>  onChange(2)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-2`}>2</div>
+            </div>
+            <div onClick={()=>  onChange(3)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-3`}>3</div>
+            </div>
+            <div onClick={()=>  onChange(4)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-4`}>4</div>
+            </div>
+            <div onClick={()=>  onChange(5)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-5`}>5</div>
+            </div>
+            <div onClick={()=>  onChange(6)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-6`}>6</div>
+            </div>
+            <div onClick={()=>  onChange(7)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-7`}>7</div>
+            </div>
+            <div onClick={()=>  onChange(8)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-8`}>8</div>
+            </div>
+            <div onClick={()=>  onChange(9)} className=" pt-[10px] pb-[20px] xs:z-10">
+              <div className={`${commonStyle} text-center hover:bg-sliderColor-9`}>9</div>
+            </div>
             <div onClick={()=>  onChange(10)} className="-mr-[14px] text-end pt-[10px] pb-[20px] z-10">
               <div className={`${commonStyle} hover:bg-sliderColor-10 pr-[7px]`}>10</div>
             </div>
