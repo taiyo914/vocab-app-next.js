@@ -14,7 +14,7 @@ const SpeechButton: React.FC<SpeechProps> = ({ word, accent }) => {
     const utterance = new SpeechSynthesisUtterance(word);
     utterance.lang = accent;  
     if(accent == "ja-JP"){
-      utterance.rate = 1.5;
+      utterance.rate = 1.1;
     }
     window.speechSynthesis.speak(utterance);
   };

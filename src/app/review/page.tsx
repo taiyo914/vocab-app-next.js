@@ -18,14 +18,14 @@ import EditModal from "@/app/review/EditModal";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import ReviewSettingsModal from "./ReviewSettingsModal";
 import ReviewTopButtons from "./ReviewTopButtons";
-
+import SpeechButton from "@/components/SpeechButton";
 
 const Review = () => {
   const supabase = createClient();
   const swiperRef = useRef<any>(null); // Swiperインスタンスを保持するuseRef
   const { userId, words, wordsSettings, setWords,
     fetchWords, fetchUserId, fetchUserWordsSettings,} = useUserStore();
-  const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore();
+  const { fields, showEmptyCards, accent, fetchReviewSettings } = useReviewSettingsStore();
   const [editWord, setEditWord] = useState<WordType | null>(null); // 編集するwordの状態
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // モーダルの開閉状態
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -40,11 +40,11 @@ const Review = () => {
 
   // fields と showEmptyCards の取得（存在しないときのみ実行）
   useEffect(() => {
-    if (userId && !fields && showEmptyCards === null) {
+    if (userId && !fields && showEmptyCards === null && !accent) {
       fetchReviewSettings(userId); 
       console.log("設定の取得", fields, showEmptyCards);
     }
-  }, [userId, fields, showEmptyCards, fetchReviewSettings]);
+  }, [userId, fields, showEmptyCards, accent, fetchReviewSettings]);
 
   // words の取得 （存在しないときのみ実行）
   useEffect(() => {
@@ -62,7 +62,7 @@ const Review = () => {
     fetchWordsIfNeeded();
   }, [words, userId, wordsSettings, fetchUserWordsSettings, fetchWords]);
 
-  if (!userId || !fields || showEmptyCards === null || !words) {
+  if (!userId || !fields || showEmptyCards === null || !accent || !words) {
     return (
       <div className="flex items-center justify-center h-screen">
         <LoadingDots />
@@ -117,50 +117,59 @@ const Review = () => {
     word: WordType,
     label: string,
     content: string,
-    additionalSettings: string
+    additionalSettings: string,
+    accent: string
   ) => {
     return (
-      <div className="flex flex-col h-full justify-between items-center w-full">
-        {/* カードのヘッダー */}
-        <div
-          className="
-          flex justify-between items-start w-full h-[81px]"
-          // px-4 xs:px-2 pt-4 short:pt-2 short:px-3 
-        >
-          {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
-          <div className="invisible xs:hidden pt-[20px] pr-[17px]">
-            <div className="flex items-center border rounded-3xl px-3 py-1 mt-1 ">
-              <PencilSquareIcon className="h-5" />
-              <div>カードを編集</div>
+      <div className="h-full w-full relative">
+        <div className="flex flex-col h-full justify-between items-center w-full">
+          {/* カードのヘッダー */}
+          <div
+            className="
+            flex justify-between items-start w-full h-[81px]"
+            // px-4 xs:px-2 pt-4 short:pt-2 short:px-3 
+          >
+            {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
+            <div className="invisible xs:hidden pt-[20px] pr-[17px]">
+              <div className="flex items-center border rounded-3xl px-3 py-1 mt-1 ">
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </div>
             </div>
+
+            <div className="text-gray-400 text-2xl pt-[21px] xs:pl-[20px]">{label}</div>
+            <div className="pt-[20px] pr-[17px]">
+              <button
+                onClick={() => openEditModal(word)}
+                className="flex items-center border rounded-3xl px-3 py-1  text-gray-500
+                        hover:bg-gray-100 transition-all duration-300 ease-out"
+              >
+                <PencilSquareIcon className="h-5" />
+                <div>カードを編集</div>
+              </button>
+            </div>
+
           </div>
-          {/* ----------------------------------------------------------*/}
 
-          <div className="text-gray-400 text-2xl pt-[21px] xs:pl-[20px]">{label}</div>
-          <div className="pt-[20px] pr-[17px]">
-            <button
-              onClick={() => openEditModal(word)}
-              className="flex items-center border rounded-3xl px-3 py-1  text-gray-500
-                      hover:bg-gray-100 transition-all duration-300 ease-out"
-            >
-              <PencilSquareIcon className="h-5" />
-              <div>カードを編集</div>
-            </button>
+          {/* コンテンツ */}
+          <div className={`f-full flex items-center justify-center px-[3.5rem] md:px-[5rem] ${additionalSettings}`}>
+            {content}
+          </div>
+
+          {/* カスタムスライダー */}
+          <div className="w-full px-[42px] xs:w-full xs:px-[22px] mb-[30px] max-w-2xl">
+            <CustomSlider
+              sliderValue={word.index}
+              onChange={(value) => handleSliderChange(value, word.id)}
+            />
           </div>
         </div>
-
-        {/* コンテンツ */}
-        <div className={`f-full flex items-center justify-center px-16 ${additionalSettings}`}>
-          {content}
-        </div>
-
-        {/* カスタムスライダー */}
-        <div className="w-5/6 xs:w-full xs:px-5 mb-[30px]">
-          <CustomSlider
-            sliderValue={word.index}
-            onChange={(value) => handleSliderChange(value, word.id)}
-          />
-        </div>
+          <div className="text-gray-500 h-[45px] w-[45px] absolute bottom-[80px] right-[35px]
+          rounded-full p-[5px] hover:bg-gray-100 transition duration-200
+            xs:h-[40px] xs:w-[40px] xs:right-[15px]
+            short:right-[9px] short:bottom-[70px]">
+            <SpeechButton word={content} accent={accent} />
+          </div>
       </div>
     );
   };
@@ -168,15 +177,15 @@ const Review = () => {
   const renderField = (word: WordType, field: string) => {
     switch (field) {
       case "word":
-        return commonDisplay(word, "語句", word.word, "text-5xl font-bold");
+        return commonDisplay(word, "単語", word.word, "text-5xl lg:text-6xl font-bold", accent);
       case "meaning":
-        return commonDisplay(word, "意味", word.meaning, "text-5xl font-bold");
+        return commonDisplay(word, "意味", word.meaning, "text-5xl lg:text-6xl  font-bold", "ja-JP");
       case "example":
-        return commonDisplay(word, "例文", word.example, "text-4xl font-semibold");
+        return commonDisplay(word, "例文", word.example, "text-4xl lg:text-5xl  font-semibold", accent);
       case "example_translation":
-        return commonDisplay(word, "例文訳", word.example_translation, "text-4xl font-semibold");
+        return commonDisplay(word, "例文訳", word.example_translation, "text-4xl lg:text-5xl   font-semibold", "ja-JP");
       case "memo":
-        return commonDisplay(word, "メモ", word.memo, "text-3xl text-gray-600");
+        return commonDisplay(word, "メモ", word.memo, "text-4xl lg:text-5xl text-gray-600", "ja-JP");
       default:
         return null;
     }
@@ -197,13 +206,6 @@ const Review = () => {
           modules={[Navigation, Pagination, Keyboard, Mousewheel]}
           className="w-full h-full p-2"
         >
-          <SwiperSlide>
-            <div className="h-full flex flex-col items-center justify-center text-3xl text-gray-500 opacity-20 px-16">
-              <div className="text-3xl xs:text-2xl font-bold mb-2">Let's get started!</div>
-              <div className="text-3xl xs:text-2xl font-bold">始めましょう！</div>
-              <div className="text-3xl font-bold">→</div>
-            </div>
-          </SwiperSlide>
           <div>
             {words!.map((word) => (
               <div key={word.id}>
