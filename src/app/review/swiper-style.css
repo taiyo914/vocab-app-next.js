@@ -1,16 +1,37 @@
-/* 450px以下の画面に対するメディアクエリ */
+
+.swiper-button-prev::after,
+  .swiper-button-next::after {
+  }
+
+.swiper-button-prev {
+  left: 20px;
+}
+
+.swiper-button-next {
+  right: 20px; 
+}
+
+
 @media (max-width: 450px) {
   .swiper-button-prev::after,
   .swiper-button-next::after {
-    font-size: 32px;
-    font-weight: 600;
+    display: none;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    top: 90px;
+    bottom: 90px;
+    height: auto; 
+    width: 50px; 
+    /* border-width: 1px; */
   }
 
   .swiper-button-prev {
-    left: 5px; /* 左の余白を小さくする */
+    left: 0; 
   }
-
   .swiper-button-next {
-    right: 5px; /* 右の余白を小さくする */
+    right: 0; 
   }
 }
+

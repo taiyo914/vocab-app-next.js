@@ -153,8 +153,14 @@ const Review = () => {
           </div>
 
           {/* コンテンツ */}
-          <div className={`f-full flex items-center justify-center px-[3.5rem] md:px-[5rem] ${additionalSettings}`}>
-            {content}
+          <div className={`f-full flex flex-col items-center justify-center xs:px-[25px] px-[65px] lg:px-[80px] `}>
+            
+            <div className={`xs:mt-[55px]  ${additionalSettings}`}>
+              {content}
+            </div>
+            {content && (<div className="h-[25px] w-[25px] mt-[15px] text-gray-400 notxs:hidden">
+              <SpeechButton word={content} accent={accent} />
+            </div>)}
           </div>
 
           {/* カスタムスライダー */}
@@ -165,10 +171,15 @@ const Review = () => {
             />
           </div>
         </div>
-          <div className="text-gray-500 h-[45px] w-[45px] absolute bottom-[80px] right-[35px]
-          rounded-full p-[5px] hover:bg-gray-100 transition duration-200
-            xs:h-[40px] xs:w-[40px] xs:right-[15px]
-            short:right-[9px] short:bottom-[70px]">
+        <div 
+          className="
+            xs:hidden
+            h-[32px] w-[32px]
+            text-gray-500
+            absolute top-[50%] -mt-[70px] right-[19px]    
+            hover:text-gray-600
+            transition duration-200"
+          >
             <SpeechButton word={content} accent={accent} />
           </div>
       </div>
@@ -178,15 +189,15 @@ const Review = () => {
   const renderField = (word: WordType, field: string) => {
     switch (field) {
       case "word":
-        return commonDisplay(word, "単語", word.word, "text-5xl lg:text-6xl font-bold", accent);
+        return commonDisplay(word, "単語", word.word, "xs:text-[2.5rem] text-5xl  lg:text-6xl font-bold leading-snug xs:leading-[1.2]", accent);
       case "meaning":
-        return commonDisplay(word, "意味", word.meaning, "text-5xl lg:text-6xl  font-bold", "ja-JP");
+        return commonDisplay(word, "意味", word.meaning, "xs:text-[2.3rem] text-5xl  lg:text-6xl  font-bold leading-snug xs:leading-[1.3] short:leading-[1.25]", "ja-JP");
       case "example":
-        return commonDisplay(word, "例文", word.example, "text-4xl lg:text-5xl  font-semibold", accent);
+        return commonDisplay(word, "例文", word.example, "xs:text-[2rem] text-4xl lg:text-5xl font-semibold leading-snug xs:leading-[1.3] short:leading-[1.26]", accent);
       case "example_translation":
-        return commonDisplay(word, "例文訳", word.example_translation, "text-4xl lg:text-5xl   font-semibold", "ja-JP");
+        return commonDisplay(word, "例文訳", word.example_translation, "xs:text-[1.93rem] text-4xl  lg:text-5xl  font-[580] leading-[1.45] xs:leading-[1.39] short:leading-[1.39] ", "ja-JP");
       case "memo":
-        return commonDisplay(word, "メモ", word.memo, "text-4xl lg:text-5xl text-gray-600", "ja-JP");
+        return commonDisplay(word, "メモ", word.memo, "xs:text-[1.93rem] text-4xl lg:text-5xl text-gray-700 leading-[1.45] xs:leading-[1.39] short:leading-[1.39]", "ja-JP");
       default:
         return null;
     }
