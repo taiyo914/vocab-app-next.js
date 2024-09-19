@@ -198,8 +198,10 @@ const Review = () => {
           className="w-full h-full p-2"
         >
           <SwiperSlide>
-            <div className="h-full flex flex-col items-center justify-center text-3xl text-gray-500 opacity-20">
-              <div className="text-3xl font-bold mb-4">Let's get started ! ➞</div>
+            <div className="h-full flex flex-col items-center justify-center text-3xl text-gray-500 opacity-20 px-16">
+              <div className="text-3xl xs:text-2xl font-bold mb-2">Let's get started!</div>
+              <div className="text-3xl xs:text-2xl font-bold">始めましょう！</div>
+              <div className="text-3xl font-bold">→</div>
             </div>
           </SwiperSlide>
           <div>
@@ -219,20 +221,17 @@ const Review = () => {
             ))}
           </div>
           <SwiperSlide>
-            <div className="h-full flex flex-col items-center justify-center   bg-gradient-to-t from-yellow-300 to-orange-400 text-gray-100 p-8 rounded-lg shadow-xl">
+            <div className="h-full flex flex-col items-center justify-center bg-gradient-to-t from-yellow-300 to-orange-400 text-gray-100 p-8 rounded-lg">
               <div className="flex space-x-2 text-3xl">
                 <div className="w-7 h-1"></div>
-                <div className="font-bold mb-3">Great job !</div>
+                <h1 className="font-bold mb-3">Great job !</h1>
                 <div className="animate-bounce"> 🎉</div>
               </div>
-              <div className="text-lg">すべてのカードを復習しました！</div>
-              <div>
-                →{" "}
-                <Link href="/" className="underline underline-offset-2">
-                  Home
-                </Link>{" "}
-                へ戻る
-              </div>
+              <p className="text-xl xs:text-lg mb-6">すべてのカードを復習しました！</p>
+              <button className="mb-2 py-2 w-32 bg-blue-500 rounded-full font-semibold hover:bg-blue-600 transition-all duration-200">完 了</button>
+              <p className="text-sm">
+                復習回数が +1 されます
+              </p>
             </div>
           </SwiperSlide>
         </Swiper>
