@@ -41,7 +41,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.3 }}
             className="
-              border shadow-lg rounded-2xl
+              rounded-2xl shadow-lg
               z-50
               w-3/5 max-w-2xl min-w-[400px] xs:min-w-[340px] 
               overflow-hidden
