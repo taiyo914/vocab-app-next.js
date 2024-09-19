@@ -214,7 +214,7 @@ const SortableItem = ({ field, toggleVisibility }: SortableItemProps) => {
     id: field,
   });
   const style = {
-    transform: `translate3d(${transform ? transform.x : 0}px, ${transform ? transform.y : 0}px, 0)`,
+    transform: CSS.Transform.toString(transform),
     transition: transition ? `transform 0.4s ease ` : undefined,
     opacity: isDragging ? 0.6 : 1,
   };
