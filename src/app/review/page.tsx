@@ -240,8 +240,8 @@ const Review = () => {
 
       {/* モーダル */}
       <EditModal
-        isModalOpen={isEditModalOpen}
-        closeModal={closeEditModal}
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
         editWord={editWord}
         setEditWord={setEditWord}
       />
