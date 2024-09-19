@@ -33,7 +33,7 @@ const Review = () => {
   // userId の取得（存在しないときのみ実行）
   useEffect(() => {
     if (!userId) {
-      fetchUserId(); // userId がキャッシュされていない場合にのみ取得
+      fetchUserId(); 
       console.log("ユーザーIDの取得", userId);
     }
   }, [userId, fetchUserId]);
@@ -41,7 +41,7 @@ const Review = () => {
   // fields と showEmptyCards の取得（存在しないときのみ実行）
   useEffect(() => {
     if (userId && !fields && showEmptyCards === null) {
-      fetchReviewSettings(userId); // userId が存在し、fields がまだ取得されていない場合に取得
+      fetchReviewSettings(userId); 
       console.log("設定の取得", fields, showEmptyCards);
     }
   }, [userId, fields, showEmptyCards, fetchReviewSettings]);
@@ -55,7 +55,7 @@ const Review = () => {
           console.error("設定の取得中にエラーが発生しました:", wordsSettingsError);
           return;
         }
-        await fetchWords(); // userId と wordsSettings が存在する場合のみ words を取得
+        await fetchWords(); 
         console.log("単語の取得", words);
       }
     };
@@ -69,6 +69,23 @@ const Review = () => {
       </div>
     );
   }
+
+  const openEditModal = (word: WordType) => {
+    //wordを受け取り、editWordに初期値として情報をセットしてからモーダルを開く
+    setEditWord(word);
+    setIsEditModalOpen(true); 
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false); 
+    setEditWord(null); 
+  };
+
+  const goToFirstSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(0); // 最初のスライドに戻る
+    }
+  };
 
   const handleSliderChange = (newIndexValue: number, wordId: string) => {
     //1. words状態を更新
@@ -94,23 +111,6 @@ const Review = () => {
     };
 
     updateWordIndex();
-  };
-
-  const openEditModal = (word: WordType) => {
-    //wordを受け取り、editWordに初期値として情報をセットしてからモーダルを開く
-    setEditWord(word);
-    setIsEditModalOpen(true); 
-  };
-
-  const closeEditModal = () => {
-    setIsEditModalOpen(false); 
-    setEditWord(null); 
-  };
-
-  const goToFirstSlide = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slideTo(0); // 最初のスライドに戻る
-    }
   };
 
   const commonDisplay = (
