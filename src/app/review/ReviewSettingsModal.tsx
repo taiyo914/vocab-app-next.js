@@ -51,8 +51,9 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
     },
   });
   const sensors = useSensors(mouseSensor, touchSensor);
+  
   if (!fields || showEmptyCards === null) {
-    alert("fieldsとshowEmptyCardsが取得できていません");
+    // alert("fieldsとshowEmptyCardsが取得できていません");
     return;
   }
 
