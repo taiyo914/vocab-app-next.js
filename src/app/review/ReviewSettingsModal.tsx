@@ -106,13 +106,35 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
 
   const handleSave = async () => {
     if (!userId) {
-      alert("userIdがありません")
+      console.log("userIdがありません")
       return
     }
-    try{
+
+    const isFieldsChanged = JSON.stringify(fields) !== JSON.stringify(temporaryFields);
+    const isShowEmptyCardsChanged = showEmptyCards !== temporaryShowEmptyCards;
+    const isAccentChanged = accent !== temporaryAccent;
+
+    //アクセントのみが変更されたときは最初のスライドに戻らない
+    if (!isFieldsChanged && !isShowEmptyCardsChanged && isAccentChanged) {
+      try{
+        await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards, temporaryAccent);
+        onClose(); 
+      } catch (err) {
+        setError("設定の保存中にエラーが発生しました");
+      }
+      return;
+    }
+
+    // 全く変更がない場合もモーダルを閉じるだけで終了
+    if (!isFieldsChanged && !isShowEmptyCardsChanged && !isAccentChanged) {
+      onClose();
+      return;
+    }
+
+    // fieldsかshowEmptyCardsは枚数や順番が変わるので最初のスライドに戻る
+    try {
       await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards, temporaryAccent);
-      // alert("設定の保存に成功しました！")
-      goToFirstSlide()
+      goToFirstSlide(); 
       onClose(); 
     } catch (err) {
       setError("設定の保存中にエラーが発生しました");
