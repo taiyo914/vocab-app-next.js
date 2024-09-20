@@ -42,31 +42,77 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
     }
   };
 
+  // const handleDelete = async () => {
+  //   setDeleteLoading(true)
+  //   try {
+  //     const deleteRequest = supabase //awaitはつけない
+  //       .from("words")
+  //       .update({ deleted_at: new Date().toISOString() })
+  //       .eq("id", editWord!.id);
+
+  //     const delay = new Promise((resolve) => setTimeout(resolve, 500)); // 0.5秒の遅延
+  //     // 削除処理と1秒の遅延を並列で実行し、両方が完了するまで待つ（最低0.5秒は待つ）
+  //     const [{ error }] = await Promise.all([deleteRequest, delay]);
+
+  //     if (error) throw new Error(error.message);
+  //     else console.log("削除に成功しました！");
+
+  //     await fetchWords();
+
+  //     onClose();
+  //   } catch (err: any) {
+  //     console.error("削除エラー:", err.message);
+  //   } finally {
+  //     setDeleteLoading(false);
+  //   }
+  // };
+
+  
   const handleDelete = async () => {
     setDeleteLoading(true)
+
     try {
-      const deleteRequest = supabase //awaitはつけない
-        .from("words")
-        .update({ deleted_at: new Date().toISOString() })
-        .eq("id", editWord!.id);
-
-      const delay = new Promise((resolve) => setTimeout(resolve, 500)); // 0.5秒の遅延
-      // 削除処理と1秒の遅延を並列で実行し、両方が完了するまで待つ（最低0.5秒は待つ）
-      const [{ error }] = await Promise.all([deleteRequest, delay]);
-
-      if (error) throw new Error(error.message);
-      else console.log("削除に成功しました！");
+      const response = await fetch("/api/deleteWord", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ wordId: editWord!.id }),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Error deleting word");
+      }
 
       await fetchWords();
-
-      onClose();
+      onClose(); 
     } catch (err: any) {
-      console.error("削除エラー:", err.message);
+      console.error(err.message);
     } finally {
       setDeleteLoading(false);
     }
   };
 
+  // const handleDelete = async () => {
+  //   setDeleteLoading(true)
+  //   try {
+  //     const { error } = await supabase
+  //       .from("words")
+  //       .update({ deleted_at: new Date().toISOString() }) // deleted_atを更新
+  //       .eq("id", editWord!.id);
+
+  //     if (error) {
+  //       throw new Error("Error deleting word: " + error.message);
+  //     }
+
+  //     await fetchWords()
+  //     onClose(); // モーダルを閉じる
+  //   } catch (err: any) {
+  //     console.error(err.message);
+  //   } finally {
+  //     setDeleteLoading(false);
+  //   }
+  // };
 
   return (
    <Modal isOpen ={isOpen} onClose={onClose}>
