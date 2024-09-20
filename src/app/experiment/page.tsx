@@ -15,10 +15,10 @@ import NotificationExp from "./NotificationExp";
 export default function page() {
   return (
     <>
-     <NotificationExp/>
+     {/* <NotificationExp/> */}
       {/* <SwiperEndSlide/> */}
       {/* <SpeechButton word="Hello" accent = "en-US"/> */}
-      {/* <CustomSlider/> */}
+      <CustomSlider/>
       {/* <DND/> */}
       {/* <DndKit /> */}
       {/* <Exercise/> */}
