@@ -381,13 +381,13 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
           : <>
             <div
               className="
-              bg-orange-400 text-gray-800
+              bg-orange-200 text-gray-700
               py-2 font-[550]
               rounded-full mb-4 w-60 text-center"
             >
               復習を記録しました!
             </div>
-            <button onClick={()=>router.push("/")} className="text-gray-700  text-center bg-yellow-100 hover:bg-yellow-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
+            <button onClick={()=>router.push("/")} className="text-gray-700  text-center bg-yellow-100 hover:bg-orange-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
             <div className="text-sm h-4"></div>
           </>
           }
