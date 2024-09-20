@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Keyboard, Mousewheel } from "swiper/modules";
 import "swiper/swiper-bundle.css";
@@ -22,6 +23,7 @@ import "./swiper-style.css"
 
 const Review = () => {
   const supabase = createClient();
+  const router = useRouter();
   const swiperRef = useRef<any>(null); // Swiperインスタンスを保持するuseRef
   const { userId, words, wordsSettings, setWords,
     fetchWords, fetchUserId, fetchUserWordsSettings,} = useUserStore();
@@ -111,6 +113,24 @@ const Review = () => {
     };
 
     updateWordIndex();
+  };
+
+  const handleCompleteReview = async () => {
+    console.log("実行されてる？")
+    try {
+      const wordIds = words!.map((word) => word.id); 
+      const { error } = await supabase.rpc("update_review_info", {
+        word_ids: wordIds,  
+      });
+      if (error) {
+        console.error("複数項目の更新中にエラーが発生しました:", error);
+      } else {
+        console.log("すべての単語のreview_countとreviewed_atを一度に更新しました!");
+        router.push("/")
+      }
+    } catch (err) {
+      console.error("復習完了中にエラーが発生しました:", err);
+    }
   };
 
   const commonDisplay = (
@@ -237,7 +257,7 @@ const Review = () => {
             ))}
           </div>
           <SwiperSlide>
-            <EndSlide/>
+            <EndSlide onClick={handleCompleteReview}/>
           </SwiperSlide>
         </Swiper>
       </div>
@@ -265,7 +285,7 @@ const StartSlide = () => {
       <div className="flex items-center justify-center h-full w-full bg-gray-50">
         <div className="flex flex-col justify-center items-center">
           <h1 className="text-4xl font-bold mb-4 flex items-center gap-2">
-            Let’s Get Started
+            Let's Get Started
             <ArrowRightIcon className="h-7"/>
           </h1>
           <p className="text-gray-400 mb-2 text-center notxs:hidden">
@@ -279,7 +299,7 @@ const StartSlide = () => {
   );
 };
 
-const EndSlide = () => {
+const EndSlide = ({onClick}:any) => {
   return (
     <div className="flex items-center justify-center h-full w-full text-white bg-gradient-to-t from-yellow-200 to-orange-400">
       <div className="text-center">
@@ -290,7 +310,7 @@ const EndSlide = () => {
         <p className="text-lg mb-5">
           
         </p>
-        <button className="bg-white text-gray-700  px-6 py-2 font-semibold rounded-full hover:bg-gray-200 transition duration-300 mb-3">
+        <button onClick={onClick}  className="bg-white text-gray-700  px-6 py-2 font-semibold rounded-full hover:bg-gray-200 transition duration-300 mb-3">
           復習完了
         </button>
         <p className="text-sm text-gray-100">
