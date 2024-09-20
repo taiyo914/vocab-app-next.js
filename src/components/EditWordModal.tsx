@@ -1,20 +1,19 @@
 import React from "react";
 import { createClient } from "@/utils/supabase/client";
-import { motion, AnimatePresence } from "framer-motion";
-import CustomSlider from "../../components/CustomSlider"; // カスタムスライダーをインポート
+import CustomSlider from "./CustomSlider";
 import useUserStore from "@/store/userStore";
 import { WordType } from "@/types/Types";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Modal from "@/components/Modal";
 
-interface EditModalProps {
+interface EditWordModalProps {
   isOpen: boolean;
   onClose: () => void;
   editWord: WordType | null;
   setEditWord: React.Dispatch<React.SetStateAction<WordType | null>>;
 }
 
-const EditModal: React.FC<EditModalProps> = ({
+const EditWordModal: React.FC<EditWordModalProps> = ({
   isOpen,
   onClose,
   editWord,
@@ -154,4 +153,4 @@ const EditModal: React.FC<EditModalProps> = ({
   );
 };
 
-export default EditModal;
+export default EditWordModal;

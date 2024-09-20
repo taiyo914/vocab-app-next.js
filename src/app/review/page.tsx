@@ -14,7 +14,7 @@ import LoadingDots from "@/components/LoadingDots";
 import CustomSlider from "@/components/CustomSlider";
 import { PencilSquareIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
-import EditModal from "@/app/review/EditModal";
+import EditWordModal from "@/components/EditWordModal";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import ReviewSettingsModal from "./ReviewSettingsModal";
 import ReviewTopButtons from "./ReviewTopButtons";
@@ -307,7 +307,7 @@ const Review = () => {
       </div>
 
       {/* モーダル */}
-      <EditModal
+      <EditWordModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         editWord={editWord}
