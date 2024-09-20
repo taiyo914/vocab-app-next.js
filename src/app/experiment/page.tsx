@@ -32,7 +32,7 @@ export default function page() {
             hover:bg-gray-200 transition duration-300 
             flex items-center gap-1">
           復習を記録する
-          {loading && (<Spinner size="h-4" color="fill-yellow-400"/>)}
+          {loading && (<Spinner size="h-4 w-4" borderColor="border-gray-100 border-t-yellow-500"/>)}
         </button>
         <p className="text-sm text-gray-100 text-center">
           今回復習した単語の<br/>
