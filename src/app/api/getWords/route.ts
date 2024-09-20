@@ -16,6 +16,7 @@ export async function POST(request: Request) {
       .from("words")
       .select("*", { count: "exact", head: true }) // head: true でデータを取得せずにカウントだけを実行
       .eq("user_id", userId)
+      .is("deleted_at", null) 
       .gte("index", userWordsSettings.start_index || 0)
       .lte("index", userWordsSettings.end_index || 10)
       .gte("review_count", userWordsSettings.start_review_count || 0)
@@ -32,6 +33,7 @@ export async function POST(request: Request) {
       .from("words")
       .select("id, word, meaning, example, example_translation, memo, index, review_count, reviewed_at, created_at, deleted_at")
       .eq("user_id", userId)
+      .is("deleted_at", null) 
       .gte("index", userWordsSettings.start_index || 0)
       .lte("index", userWordsSettings.end_index || 10)
       .gte("review_count", userWordsSettings.start_review_count || 0)
