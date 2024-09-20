@@ -19,25 +19,31 @@ import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import ReviewSettingsModal from "./ReviewSettingsModal";
 import ReviewTopButtons from "./ReviewTopButtons";
 import SpeechButton from "@/components/SpeechButton";
-import "./swiper-style.css"
+import "./swiper-style.css";
 import Spinner from "@/components/Spiner";
 
 const Review = () => {
   const supabase = createClient();
-  const router = useRouter();
   const swiperRef = useRef<any>(null); // Swiperインスタンスを保持するuseRef
-  const { userId, words, wordsSettings, setWords,
-    fetchWords, fetchUserId, fetchUserWordsSettings,} = useUserStore();
+  const {
+    userId,
+    words,
+    wordsSettings,
+    setWords,
+    fetchWords,
+    fetchUserId,
+    fetchUserWordsSettings,
+  } = useUserStore();
   const { fields, showEmptyCards, accent, fetchReviewSettings } = useReviewSettingsStore();
   const [editWord, setEditWord] = useState<WordType | null>(null); // 編集するwordの状態
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // モーダルの開閉状態
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-    
+  const [reviewStatus, setReviewStatus] = useState("yet");
+
   // userId の取得（存在しないときのみ実行）
   useEffect(() => {
     if (!userId) {
-      fetchUserId(); 
+      fetchUserId();
       console.log("ユーザーIDの取得", userId);
     }
   }, [userId, fetchUserId]);
@@ -45,7 +51,7 @@ const Review = () => {
   // fields と showEmptyCards の取得（存在しないときのみ実行）
   useEffect(() => {
     if (userId && !fields && showEmptyCards === null && !accent) {
-      fetchReviewSettings(userId); 
+      fetchReviewSettings(userId);
       console.log("設定の取得", fields, showEmptyCards);
     }
   }, [userId, fields, showEmptyCards, accent, fetchReviewSettings]);
@@ -59,7 +65,7 @@ const Review = () => {
           console.error("設定の取得中にエラーが発生しました:", wordsSettingsError);
           return;
         }
-        await fetchWords(); 
+        await fetchWords();
         console.log("単語の取得", words);
       }
     };
@@ -77,12 +83,12 @@ const Review = () => {
   const openEditModal = (word: WordType) => {
     //wordを受け取り、editWordに初期値として情報をセットしてからモーダルを開く
     setEditWord(word);
-    setIsEditModalOpen(true); 
+    setIsEditModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setIsEditModalOpen(false); 
-    setEditWord(null); 
+    setIsEditModalOpen(false);
+    setEditWord(null);
   };
 
   const goToFirstSlide = () => {
@@ -118,22 +124,23 @@ const Review = () => {
   };
 
   const handleCompleteReview = async () => {
-    try {
-      setLoading(true)
-      const wordIds = words!.map((word) => word.id); 
-      const { error } = await supabase.rpc("update_review_info", {
-        word_ids: wordIds,  
-      });
-      if (error) {
-        console.error("複数項目の更新中にエラーが発生しました:", error);
-      } else {
-        console.log("すべての単語のreview_countとreviewed_atを更新しました!");
-        router.push("/")
-      }
-    } catch (err) {
-      console.error("復習完了中にエラーが発生しました:", err);
-    } finally{
-      setLoading(false)
+    setReviewStatus("loading")
+
+    //逆につけたほうがいい気がする（処理が早すぎてスピナーが見えない）
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const wordIds = words!.map((word) => word.id);
+    const { error } = await supabase.rpc("update_review_info", {
+      word_ids: wordIds,
+    });
+
+    if (error) {
+      console.error("復習情報の更新でエラーが発生しました:", error);
+      setReviewStatus(`更新でエラーが発生しました: ${error.message}`)
+    } else {
+      console.log("すべての単語のreview_countとreviewed_atを更新しました!");
+      setReviewStatus("done")
+      // router.push("/");
     }
   };
 
@@ -151,7 +158,7 @@ const Review = () => {
           <div
             className="
             flex justify-between items-start w-full h-[81px]"
-            // px-4 xs:px-2 pt-4 short:pt-2 short:px-3 
+            // px-4 xs:px-2 pt-4 short:pt-2 short:px-3
           >
             {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
             <div className="invisible xs:hidden pt-[20px] pr-[17px]">
@@ -172,18 +179,18 @@ const Review = () => {
                 <div>カードを編集</div>
               </button>
             </div>
-
           </div>
 
           {/* コンテンツ */}
-          <div className={`f-full flex flex-col items-center justify-center xs:px-[25px] px-[65px] lg:px-[80px] `}>
-            
-            <div className={`xs:mt-[55px]  ${additionalSettings}`}>
-              {content}
-            </div>
-            {content && (<div className="h-[25px] w-[25px] mt-[15px] text-gray-400 notxs:hidden">
-              <SpeechButton word={content} accent={accent} />
-            </div>)}
+          <div
+            className={`f-full flex flex-col items-center justify-center xs:px-[25px] px-[65px] lg:px-[80px] `}
+          >
+            <div className={`xs:mt-[55px]  ${additionalSettings}`}>{content}</div>
+            {content && (
+              <div className="h-[25px] w-[25px] mt-[15px] text-gray-400 notxs:hidden">
+                <SpeechButton word={content} accent={accent} />
+              </div>
+            )}
           </div>
 
           {/* カスタムスライダー */}
@@ -194,7 +201,7 @@ const Review = () => {
             />
           </div>
         </div>
-        <div 
+        <div
           className="
             xs:hidden
             h-[32px] w-[32px]
@@ -202,9 +209,9 @@ const Review = () => {
             absolute top-[50%] -mt-[70px] right-[19px]    
             hover:text-gray-600
             transition duration-200"
-          >
-            <SpeechButton word={content} accent={accent} />
-          </div>
+        >
+          <SpeechButton word={content} accent={accent} />
+        </div>
       </div>
     );
   };
@@ -212,15 +219,45 @@ const Review = () => {
   const renderField = (word: WordType, field: string) => {
     switch (field) {
       case "word":
-        return commonDisplay(word, "単語", word.word, "xs:text-[2.5rem] text-5xl  lg:text-6xl font-bold leading-snug xs:leading-[1.2]", accent);
+        return commonDisplay(
+          word,
+          "単語",
+          word.word,
+          "xs:text-[2.5rem] text-5xl  lg:text-6xl font-bold leading-snug xs:leading-[1.2]",
+          accent
+        );
       case "meaning":
-        return commonDisplay(word, "意味", word.meaning, "xs:text-[2.3rem] text-5xl  lg:text-6xl  font-bold leading-snug xs:leading-[1.3] short:leading-[1.25]", "ja-JP");
+        return commonDisplay(
+          word,
+          "意味",
+          word.meaning,
+          "xs:text-[2.3rem] text-5xl  lg:text-6xl  font-bold leading-snug xs:leading-[1.3] short:leading-[1.25]",
+          "ja-JP"
+        );
       case "example":
-        return commonDisplay(word, "例文", word.example, "xs:text-[2rem] text-4xl lg:text-5xl font-semibold leading-snug xs:leading-[1.3] short:leading-[1.26]", accent);
+        return commonDisplay(
+          word,
+          "例文",
+          word.example,
+          "xs:text-[2rem] text-4xl lg:text-5xl font-semibold leading-snug xs:leading-[1.3] short:leading-[1.26]",
+          accent
+        );
       case "example_translation":
-        return commonDisplay(word, "例文訳", word.example_translation, "xs:text-[1.93rem] text-4xl  lg:text-5xl  font-[580] leading-[1.45] xs:leading-[1.39] short:leading-[1.39] ", "ja-JP");
+        return commonDisplay(
+          word,
+          "例文訳",
+          word.example_translation,
+          "xs:text-[1.93rem] text-4xl  lg:text-5xl  font-[580] leading-[1.45] xs:leading-[1.39] short:leading-[1.39] ",
+          "ja-JP"
+        );
       case "memo":
-        return commonDisplay(word, "メモ", word.memo, "xs:text-[1.93rem] text-4xl lg:text-5xl text-gray-700 leading-[1.45] xs:leading-[1.39] short:leading-[1.39]", "ja-JP");
+        return commonDisplay(
+          word,
+          "メモ",
+          word.memo,
+          "xs:text-[1.93rem] text-4xl lg:text-5xl text-gray-700 leading-[1.45] xs:leading-[1.39] short:leading-[1.39]",
+          "ja-JP"
+        );
       default:
         return null;
     }
@@ -229,7 +266,10 @@ const Review = () => {
   return (
     <>
       <div className="fixed inset-0 flex flex-col items-center ">
-        <ReviewTopButtons goToFirstSlide={goToFirstSlide} toggleSettingsModal={() => setIsSettingsModalOpen(true)}/>
+        <ReviewTopButtons
+          goToFirstSlide={goToFirstSlide}
+          toggleSettingsModal={() => setIsSettingsModalOpen(true)}
+        />
         <Swiper
           onSwiper={(swiper) => {
             swiperRef.current = swiper; // Swiperのインスタンスを取得
@@ -243,7 +283,7 @@ const Review = () => {
         >
           <div>
             <SwiperSlide>
-              <StartSlide/>
+              <StartSlide />
             </SwiperSlide>
             {words!.map((word) => (
               <div key={word.id}>
@@ -261,7 +301,7 @@ const Review = () => {
             ))}
           </div>
           <SwiperSlide>
-            <EndSlide onClick={handleCompleteReview} loading={loading}/>
+            <EndSlide onClick={handleCompleteReview} reviewStatus={reviewStatus} />
           </SwiperSlide>
         </Swiper>
       </div>
@@ -286,51 +326,73 @@ export default Review;
 
 const StartSlide = () => {
   return (
-      <div className="flex items-center justify-center h-full w-full bg-gray-50">
-        <div className="flex flex-col justify-center items-center">
-          <h1 className="text-4xl font-bold mb-4 flex items-center gap-2">
-            Let's Get Started
-            <ArrowRightIcon className="h-7"/>
-          </h1>
-          <p className="text-gray-400 mb-2 text-center notxs:hidden">
-            画面をスワイプ、または左右をタップ
-          </p>
-          <p className="text-gray-400 mb-2 text-center xs:hidden">
-            画面スワイプ、左右のボタン、矢印キーで操作できます。
-          </p>
-        </div>
-      </div>
-  );
-};
-
-const EndSlide = ({onClick, loading}:any) => {
-  return (
-    <div className="flex items-center justify-center h-full w-full text-white bg-gradient-to-t from-yellow-200 to-orange-400">
+    <div className="flex items-center justify-center h-full w-full bg-gray-50">
       <div className="flex flex-col justify-center items-center">
-        <h1 className="text-4xl font-bold flex gap-3">
-            <div>Great Job!</div>
-            <div className="animate-bounce"> 🎉</div>
+        <h1 className="text-4xl font-bold mb-4 flex items-center gap-2">
+          Let's Get Started
+          <ArrowRightIcon className="h-7" />
         </h1>
-        <p className="text-lg mb-5">
-          
+        <p className="text-gray-400 mb-2 text-center notxs:hidden">
+          画面をスワイプ、または左右をタップ
         </p>
-        <button 
-          onClick={onClick}  
-          className="
-            bg-white text-gray-700 
-            px-6 py-2 mb-3 font-semibold 
-            rounded-full 
-            hover:bg-gray-200 transition duration-300 
-            flex items-center gap-1">
-          復習を記録する
-          {/* {loading && (<Spinner size="h-4 w-4" borderColor="border-gray-100 border-t-yellow-500"/>)} */}
-          {/* 処理が早すぎてつけるか悩み中 */}
-        </button>
-        <p className="text-sm text-gray-100 text-center">
-          今回復習した単語の<br/>
-          復習回数と復習日時が更新されます
+        <p className="text-gray-400 mb-2 text-center xs:hidden">
+          画面スワイプ、左右のボタン、矢印キーで操作できます。
         </p>
       </div>
     </div>
+  );
+};
+
+const EndSlide = ({ onClick, reviewStatus }: any) => {
+  const router = useRouter();
+  return (
+    <>
+      <div className="flex items-center justify-center h-full w-full bg-gradient-to-t from-yellow-200 to-orange-400 ">
+        <div className="flex flex-col justify-center items-center w-[360px] ">
+          <h1 className="text-4xl font-bold flex gap-3">
+            <div className="text-white">Great Job!</div>
+            <div className="animate-bounce"> 🎉</div>
+          </h1>
+          <p className="text-lg mb-5"></p>
+          {reviewStatus !== "done" 
+          ? <>
+            <button
+              onClick={onClick}
+              className="
+              bg-orange-100 text-gray-700 
+              w-60 py-2 mb-3 font-[550] text-center
+              rounded-full 
+              hover:bg-orange-200 transition duration-300 shadow-md"
+            >
+              {reviewStatus === "loading" 
+              ? <Spinner size="h-4 w-4" borderColor="border-gray-100 border-t-yellow-500" />
+              : "復習を記録する"
+              }
+            </button>
+
+            {(reviewStatus !== "yet"  && reviewStatus !== "loading") && <p className="text-red-600 mb-3 ">{reviewStatus}</p>}
+
+            <p className="text-sm text-gray-100 text-center">
+              今回復習した単語の
+              <br />
+              復習回数と復習日時が更新されます
+            </p>
+          </>
+          : <>
+            <div
+              className="
+              bg-orange-400 text-gray-800
+              py-2 font-[550]
+              rounded-full mb-4 w-60 text-center"
+            >
+              復習を記録しました!
+            </div>
+            <button onClick={()=>router.push("/")} className="text-gray-700  text-center bg-yellow-100 hover:bg-yellow-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
+            <div className="text-sm h-4"></div>
+          </>
+          }
+        </div>
+      </div>
+    </>
   );
 };
