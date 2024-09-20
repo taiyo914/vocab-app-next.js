@@ -24,7 +24,7 @@ const DisplayContent = () => {
     fetchUserWordsSettings,
     fetchWords,
   } = useUserStore();
-  const { fields, showEmptyCards, fetchReviewSettings } = useReviewSettingsStore();
+  const { fields, showEmptyCards, accent, fetchReviewSettings } = useReviewSettingsStore();
 
   useEffect(() => {
     fetchUserId(); // 初回のみ取得、キャッシュ済みなら何もしない
@@ -46,11 +46,11 @@ const DisplayContent = () => {
   }, [userId, wordsSettings, fetchWords]);
 
   useEffect(() => {
-    if (userId && !fields && showEmptyCards === null) {
+    if (userId && !fields && showEmptyCards === null && !accent) {
       fetchReviewSettings(userId); // userId が存在し、fields がまだ取得されていない場合に取得
-      console.log("設定の取得", fields, showEmptyCards);
+      console.log("設定の取得", fields, showEmptyCards, accent);
     }
-  }, [userId, fields, showEmptyCards, fetchReviewSettings]);
+  }, [userId, fields, showEmptyCards, accent, fetchReviewSettings]);
 
   //ページネーションを更新する関数
   const updatePageOffsetInSupabase = useCallback(
