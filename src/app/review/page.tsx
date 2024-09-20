@@ -32,6 +32,7 @@ const Review = () => {
   const [editWord, setEditWord] = useState<WordType | null>(null); // 編集するwordの状態
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // モーダルの開閉状態
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
     
   // userId の取得（存在しないときのみ実行）
   useEffect(() => {
@@ -117,8 +118,8 @@ const Review = () => {
   };
 
   const handleCompleteReview = async () => {
-    console.log("実行されてる？")
     try {
+      setLoading(true)
       const wordIds = words!.map((word) => word.id); 
       const { error } = await supabase.rpc("update_review_info", {
         word_ids: wordIds,  
@@ -126,11 +127,13 @@ const Review = () => {
       if (error) {
         console.error("複数項目の更新中にエラーが発生しました:", error);
       } else {
-        console.log("すべての単語のreview_countとreviewed_atを一度に更新しました!");
+        console.log("すべての単語のreview_countとreviewed_atを更新しました!");
         router.push("/")
       }
     } catch (err) {
       console.error("復習完了中にエラーが発生しました:", err);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -258,7 +261,7 @@ const Review = () => {
             ))}
           </div>
           <SwiperSlide>
-            <EndSlide onClick={handleCompleteReview}/>
+            <EndSlide onClick={handleCompleteReview} loading={loading}/>
           </SwiperSlide>
         </Swiper>
       </div>
@@ -300,10 +303,10 @@ const StartSlide = () => {
   );
 };
 
-const EndSlide = ({onClick}:any) => {
+const EndSlide = ({onClick, loading}:any) => {
   return (
     <div className="flex items-center justify-center h-full w-full text-white bg-gradient-to-t from-yellow-200 to-orange-400">
-      <div className="text-center">
+      <div className="flex flex-col justify-center items-center">
         <h1 className="text-4xl font-bold flex gap-3">
             <div>Great Job!</div>
             <div className="animate-bounce"> 🎉</div>
@@ -311,13 +314,22 @@ const EndSlide = ({onClick}:any) => {
         <p className="text-lg mb-5">
           
         </p>
-        <button onClick={onClick}  className="bg-white text-gray-700  px-6 py-2 font-semibold rounded-full hover:bg-gray-200 transition duration-300 mb-3">
-          復習完了
+        <button 
+          onClick={onClick}  
+          className="
+            bg-white text-gray-700 
+            px-6 py-2 mb-3 font-semibold 
+            rounded-full 
+            hover:bg-gray-200 transition duration-300 
+            flex items-center gap-1">
+          復習を記録する
+          {/* {loading && (<Spinner size="h-4 w-4" borderColor="border-gray-100 border-t-yellow-500"/>)} */}
+          {/* 処理が早すぎてつけるか悩み中 */}
         </button>
-        <Spinner />
-        <p className="text-sm text-gray-100">
-        復習回数がカウントされます
-      </p>
+        <p className="text-sm text-gray-100 text-center">
+          今回復習した単語の<br/>
+          復習回数と復習日時が更新されます
+        </p>
       </div>
     </div>
   );
