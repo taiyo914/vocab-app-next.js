@@ -185,7 +185,7 @@ const Review = () => {
           <div
             className={`f-full flex flex-col items-center justify-center xs:px-[25px] px-[65px] lg:px-[80px] `}
           >
-            <div className={`xs:mt-[55px]  ${additionalSettings}`}>{content}</div>
+            <div className={`xs:mt-[55px] text-center ${additionalSettings}`}>{content}</div>
             {content && (
               <div className="h-[25px] w-[25px] mt-[15px] text-gray-400 notxs:hidden">
                 <SpeechButton word={content} accent={accent} />
@@ -328,7 +328,7 @@ const StartSlide = () => {
   return (
     <div className="flex items-center justify-center h-full w-full bg-gray-50">
       <div className="flex flex-col justify-center items-center">
-        <h1 className="text-4xl font-bold mb-4 flex items-center gap-2">
+        <h1 className="text-4xl font-bold mb-4 flex items-center gap-2 mt-12">
           Let's Get Started
           <ArrowRightIcon className="h-7" />
         </h1>
