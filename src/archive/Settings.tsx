@@ -66,7 +66,7 @@ export default function Settings({initialUserWordsSettings}: SettingsProps) {
               <select name="sort_field" value={temporarySettings.sort_field} onChange={handleChange} className="p-2 border border-gray-300 rounded w-full">
                 <option value="created_at">作成日</option>
                 <option value="index">優先度</option>
-                <option value="word">語句</option>
+                <option value="word">アルファベット順</option>
                 <option value="review_count">復習回数</option>
                 <option value="reviewed_at">復習日</option>
                 <option value="updated_at">更新日</option>

@@ -176,7 +176,7 @@ const Review = () => {
   const renderField = (word: WordType, field: string) => {
     switch (field) {
       case "word":
-        return commonDisplay(word, "語句", word.word, "text-5xl font-bold");
+        return commonDisplay(word, "単語", word.word, "text-5xl font-bold");
       case "meaning":
         return commonDisplay(word, "意味", word.meaning, "text-5xl font-bold");
       case "example":

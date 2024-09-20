@@ -110,7 +110,7 @@ export default function AddNewWord() {
           <div className="p-8 xs:py-2 xs:px-5 border xs:border-none bg-white rounded-lg shadow-lg xs:shadow-none">
             <div className="mb-5">
               <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
-                語句
+                単語
               </label>
               <input
                 type="text"

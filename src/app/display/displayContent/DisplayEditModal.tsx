@@ -123,7 +123,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
 
       <div>
         <div className="mb-5">
-          <label className="text-gray-600 ml-1">語句</label>
+          <label className="text-gray-600 ml-1">単語</label>
           <input
             type="text"
             value={editWord?.word}

@@ -25,7 +25,7 @@ interface SettingsModalProps {
 }
 
 const fieldLabelMap: { [key: string]: string } = {
-  word: "語句",
+  word: "単語",
   meaning: "意味",
   example: "例文",
   example_translation: "例文訳",

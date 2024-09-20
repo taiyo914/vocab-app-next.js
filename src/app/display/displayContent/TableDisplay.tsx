@@ -24,7 +24,7 @@ const TableDisplay = ({ words }: { words: WordType[] }) => {
         <div className="min-w-[1080px] xs:min-w-[1750px]">
           <div className="flex items-center mb-1 ">
             <div className="flex-1 grid grid-cols-5">
-              <div className="col-span-1 font-bold text-gray-400 text-sm text-center">語句 </div>
+              <div className="col-span-1 font-bold text-gray-400 text-sm text-center">単語 </div>
               <div className="col-span-1 font-bold text-gray-400 text-sm text-center">意味 </div>
               <div className="col-span-1 font-bold text-gray-400 text-sm text-center">例文</div>
               <div className="col-span-1 font-bold text-gray-400 text-sm text-center">例文訳</div>
