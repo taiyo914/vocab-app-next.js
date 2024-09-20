@@ -40,14 +40,14 @@ const TableDisplay = ({ words }: { words: WordType[] }) => {
           </div>
         </div>
       </div>
-      {editWord && (
-        <EditWordModal
-          isOpen={isEditModalOpen}
-          onClose={closeModal}
-          editWord={editWord}
-          setEditWord={setEditWord}
-        />
-      )}
+
+      <EditWordModal
+        isOpen={isEditModalOpen}
+        onClose={closeModal}
+        editWord={editWord}
+        setEditWord={setEditWord}
+      />
+
     </motion.div>
   );
 };
