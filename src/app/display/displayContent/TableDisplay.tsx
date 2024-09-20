@@ -33,7 +33,7 @@ const TableDisplay = ({ words }: { words: WordType[] }) => {
           </div>
           <div className="space-y-2">
             {words.map((word) => (
-              <button key={word.id} onClick={() => handleEditClick(word)}>
+              <button key={word.id} onClick={() => handleEditClick(word)} className="w-full">
                 <TableItem  word={word} />
               </button>
             ))}
