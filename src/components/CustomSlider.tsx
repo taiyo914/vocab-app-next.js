@@ -27,8 +27,23 @@ export default function CustomSlider({ sliderValue, onChange }: CustomSliderProp
     return "rgb(253, 83, 83)";
   };
 
-  function ticks1to9(i: number) {
-    const hoverColor = `hover:bg-sliderColor-${i}`;
+  function ticks(i: number) {
+    // taiwwindはクラス名の一部を動的に変更するとバグが起きやすいので、このようにクラス名全体を指定する必要がある
+    const getHoverColor = (i: number) => {
+      switch (i) {
+        case 0: return 'hover:bg-sliderColor-0';
+        case 1: return 'hover:bg-sliderColor-1';
+        case 2: return 'hover:bg-sliderColor-2';
+        case 3: return 'hover:bg-sliderColor-3';
+        case 4: return 'hover:bg-sliderColor-4';
+        case 5: return 'hover:bg-sliderColor-5';
+        case 6: return 'hover:bg-sliderColor-6';
+        case 7: return 'hover:bg-sliderColor-7';
+        case 8: return 'hover:bg-sliderColor-8';
+        case 9: return 'hover:bg-sliderColor-9';
+        case 10: return 'hover:bg-sliderColor-10';
+      }
+    };
     return (
       <>
         <div key={i} className="z-10">
@@ -43,7 +58,7 @@ export default function CustomSlider({ sliderValue, onChange }: CustomSliderProp
             <div
               className={`
               ${commonStyle} 
-              ${hoverColor} 
+              ${getHoverColor(i)} 
               ${i === 0 && "pl-[10px]"}
               ${i !== 0 && i !== 10 && "text-center"}
               ${i === 10 && "pr-[7px]"}
@@ -64,7 +79,7 @@ export default function CustomSlider({ sliderValue, onChange }: CustomSliderProp
         <div className="w-[7.5px]"></div>{" "}
         {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
         <div className="slider-ticks">
-          {Array.from({ length: 11 }, (_, i) => i).map((i) => ticks1to9(i))}
+          {Array.from({ length: 11 }, (_, i) => i).map((i) => ticks(i))}
         </div>
         <div className="w-[7.5px]"></div>{" "}
         {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
