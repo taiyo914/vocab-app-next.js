@@ -194,7 +194,7 @@ const Review = () => {
           </div>
 
           {/* カスタムスライダー */}
-          <div className="w-full px-[42px] xs:w-full xs:px-[22px] mb-[30px] max-w-2xl z-10">
+          <div className="w-full px-[42px] xs:w-full xs:px-[22px] mb-[20px] xs:mb-[13px] max-w-2xl">
             <CustomSlider
               sliderValue={word.index}
               onChange={(value) => handleSliderChange(value, word.id)}
