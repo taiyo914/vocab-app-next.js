@@ -3,7 +3,7 @@ import { useState } from "react";
 import { WordType } from "@/types/Types";
 import TableItem from "./TableItem";
 import { motion } from "framer-motion";
-import EditWordModal from "@/components/EditWordModal";
+import DisplayEditModal from "./DisplayEditModal";
 
 const TableDisplay = ({ words }: { words: WordType[] }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -39,7 +39,7 @@ const TableDisplay = ({ words }: { words: WordType[] }) => {
         </div>
       </div>
 
-      <EditWordModal
+      <DisplayEditModal
         isOpen={isEditModalOpen}
         onClose={closeModal}
         editWord={editWord}
