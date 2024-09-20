@@ -83,12 +83,14 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
         <div className="slider-ticks">
             {Array.from({ length: 11 }, (_, i) => i).map(i => (
               <div 
-              onClick={()=>  onChange(i)} 
-              className={`
-                h-[15px]
-                ${ i === 0 && "pl-[10px] -ml-[14px]" }
-                ${ i === 10 && "pr-[7px] -mr-[14px]" }
-                `}>
+                key ={i}
+                onClick={()=>  onChange(i)} 
+                className={`
+                  h-[15px]
+                  ${ i === 0 && "pl-[10px] -ml-[14px]" }
+                  ${ i === 10 && "pr-[7px] -mr-[14px]" }
+                  `}
+                >
               </div>
             ))}
         </div>
