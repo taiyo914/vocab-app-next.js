@@ -29,51 +29,36 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
   };
 
   function ticks1to9(i:number){
-    return(
-      <div key={i} onClick={()=>  onChange(i)} className=" pt-[10px] pb-[20px] xs:z-10">
-        <div className={`${commonStyle} text-center hover:bg-[backgroundColor]`}>{i}</div>
+    const hoverColor = `hover:bg-sliderColor-${i}`
+    return(<>
+      <div key={i} className="z-10" >
+        <div 
+          onClick={()=>  {
+            onChange(i)
+          }}  
+          className={`pt-[10px] pb-[3px]  
+            ${ i === 0 && "-ml-[14px]" }
+            ${ i === 10 && "-mr-[14px] text-end" }`}
+        >
+          <div 
+            className={`
+              ${commonStyle} 
+              ${hoverColor} 
+              ${ i === 0 && "pl-[10px]" }
+              ${ i !== 0 && i !== 10 &&  "text-center" }
+              ${ i === 10 && "pr-[7px]" }
+              `}>{i}</div>
+        </div>
       </div>
-    )
+    </>)
   }
   return (
     <div className="w-full">  {/* 親要素の幅を変えることで調整できます */}
       
-      <div className="flex -mb-[27px] short:-mb-[25px]">
+      <div className="flex -mb-[9px] short:-mb-[11px]">
         <div className="w-[7.5px]"></div> {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
         <div className="slider-ticks">
-            <div onClick={()=>  onChange(0)} className=" -ml-[14px] pt-[10px] pb-[20px] z-10">
-              <div className={`${commonStyle} hover:bg-sliderColor-0 pl-[10px]`}>0</div>
-            </div>
-            <div onClick={()=>  onChange(1)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-1`}>1</div>
-            </div>
-            <div onClick={()=>  onChange(2)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-2`}>2</div>
-            </div>
-            <div onClick={()=>  onChange(3)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-3`}>3</div>
-            </div>
-            <div onClick={()=>  onChange(4)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-4`}>4</div>
-            </div>
-            <div onClick={()=>  onChange(5)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-5`}>5</div>
-            </div>
-            <div onClick={()=>  onChange(6)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-6`}>6</div>
-            </div>
-            <div onClick={()=>  onChange(7)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-7`}>7</div>
-            </div>
-            <div onClick={()=>  onChange(8)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-8`}>8</div>
-            </div>
-            <div onClick={()=>  onChange(9)} className=" pt-[10px] pb-[20px] xs:z-10">
-              <div className={`${commonStyle} text-center hover:bg-sliderColor-9`}>9</div>
-            </div>
-            <div onClick={()=>  onChange(10)} className="-mr-[14px] text-end pt-[10px] pb-[20px] z-10">
-              <div className={`${commonStyle} hover:bg-sliderColor-10 pr-[7px]`}>10</div>
-            </div>
+            {Array.from({ length: 11 }, (_, i) => i).map(i => ticks1to9(i))}
         </div>
         <div className="w-[7.5px]"></div>  {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
       </div>
@@ -84,7 +69,7 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
         min="0"
         max="10"
         onChange={handleSliderChange}
-        className="w-full cursor-pointer"
+        className="w-full cursor-pointer "
         style={
           {
             "--range-percent": `${sliderValue * 10}%`,
@@ -92,6 +77,23 @@ export default function CustomSlider({ sliderValue, onChange }:CustomSliderProps
           } as React.CSSProperties
         }
       />
+
+      <div className="flex -mt-[6.3px]">
+        <div className="w-[7.5px]"></div> {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
+        <div className="slider-ticks">
+            {Array.from({ length: 11 }, (_, i) => i).map(i => (
+              <div 
+              onClick={()=>  onChange(i)} 
+              className={`
+                h-[15px]
+                ${ i === 0 && "pl-[10px] -ml-[14px]" }
+                ${ i === 10 && "pr-[7px] -mr-[14px]" }
+                `}>
+              </div>
+            ))}
+        </div>
+        <div className="w-[7.5px]"></div>  {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
+      </div>
         
     </div>
   );
