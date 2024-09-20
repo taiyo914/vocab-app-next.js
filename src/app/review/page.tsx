@@ -14,13 +14,13 @@ import LoadingDots from "@/components/LoadingDots";
 import CustomSlider from "@/components/CustomSlider";
 import { PencilSquareIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { WordType } from "@/types/Types";
-import EditWordModal from "@/components/EditWordModal";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import ReviewSettingsModal from "./ReviewSettingsModal";
 import ReviewTopButtons from "./ReviewTopButtons";
 import SpeechButton from "@/components/SpeechButton";
 import "./swiper-style.css";
 import Spinner from "@/components/Spiner";
+import ReviewEditModal from "./ReviewEditModal";
 
 const Review = () => {
   const supabase = createClient();
@@ -307,7 +307,7 @@ const Review = () => {
       </div>
 
       {/* モーダル */}
-      <EditWordModal
+      <ReviewEditModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         editWord={editWord}

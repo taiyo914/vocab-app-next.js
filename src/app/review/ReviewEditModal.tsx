@@ -1,27 +1,26 @@
 import React, {useState}from "react";
 import { createClient } from "@/utils/supabase/client";
-import CustomSlider from "./CustomSlider";
+import CustomSlider from "@/components/CustomSlider";
 import useUserStore from "@/store/userStore";
 import { WordType } from "@/types/Types";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Modal from "@/components/Modal";
 
-interface EditWordModalProps {
+interface ReviewEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   editWord: WordType | null;
   setEditWord: React.Dispatch<React.SetStateAction<WordType | null>>;
 }
 
-const EditWordModal: React.FC<EditWordModalProps> = ({
+const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
   isOpen,
   onClose,
   editWord,
   setEditWord,
 }) => {
   const supabase = createClient();
-  const { words, setWords, fetchWords } = useUserStore();
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false); 
+  const { words, setWords } = useUserStore();
 
   const handleSaveChanges = async () => {
     try {
@@ -39,25 +38,6 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       console.error("更新エラー:", err.message);
     }
   };
-
-  const handleDelete = async () => {
-    try {
-      const { error } = await supabase
-        .from("words")
-        .update({ deleted_at: new Date().toISOString() })
-        .eq("id", editWord!.id);
-
-      if (error) throw new Error(error.message);
-      else console.log("削除に成功しました！");
-
-      await fetchWords();
-
-      onClose();
-    } catch (err: any) {
-      console.error("削除エラー:", err.message);
-    }
-  };
-
 
   return (
    <Modal isOpen ={isOpen} onClose={onClose}>
@@ -155,7 +135,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       </div>
 
       {/* ボタン */}
-      <div className="flex justify-center space-x-3 my-4 mt-10">
+      <div className="flex justify-center gap-3 my-10">
         <button
           onClick={handleSaveChanges}
           className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-[580] rounded-lg transition duration-300"
@@ -166,45 +146,11 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
           onClick={onClose}
           className="w-full py-2  bg-gray-300 hover:bg-gray-400 text-black font-[590] rounded-lg transition duration-300"
         >
-          キャンセル
+          閉じる
         </button>
       </div>
-
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => setIsDeleteConfirmOpen(true)} 
-          className="w-1/2 py-2 bg-red-500 hover:bg-red-600 text-white font-[580] rounded-lg transition duration-300"
-        >
-          単語を削除する
-        </button>
-      </div>
-
-      {isDeleteConfirmOpen && (
-          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-lg font-bold mb-4">本当に削除しますか？</h3>
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={() => {
-                    handleDelete();
-                    setIsDeleteConfirmOpen(false);
-                  }}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg"
-                >
-                  はい、削除します
-                </button>
-                <button
-                  onClick={() => setIsDeleteConfirmOpen(false)} // キャンセル
-                  className="px-4 py-2 bg-gray-300 text-black rounded-lg"
-                >
-                  キャンセル
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
   </Modal>
   );
 };
 
-export default EditWordModal;
+export default ReviewEditModal;
