@@ -20,6 +20,7 @@ import ReviewSettingsModal from "./ReviewSettingsModal";
 import ReviewTopButtons from "./ReviewTopButtons";
 import SpeechButton from "@/components/SpeechButton";
 import "./swiper-style.css"
+import Spinner from "@/components/Spiner";
 
 const Review = () => {
   const supabase = createClient();
@@ -313,6 +314,7 @@ const EndSlide = ({onClick}:any) => {
         <button onClick={onClick}  className="bg-white text-gray-700  px-6 py-2 font-semibold rounded-full hover:bg-gray-200 transition duration-300 mb-3">
           復習完了
         </button>
+        <Spinner />
         <p className="text-sm text-gray-100">
         復習回数がカウントされます
       </p>
