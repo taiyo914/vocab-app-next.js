@@ -372,7 +372,7 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
 
             {(reviewStatus !== "yet"  && reviewStatus !== "loading") && <p className="text-red-600 mb-3 ">{reviewStatus}</p>}
 
-            <p className="text-sm text-gray-100 text-center">
+            <p className="text-sm text-gray-50 text-center xs:font-semibold">
               今回復習した単語の
               <br />
               復習回数と復習日時が更新されます
