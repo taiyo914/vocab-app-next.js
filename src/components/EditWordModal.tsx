@@ -20,7 +20,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
   setEditWord,
 }) => {
   const supabase = createClient();
-  const { words, setWords } = useUserStore();
+  const { words, setWords, fetchWords } = useUserStore();
 
   const handleSaveChanges = async () => {
     try {
@@ -38,6 +38,25 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       console.error("更新エラー:", err.message);
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      const { error } = await supabase
+        .from("words")
+        .update({ deleted_at: new Date().toISOString() })
+        .eq("id", editWord!.id);
+
+      if (error) throw new Error(error.message);
+      else console.log("削除に成功しました！");
+
+      await fetchWords();
+
+      onClose();
+    } catch (err: any) {
+      console.error("削除エラー:", err.message);
+    }
+  };
+
 
   return (
    <Modal isOpen ={isOpen} onClose={onClose}>
