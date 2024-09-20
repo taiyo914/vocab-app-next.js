@@ -30,7 +30,7 @@ export async function POST(request: Request) {
      // 2. ページネーション用のデータを取得
     const { data: words, error } = await supabase
       .from("words")
-      .select("id, word, meaning, example, example_translation, memo, index")
+      .select("id, word, meaning, example, example_translation, memo, index, review_count, reviewed_at, created_at, deleted_at")
       .eq("user_id", userId)
       .gte("index", userWordsSettings.start_index || 0)
       .lte("index", userWordsSettings.end_index || 10)
