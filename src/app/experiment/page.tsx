@@ -12,6 +12,8 @@ import Spinner from "@/components/Spiner";
 import SwiperEndSlide from "./SwiperEndSlide";
 import NotificationExp from "./NotificationExp";
 import DisplayEditModal from "../display/displayContent/DisplayEditModal";
+import FlipCard from "./FlipCard";
+import MyCardFlip from "./ReactCardFlip";
 
 export default function page() {
   const wordSample = {
@@ -31,12 +33,12 @@ export default function page() {
   }
   return (
     <>
-    <DisplayEditModal
+    {/* <DisplayEditModal
       isOpen ={true}
       onClose={()=> {}}
       editWord={wordSample}
       setEditWord={()=>{}}
-    />
+    /> */}
      {/* <NotificationExp/> */}
       {/* <SwiperEndSlide/> */}
       {/* <SpeechButton word="Hello" accent = "en-US"/> */}
@@ -46,6 +48,8 @@ export default function page() {
       {/* <Exercise/> */}
       {/* <TaskManager /> */}
       {/* <ReviewSettingsModal/> */}
+      {/* <FlipCard/> */}
+      <MyCardFlip/>
     </>
   );
 }
