@@ -154,7 +154,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} width="w-3/5 max-w-lg">
       <h3 className="text-xl font-bold mt-1 mb-6 text-center">復習画面の設定</h3>
 
       <h4 className="font-semibold mb-1 flex items-center gap-1">
