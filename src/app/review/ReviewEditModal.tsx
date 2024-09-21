@@ -122,7 +122,7 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
-        <div className="mb-8 pl-1">
+        <div className="mb-8 xs:mb-6 pl-1">
           <div className="flex items-center gap-2">
             <label className="text-gray-600 ml-0.5">優先度</label>
             <div className="">{editWord?.index}</div>
@@ -135,7 +135,7 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
       </div>
 
     {/* ボタン */}
-      <div className="flex gap-3 -mr-1 mb-1">
+      <div className="flex gap-3 -mr-1 mb-1 xs:mb-0">
         <button
           onClick={handleSaveChanges}
           className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold"
