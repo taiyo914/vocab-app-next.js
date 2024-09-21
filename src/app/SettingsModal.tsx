@@ -10,7 +10,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { HiXMark } from "react-icons/hi2";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import Modal from "../components/Modal";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function SettingsModal() {
   const { isOpen, toggleModal } = useOpenModalStore();
@@ -101,7 +101,7 @@ export default function SettingsModal() {
   };
 
   return (
-    <Modal isOpen ={isOpen} onClose={onClose}>
+    <Modal isOpen ={isOpen} onClose={onClose} width="w-3/5 max-w-2xl">
       <button
         onClick={onClose}
         className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition duration-200"
@@ -128,7 +128,7 @@ export default function SettingsModal() {
               focus:outline-none focus:border-black"
           />
         </div>
-        <div className="mb-7">
+        <div className="mb-6">
           <label className="block font-medium mb-1 ml-0.5 text-gray-600">並び替え</label>
           <div className="flex items-center space-x-2">
             <select
@@ -170,15 +170,15 @@ export default function SettingsModal() {
 
 
           {/* トグルボタン */}
-          <div className="flex justify-center text-sm">
+          <div className="flex">
             <button
-              type="button"
-              className="bg-gray-200 text-gray-700 w-fit px-3 py-2 text-center rounded-full"
+              type = "button"
+              className=" rounded-lg  hover:text-gray-500 transition-all duration-100 "
               onClick={toggleDetails}
             >
               {showDetails 
-                ? (<div className="flex items-center justify-center gap-1"><FaRegCircleXmark />詳細設定を閉じる</div>) 
-                : (<div className="flex items-center justify-center gap-1"><IoSettingsOutline />詳細設定を開く</div>)}
+              ? (<div className="flex items-center justify-center gap-0.5"><ChevronDownIcon className="h-5"/>詳細設定</div>) 
+              : (<div className="flex items-center justify-center gap-0.5"><ChevronRightIcon className="h-5"/>詳細設定</div>)}
             </button>
           </div>
 
@@ -338,7 +338,7 @@ export default function SettingsModal() {
               </motion.div>)}
         </AnimatePresence>
 
-        <div className="flex justify-between space-x-3 mt-7">
+        <div className="flex justify-between space-x-3 mt-6">
           <button
             type="submit"
             className="
