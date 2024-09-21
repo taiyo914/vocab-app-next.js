@@ -5,10 +5,11 @@ import { useEffect } from "react";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  width : string;
   children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, width = "md:w-3/5 w-4/5 max-w-2xl ",  children }) => {
   //後ろの画面をスクロールできなくする設定
   useEffect(() => {
     if (isOpen) {
@@ -40,13 +41,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -100 }}
             transition={{ duration: 0.5}}
-            className="
+            className={`
               rounded-2xl shadow-lg
               z-50
-              w-3/5 max-w-2xl min-w-[400px] xs:min-w-[340px] 
+              ${width}
+              min-w-[400px] xs:min-w-[340px] 
               overflow-hidden
               max-h-[75vh]
-              relative"
+              relative`}
           >
             <div className="bg-white px-10 xs:px-7 py-7 max-h-[75vh] overflow-y-auto">
               {children}
