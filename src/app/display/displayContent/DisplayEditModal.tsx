@@ -150,7 +150,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-800 font-semibold
+              font-medium
               focus:outline-none focus:border-1 transition-colors 
               focus:border-gray-700 "
           />
@@ -165,7 +165,6 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-800 font-semibold
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
@@ -178,7 +177,6 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-800 
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
@@ -193,7 +191,6 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-800 
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
@@ -206,14 +203,13 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-600 
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
         <div className="mb-3 px-0.5">
           <div className="flex items-center gap-2">
             <label className="text-gray-600 ml-0.5">優先度</label>
-            <div className="text-gray-900 ">{editWord?.index}</div>
+            <div className="">{editWord?.index}</div>
           </div>
           <CustomSlider 
             sliderValue={editWord?.index || 0}
@@ -221,16 +217,6 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
           />
         </div>
       </div>
-
-    {/* 保存ボタン */}
-      {/* <div className="flex justify-center mb-8">
-        <button
-          onClick={handleSaveChanges}
-          className="w-full px-8  py-2 text-lg bg-blue-500 hover:bg-blue-600 text-gray-50 font-semibold rounded-xl transition duration-300"
-        >
-          変更を保存
-        </button>
-      </div> */}
 
       <div className="flex justify-start">
         <button
@@ -316,7 +302,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
       {isDeleteConfirmOpen && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-full">
           <div className="bg-white p-6 rounded-xl shadow-lg w-4/5 max-w-sm">
-            <h3 className="font-semibold mb-4 text-center">本当に削除しますか？</h3>
+            <h3 className="mb-4 text-[1.1rem] text-center">この単語を削除しますか？</h3>
             <div className="flex justify-center gap-3">
               <button
                 onClick={() => {
@@ -324,26 +310,27 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
                 }}
                 className="
                     w-full py-2 
-                    bg-gray-500 text-white font-[550] rounded-lg 
-                    hover:bg-gray-600 transition duration-200
+                    bg-red-500 text-white font-[550] rounded-lg 
+                    hover:bg-red-600 transition duration-200
                     flex justify-center items-center gap-1"
               >
+                {deleteLoading
+                  ? (
+                    <Spinner
+                      size="h-5 w-5"
+                      borderColor="border-gray-100 border-t-red-300"
+                      borderWeight="border-[3px]"
+                    />
+                  ) : (
+                    <TrashIcon className="h-5" />
+                  )}
                 <span>削除</span>
-                {deleteLoading ? (
-                  <Spinner
-                    size="h-5 w-5"
-                    borderColor="border-gray-100 border-t-gray-400"
-                    borderWeight="border-[3px]"
-                  />
-                ) : (
-                  <TrashIcon className="h-5" />
-                )}
               </button>
               <button
                 onClick={() => setIsDeleteConfirmOpen(false)}
                 className="
-                    w-full py-2 bg-gray-300 text-black rounded-lg font-[550
-                    hover:bg-gray-200 transition duration-200]"
+                    w-full py-2 bg-gray-200 border text-black rounded-lg font-[550
+                    hover:bg-gray-300 transition duration-200]"
               >
                 キャンセル
               </button>
