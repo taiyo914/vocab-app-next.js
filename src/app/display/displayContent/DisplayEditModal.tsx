@@ -278,7 +278,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
         </motion.div>)}
     </AnimatePresence>
 
-      <div className="flex justify-between mt-7">
+      <div className="flex justify-between mt-7 xs:-mb-1">
         <button
           onClick={() => setIsDeleteConfirmOpen(true)}
           className="
