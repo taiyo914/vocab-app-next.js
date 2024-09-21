@@ -1,14 +1,42 @@
 // "use client"
+import { useEffect , useState} from'react';
 import { motion } from "framer-motion";
 import useTabStore from "@/store/currentTabStore";
 
 const Tabs = () => {
   const { currentTab, setTab } = useTabStore();
+  const [isLoading, setIsLoading] = useState(true); 
+
+  useEffect(()=>{
+    const savedTab = localStorage.getItem('currentTab');
+  //アニメーションが早くかかりすぎないように最低1秒は遅延させる（ちゃんとsetTabはセットされてる)
+    const loadTabFromStorage = new Promise<void>((resolve) => {
+      if (savedTab) {
+        setTab(savedTab); 
+      }
+      resolve(); 
+    });
+
+    const delay = new Promise<void>((resolve) => {
+      setTimeout(() => {
+        resolve(); 
+      }, 1000);
+    });
+
+    Promise.all([loadTabFromStorage, delay]).then(() => {
+      setIsLoading(false); 
+    });
+  },[setTab])
+
+  const handleTabChange = (tab: string) => {
+    setTab(tab); 
+    localStorage.setItem('currentTab', tab); 
+  };
 
   return (
     <div className="flex">
       <motion.div
-        onClick={() => setTab('cards')}
+        onClick={() => handleTabChange('cards')}
         className={`
           cursor-pointer 
           py-2 px-5
@@ -17,14 +45,16 @@ const Tabs = () => {
           duration-300
           ease-out
           transition-all
-          ${currentTab === 'cards' 
+          ${isLoading
+            ? 'text-gray-400 font-semibold border-r' 
+            : currentTab === 'cards' 
             ? 'border-r font-bold bg-gray-100' 
             : 'hover:bg-gray-50 text-gray-400 font-semibold '}`}
       >
         カード
       </motion.div>
       <div
-        onClick={() => setTab('table')}
+        onClick={() => handleTabChange('table')}
         className={`
           cursor-pointer 
           py-2 px-3 
@@ -32,7 +62,9 @@ const Tabs = () => {
           rounded-tl-lg rounded-tr-lg
           transition-all
           duration-300
-          ${currentTab === 'table' 
+          ${isLoading
+            ? 'text-gray-400 font-semibold' 
+            : currentTab === 'table' 
             ? 'bg-gray-100 font-bold border-l' 
             : 'hover:bg-gray-50 text-gray-400 font-semibold '}`}
       >
