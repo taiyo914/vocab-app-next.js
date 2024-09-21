@@ -10,6 +10,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { HiXMark } from "react-icons/hi2";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import Modal from "../components/Modal";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function SettingsModal() {
   const { isOpen, toggleModal } = useOpenModalStore();
@@ -101,6 +102,12 @@ export default function SettingsModal() {
 
   return (
     <Modal isOpen ={isOpen} onClose={onClose}>
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition duration-200"
+      >
+        <XMarkIcon className="h-8 w-8 p-1" />
+      </button>
       <h1 className="text-2xl font-bold mb-3 text-center">設定</h1>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 ">
         <div className="mb-4">
@@ -166,7 +173,7 @@ export default function SettingsModal() {
           <div className="flex justify-center text-sm">
             <button
               type="button"
-              className="bg-gray-200 text-gray-700 w-full py-2 text-center rounded-full"
+              className="bg-gray-200 text-gray-700 w-fit px-3 py-2 text-center rounded-full"
               onClick={toggleDetails}
             >
               {showDetails 
@@ -335,19 +342,11 @@ export default function SettingsModal() {
           <button
             type="submit"
             className="
-              bg-blue-500 text-lg text-white xs:font-semibold
-              px-3 py-3 rounded-lg hover:bg-blue-600 transition-all w-full"
+              bg-blue-500 text-xl text-gray-100 xs:font-semibold font-[550]
+              px-3 py-3 rounded-full hover:bg-blue-600 transition-all w-full"
           >
             設定を保存
           </button>
-          <div
-            className="
-              bg-gray-500 text-lg text-white xs:font-semibold
-              px-3 py-3 rounded-lg hover:bg-gray-600 transition-all w-full text-center cursor-pointer"
-            onClick={onClose}
-          >
-            閉じる
-          </div>
         </div>
       </form>
     </Modal>
