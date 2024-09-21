@@ -9,7 +9,7 @@ const Tabs = () => {
 
   useEffect(()=>{
     const savedTab = localStorage.getItem('currentTab');
-  //アニメーションが早くかかりすぎないように最低1秒は遅延させる（ちゃんとsetTabはセットされてる)
+  //アニメーションが早くかかりすぎないように最低0.5秒は遅延させる（ちゃんとsetTabはセットされてる)
     const loadTabFromStorage = new Promise<void>((resolve) => {
       if (savedTab) {
         setTab(savedTab); 
@@ -20,7 +20,7 @@ const Tabs = () => {
     const delay = new Promise<void>((resolve) => {
       setTimeout(() => {
         resolve(); 
-      }, 1000);
+      }, 500);
     });
 
     Promise.all([loadTabFromStorage, delay]).then(() => {
