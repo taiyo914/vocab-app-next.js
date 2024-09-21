@@ -10,7 +10,7 @@ const CardsDisplay = ({ words }: { words: WordType[] }) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.7 }}
       style={{
-        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
       }}
     >
       {words.map((word, index) => (
