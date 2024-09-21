@@ -8,6 +8,7 @@ import Modal from "@/components/Modal";
 import Spinner from "@/components/Spiner";
 import { format, parseISO } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
+import useShowDetailsStore from "@/store/showDetailsStore";
 
 interface DisplayEditModalProps {
   isOpen: boolean;
@@ -26,8 +27,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
   const { words, setWords, fetchWords } = useUserStore();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [showDetails, setShowDetails] = useState(false); 
-  const toggleDetails = () => setShowDetails((prev) => !prev);
+  const { showDetails, toggleDetails} = useShowDetailsStore();
 
   const handleSaveChanges = async () => {
     try {
