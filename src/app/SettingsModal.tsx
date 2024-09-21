@@ -102,16 +102,10 @@ export default function SettingsModal() {
 
   return (
     <Modal isOpen ={isOpen} onClose={onClose} width="w-3/5 max-w-2xl">
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition duration-200"
-      >
-        <XMarkIcon className="h-8 w-8 p-1" />
-      </button>
       <h1 className="text-2xl font-bold mb-3 text-center">設定</h1>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 ">
         <div className="mb-4">
-          <label className="block font-medium mb-1 ml-0.5 text-gray-600">表示件数</label>
+          <label className="block notxs:font-medium mb-1 ml-0.5 text-gray-600">表示件数</label>
           <input
             type="number"
             name="display_count"
@@ -124,12 +118,11 @@ export default function SettingsModal() {
               py-2 px-3 w-full 
               border border-gray-300 rounded-lg
               bg-gray-50
-              xs:font-semibold 
               focus:outline-none focus:border-black"
           />
         </div>
         <div className="mb-6">
-          <label className="block font-medium mb-1 ml-0.5 text-gray-600">並び替え</label>
+          <label className="block notxs:font-medium mb-1 ml-0.5 text-gray-600">並び替え</label>
           <div className="flex items-center space-x-2">
             <select
               name="sort_field"
@@ -139,7 +132,6 @@ export default function SettingsModal() {
                 appearance-none w-full bg-gray-50
                 border border-gray-300 rounded-lg
                 pl-3 py-2 
-                xs:font-semibold
                 focus:outline-none focus:border-black "
             >
               <option value="increment">作成日</option>
@@ -158,7 +150,6 @@ export default function SettingsModal() {
                 appearance-none w-full bg-gray-50
                 border border-gray-300 rounded-lg
                 pl-3 py-2 
-                xs:font-semibold
                 focus:outline-none focus:border-black "
             >
               <option value="ASC">昇順</option>
@@ -208,7 +199,6 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className=" text-gray-600 min-w-max ">から</span>
@@ -225,7 +215,6 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className=" text-gray-600 min-w-max">まで</span>
@@ -248,7 +237,6 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className="min-w-max  text-gray-600">から</span>
@@ -265,7 +253,6 @@ export default function SettingsModal() {
                         py-2 px-3 w-full 
                         border border-gray-300 rounded-lg
                         bg-gray-50
-                        xs:font-semibold 
                         focus:outline-none focus:border-black"
                     />
                     <span className="min-w-max text-gray-600 text-center">まで</span>
@@ -292,7 +279,6 @@ export default function SettingsModal() {
                           appearance-none w-full bg-gray-50
                           border border-gray-300 rounded-lg
                           pl-3 py-2 
-                          xs:font-semibold
                           focus:outline-none focus:border-black "
                       >
                         <option value="created_at">作成日</option>
@@ -312,7 +298,6 @@ export default function SettingsModal() {
                             flex-grow bg-gray-50 h-11
                             border border-gray-300 rounded-lg
                             px-3  
-                            xs:font-semibold
                             focus:outline-none focus:border-black "
                         />
                         <span className="text-gray-600 min-w-8 mx-2 ">から</span>
@@ -327,7 +312,6 @@ export default function SettingsModal() {
                             flex-grow bg-gray-50 h-11
                             border border-gray-300 rounded-lg
                             px-3
-                            xs:font-semibold
                             focus:outline-none focus:border-black "
                           />
                         <span className="text-gray-600 min-w-8 mx-2">まで</span>
@@ -338,17 +322,32 @@ export default function SettingsModal() {
               </motion.div>)}
         </AnimatePresence>
 
-        <div className="flex justify-between space-x-3 mt-6">
+        {/* <div className="flex justify-between space-x-3 mt-6">
           <button
             type="submit"
             className="
-              bg-blue-500 text-xl text-gray-100 xs:font-semibold font-[550]
+              bg-blue-500 text-xl text-gray-100 xs:font-medium font-[550]
               px-3 py-3 rounded-full hover:bg-blue-600 transition-all w-full"
           >
             設定を保存
           </button>
+        </div> */}
+        <div className="flex gap-3 mt-6 xs:mb-0">
+        <button
+          type="submit"
+          className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold"
+        >
+          保 存
+        </button>
+        <div
+          onClick = {onClose} 
+          className="cursor-pointer text-center py-2 border rounded-xl text-white w-full bg-gray-500 hover:bg-gray-600 transition-colors duration-300 font-semibold" 
+        >
+          閉じる
         </div>
+      </div>
       </form>
+      
     </Modal>
   );
 }
