@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import { createClient } from '@/utils/supabase/client';
 
 const supabase = createClient();
-interface ReivewSettings {
+
+interface ReivewSettingsState {
   fields: string[]| null;  // ["meaning", "word", "example", "-example_translation", "-memo"]など
   showEmptyCards: boolean | null;
   accent: string | null;
@@ -14,7 +15,7 @@ interface ReivewSettings {
   setAccent: (language: string)=> void;
 }
 
-const useReivewSettingsStore = create<ReivewSettings>((set) => ({
+const useReivewSettingsStore = create<ReivewSettingsState>((set) => ({
   fields: null,
   showEmptyCards: null,
   accent: null,
