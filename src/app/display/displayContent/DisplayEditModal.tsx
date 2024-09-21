@@ -211,8 +211,11 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
           />
         </div>
         <div className="mb-3 px-0.5">
-          <label className="text-gray-600 ml-0.5">優先度</label>
-          <CustomSlider
+          <div className="flex items-center gap-2">
+            <label className="text-gray-600 ml-0.5">優先度</label>
+            <div className="text-gray-900 ">{editWord?.index}</div>
+          </div>
+          <CustomSlider 
             sliderValue={editWord?.index || 0}
             onChange={(value) => setEditWord((prev) => prev && { ...prev, index: value })}
           />
@@ -232,7 +235,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
       <div className="flex justify-start">
         <button
           type="button"
-          className=" rounded-lg text-gray-700  hover:text-gray-500 transition "
+          className=" rounded-lg text-gray-600  hover:text-gray-500 transition-all duration-100 "
           onClick={toggleDetails}
         >
           {showDetails 
@@ -251,7 +254,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
           transition={{ duration: 0.3 }}
           className="overflow-hidden"
         >
-          <div className="flex flex-col gap-3 ml-1 mt-3 mb-1 text-gray-600  ">
+          <div className="flex flex-col gap-3 ml-1 mt-4 mb-1 text-gray-600  ">
         
             <div className="flex">
               <span className="w-[5.1rem]">復習回数</span>
@@ -289,7 +292,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
         </motion.div>)}
     </AnimatePresence>
 
-      <div className="flex justify-between mb-1 mt-7">
+      <div className="flex justify-between mt-7">
         <button
           onClick={() => setIsDeleteConfirmOpen(true)}
           className="
@@ -303,7 +306,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
 
         <button
           onClick={handleSaveChanges}
-          className="px-6  py-1.5  bg-blue-500 hover:bg-blue-600 text-gray-50 font-[550] rounded-lg transition duration-300"
+          className="px-6  py-1.5  bg-blue-500 hover:bg-blue-600 text-white font-[550] rounded-lg transition duration-300"
         >
           保 存
         </button>
