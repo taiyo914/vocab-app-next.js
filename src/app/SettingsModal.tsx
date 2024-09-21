@@ -322,30 +322,20 @@ export default function SettingsModal() {
               </motion.div>)}
         </AnimatePresence>
 
-        {/* <div className="flex justify-between space-x-3 mt-6">
+        <div className="flex gap-3 mt-6 xs:mb-0">
           <button
             type="submit"
-            className="
-              bg-blue-500 text-xl text-gray-100 xs:font-medium font-[550]
-              px-3 py-3 rounded-full hover:bg-blue-600 transition-all w-full"
+            className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold"
           >
-            設定を保存
+            保 存
           </button>
-        </div> */}
-        <div className="flex gap-3 mt-6 xs:mb-0">
-        <button
-          type="submit"
-          className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold"
-        >
-          保 存
-        </button>
-        <div
-          onClick = {onClose} 
-          className="cursor-pointer text-center py-2 border rounded-xl text-white w-full bg-gray-500 hover:bg-gray-600 transition-colors duration-300 font-semibold" 
-        >
-          閉じる
+          <div
+            onClick = {onClose} 
+            className="cursor-pointer text-center py-2 border rounded-xl text-white w-full bg-gray-500 hover:bg-gray-600 transition-colors duration-300 font-semibold" 
+          >
+            閉じる
+          </div>
         </div>
-      </div>
       </form>
       
     </Modal>
