@@ -5,7 +5,7 @@ import { useEffect } from "react";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  width : string;
+  width? : string;
   children: React.ReactNode;
 }
 
