@@ -4,8 +4,7 @@ import { motion } from "framer-motion";
 import useTabStore from "@/store/currentTabStore";
 
 const Tabs = () => {
-  const { currentTab, setTab } = useTabStore();
-  const [isLoading, setIsLoading] = useState(true); 
+  const { currentTab, setTab, isLoading, setIsLoading } = useTabStore(); 
 
   useEffect(()=>{
     const savedTab = localStorage.getItem('currentTab');
