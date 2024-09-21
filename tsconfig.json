@@ -27,7 +27,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/(auth)/signup",
-    "src/app/experiment/TaskManager.tsx"
+    "src/app/experiment/dnd/TaskManager.tsx"
   ],
   "exclude": ["node_modules"]
 }
