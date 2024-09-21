@@ -127,7 +127,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} width="">
       <button
         onClick={onClose}
         className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition duration-200"
