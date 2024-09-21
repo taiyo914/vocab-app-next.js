@@ -46,26 +46,24 @@ export default function CustomSlider({ sliderValue, onChange }: CustomSliderProp
     };
     return (
       <>
-        <div key={i} className="z-10">
+        <div
+          onClick={() => {
+            onChange(i);
+          }}
+          className={`pt-[10px] pb-[3px]  
+          ${i === 0 && "-ml-[14px]"}
+          ${i === 10 && "-mr-[14px] text-end"}`}
+        >
           <div
-            onClick={() => {
-              onChange(i);
-            }}
-            className={`pt-[10px] pb-[3px]  
-            ${i === 0 && "-ml-[14px]"}
-            ${i === 10 && "-mr-[14px] text-end"}`}
+            className={`
+            ${commonStyle} 
+            ${getHoverColor(i)} 
+            ${i === 0 && "pl-[10px]"}
+            ${i !== 0 && i !== 10 && "text-center"}
+            ${i === 10 && "pr-[7px]"}
+            `}
           >
-            <div
-              className={`
-              ${commonStyle} 
-              ${getHoverColor(i)} 
-              ${i === 0 && "pl-[10px]"}
-              ${i !== 0 && i !== 10 && "text-center"}
-              ${i === 10 && "pr-[7px]"}
-              `}
-            >
-              {i}
-            </div>
+            {i}
           </div>
         </div>
       </>
@@ -79,7 +77,12 @@ export default function CustomSlider({ sliderValue, onChange }: CustomSliderProp
         <div className="w-[7.5px]"></div>{" "}
         {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
         <div className="slider-ticks">
-          {Array.from({ length: 11 }, (_, i) => i).map((i) => ticks(i))}
+          {Array.from({ length: 11 }, (_, i) => i).map((i) => (
+            <div key={i} className="z-10">
+              { ticks(i)}
+            </div>
+          )
+          )}
         </div>
         <div className="w-[7.5px]"></div>{" "}
         {/* つまみの半分の大きさをココに置くことでgridでぴったりになる */}
