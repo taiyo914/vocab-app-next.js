@@ -30,7 +30,7 @@ const VocabListItem = ({ word, onClick } : {word : WordType, onClick: ()=> void}
         <div className="col-span-1 flex items-center justify-center border-r border-gray-200 px-3 ">
           {word.example_translation}
         </div>
-        <div className="col-span-1 flex items-center px-3 text-sm text-gray-700">
+        <div className="col-span-1 flex items-center px-3 text-[0.95rem] text-gray-700">
           {word.memo}
         </div>
       </div>
