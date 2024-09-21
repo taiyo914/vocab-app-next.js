@@ -58,7 +58,7 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-800 font-semibold
+              font-[500]
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
@@ -73,8 +73,7 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
             }
             className="
               w-full px-3 py-2 
-              border rounded-lg 
-              text-gray-800 font-semibold
+              border rounded-lg
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
@@ -89,7 +88,6 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-800 
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
@@ -106,7 +104,6 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
             className="
               w-full px-3 py-2 
               border rounded-lg 
-              text-gray-800 
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
@@ -125,8 +122,11 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
               focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
           />
         </div>
-        <div className="mb-5">
-          <label className="text-gray-600 ml-1">優先度</label>
+        <div className="mb-8 pl-1">
+          <div className="flex items-center gap-2">
+            <label className="text-gray-600 ml-0.5">優先度</label>
+            <div className="">{editWord?.index}</div>
+          </div>
           <CustomSlider
             sliderValue={editWord?.index || 0}
             onChange={(value) => setEditWord((prev) => prev && { ...prev, index: value })}
@@ -134,19 +134,19 @@ const ReviewEditModal: React.FC<ReviewEditModalProps> = ({
         </div>
       </div>
 
-      {/* ボタン */}
-      <div className="flex justify-center gap-3 my-10">
+    {/* ボタン */}
+      <div className="flex gap-3 -mr-1 mb-1">
         <button
           onClick={handleSaveChanges}
-          className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-[580] rounded-lg transition duration-300"
+          className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold"
         >
-          変更を保存
+          保 存
         </button>
         <button
-          onClick={onClose}
-          className="w-full py-2  bg-gray-300 hover:bg-gray-400 text-black font-[590] rounded-lg transition duration-300"
+          onClick = {onClose} 
+          className="py-3 border rounded-xl text-white w-full bg-gray-500 hover:bg-gray-600 transition-colors duration-300 font-semibold" 
         >
-          閉じる
+          キャンセル
         </button>
       </div>
   </Modal>
