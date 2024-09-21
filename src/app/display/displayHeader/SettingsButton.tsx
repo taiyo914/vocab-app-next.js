@@ -1,7 +1,7 @@
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
-import useOpenModalStore from "@/store/openModalStore";
+import useWordsSettingsModalStore from "@/store/wordsSettingsModalStore";
 const SettingsButton = () => {
-  const { toggleModal } = useOpenModalStore();
+  const { toggleModal } = useWordsSettingsModalStore();
 
   return (
     <button

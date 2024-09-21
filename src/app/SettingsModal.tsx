@@ -1,24 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import useOpenModalStore from "@/store/openModalStore";
+import useWordsSettingsModalStore from "@/store/wordsSettingsModalStore";
 import useUserStore from "@/store/userStore";
 import { WordsSettingsType } from "@/types/Types";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsEraser } from "react-icons/bs";
-import { IoSettingsOutline } from "react-icons/io5";
-import { HiXMark } from "react-icons/hi2";
-import { FaRegCircleXmark } from "react-icons/fa6";
 import Modal from "../components/Modal";
-import { ChevronDownIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export default function SettingsModal() {
-  const { isOpen, toggleModal } = useOpenModalStore();
+  const { isOpen, toggleModal, showDetails, toggleDetails } = useWordsSettingsModalStore();
   const { userId, wordsSettings, setWordsSettings } = useUserStore();
   const supabase = createClient();
   const [temporarySettings, setTemporarySettings] = useState<WordsSettingsType | null>(wordsSettings);
-  const [showDetails, setShowDetails] = useState(false); // 詳細設定を表示するかどうかの状態
-  const toggleDetails = () => setShowDetails((prev) => !prev); // トグルボタン用
   const onClose = () => {
     toggleModal()
     setTemporarySettings(wordsSettings)
