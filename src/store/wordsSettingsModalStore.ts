@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 type WordsSettingsModalState = {
   isOpen: boolean;
@@ -11,7 +11,7 @@ const useWordsSettingsModalStore = create<WordsSettingsModalState>((set) => ({
   isOpen: false,
   toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
   showDetails: false,
-  toggleDetails: () => set((state) => ({showDetails: !state.showDetails}))
+  toggleDetails: () => set((state) => ({ showDetails: !state.showDetails })),
 }));
 
 export default useWordsSettingsModalStore;
