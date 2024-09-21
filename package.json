@@ -20,6 +20,7 @@
     "@supabase/supabase-js": "^2.45.3",
     "d3-dsv": "^3.0.1",
     "date-fns": "^3.6.0",
+    "fitty": "^2.4.2",
     "framer-motion": "^11.5.4",
     "lodash": "^4.17.21",
     "next": "^14.2.13",
