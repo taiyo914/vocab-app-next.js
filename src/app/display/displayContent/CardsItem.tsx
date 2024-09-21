@@ -12,7 +12,7 @@ const CardsItem = ({ word }:{ word: WordType}) => {
         flex items-center justify-center"
       whileHover={{ scale: 1.03 }}
     >
-      <h2 className="text-[1.4rem] font-bold text-center">{word.word}</h2>
+      <h2 className="text-[1.4rem] font-bold text-center overflow-auto">{word.word}</h2>
     </motion.div>
   );
 };
