@@ -127,13 +127,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} width="">
-      <button
-        onClick={onClose}
-        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition duration-200"
-      >
-        <XMarkIcon className="h-8 w-8 p-1" />
-      </button>
+    <Modal isOpen={isOpen} onClose={onClose} >
 
       <div className="relative flex items-center justify-center mt-2 xs:mt-0 mb-3">
         <PencilSquareIcon className="h-5" />
@@ -278,7 +272,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
         </motion.div>)}
     </AnimatePresence>
 
-      <div className="flex justify-between mt-7 xs:-mb-1">
+      {/* <div className="flex justify-between mt-7 xs:-mb-1">
         <button
           onClick={() => setIsDeleteConfirmOpen(true)}
           className="
@@ -296,7 +290,35 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
         >
           保 存
         </button>
-      </div>
+      </div> */}
+
+        <div className="flex gap-3 mt-6 xs:-mb-1">
+          <button
+            onClick={handleSaveChanges}
+            className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold"
+          >
+            保 存
+          </button>
+          <button
+            onClick = {onClose} 
+            className="cursor-pointer text-center py-2 border rounded-xl text-white w-full bg-gray-500 hover:bg-gray-600 transition-colors duration-300 font-semibold" 
+          >
+            閉じる
+          </button>
+        </div>
+
+        <div className="mt-7 flex justify-center ">
+          <button
+            onClick={() => setIsDeleteConfirmOpen(true)}
+            className="
+              w-40 py-2 rounded-full text-sm -mb-1
+            hover:bg-gray-200 text-gray-600 font-medium transition duration-300
+              flex items-center justify-center gap-0.5"
+          >
+            <TrashIcon className="h-4" />
+            単語を削除する
+          </button>
+        </div>
       
       {/* 削除確認モダール */}
       {isDeleteConfirmOpen && (
