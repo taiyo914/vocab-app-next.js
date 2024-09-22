@@ -1,6 +1,11 @@
 "use client"
+import DisplayHeader from '@/app/display/displayHeader/DisplayHeader';
+import Tabs from '@/app/display/displayHeader/Tabs';
 import Spinner from '@/components/Spiner';
 import { useState, useEffect } from 'react';
+import XSearchInput from './XSearchInput';
+import SettingsButton from '@/app/display/displayHeader/SettingsButton';
+import SimpleSearchInput from './SimpleInput';
 
 export default function SearchWords() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,8 +32,8 @@ export default function SearchWords() {
   }, [searchTerm]);
 
   return (
-    <div>
-      <Spinner/>
+    <div className='p-10'>
+      {/* <Spinner/>
       <div>{counter}</div>
       <input 
         type="text" 
@@ -51,8 +56,15 @@ export default function SearchWords() {
           )
         )}
           
-      </ul>
-      
+      </ul> */}
+          <div className="flex items-center justify-between">
+            <Tabs/>
+            <div className="flex ">
+              {/* <XSearchInput/> */}
+              <SimpleSearchInput/>
+              <SettingsButton/>
+            </div>
+          </div>
     </div>
   );
 }
