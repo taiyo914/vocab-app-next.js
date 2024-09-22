@@ -355,41 +355,41 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
           </h1>
           <p className="text-lg mb-5"></p>
           {reviewStatus !== "done" 
-          ? <>
-            <button
-              onClick={onClick}
-              className="
-              bg-orange-100 text-gray-700 
-              w-60 py-2 mb-3 font-[550] text-center
-              rounded-full 
-              hover:bg-orange-200 transition duration-300 shadow-md"
-            >
-              {reviewStatus === "loading" 
-              ? <Spinner size="h-4 w-4" borderColor="border-gray-100 border-t-yellow-500" />
-              : "復習を記録する"
-              }
-            </button>
+            ?<>
+              <button
+                onClick={onClick}
+                className="
+                bg-orange-100 text-gray-700 
+                w-60 py-2 mb-3 font-[550] text-center
+                rounded-full 
+                hover:bg-orange-200 transition duration-300 shadow-md"
+              >
+                {reviewStatus === "loading" 
+                ? <Spinner size="h-4 w-4" borderColor="border-gray-100 border-t-yellow-500" />
+                : "復習を記録する"
+                }
+              </button>
 
-            {(reviewStatus !== "yet"  && reviewStatus !== "loading") && <p className="text-red-600 mb-3 ">{reviewStatus}</p>}
+              {(reviewStatus !== "yet"  && reviewStatus !== "loading") && <p className="text-red-600 mb-3 ">{reviewStatus}</p>}
 
-            <p className="text-sm text-gray-50 text-center xs:font-semibold">
-              今回復習した単語の
-              <br />
-              復習回数と復習日時が更新されます
-            </p>
-          </>
-          : <>
-            <div
-              className="
-              bg-orange-200 text-gray-700
-              py-2 font-[550]
-              rounded-full mb-4 w-60 text-center"
-            >
-              復習を記録しました!
-            </div>
-            <button onClick={()=>router.push("/")} className="text-gray-700  text-center bg-yellow-100 hover:bg-orange-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
-            <div className="text-sm h-4"></div>
-          </>
+              <p className="text-sm text-gray-50 text-center xs:font-semibold">
+                今回復習した単語の
+                <br />
+                復習回数と復習日時が更新されます
+              </p>
+            </>
+            :<>
+              <div
+                className="
+                bg-orange-200 text-gray-700
+                py-2 font-[550]
+                rounded-full mb-4 w-60 text-center"
+              >
+                復習を記録しました!
+              </div>
+              <button onClick={()=>router.push("/")} className="text-gray-700  text-center bg-yellow-100 hover:bg-orange-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
+              <div className="text-sm h-4"></div>
+            </>
           }
         </div>
       </div>
