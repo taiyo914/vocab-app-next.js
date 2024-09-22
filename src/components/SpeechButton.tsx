@@ -3,30 +3,25 @@ import React from 'react';
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline'; 
 
 interface SpeechProps {
-  word: string; 
-  accent: string; 
+  props? :  string
+  word: string | undefined; 
+  accent?: string; 
 }
 
-const SpeechButton: React.FC<SpeechProps> = ({ word, accent }) => {
-  const handleSpeak = () => {
-    if (!word) return;
+export const handleSpeak = (word: string | undefined, accent: string ="en-US" ) => {
+  if (!word) return;
 
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.lang = accent;  
-    if(accent == "ja-JP"){
-      utterance.rate = 1.1;
-    }
-    window.speechSynthesis.speak(utterance);
-  };
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = accent;  
+  if(accent == "ja-JP"){
+    utterance.rate = 1.1;
+  }
+  window.speechSynthesis.speak(utterance);
+};
 
+const SpeechButton: React.FC<SpeechProps> = ({ props = "h-5", word, accent = "en-US" }) => {
   return (
-    <button
-      onClick={handleSpeak}
-      aria-label="Speak"
-      
-    >
-      <SpeakerWaveIcon className='w-full h-full'/>
-    </button>
+      <SpeakerWaveIcon className={`${props} cursor-pointer`} onClick={() => handleSpeak(word, accent)}/>
   );
 };
 
