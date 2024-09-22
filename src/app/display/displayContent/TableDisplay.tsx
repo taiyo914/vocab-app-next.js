@@ -9,7 +9,7 @@ const TableDisplay = ({ words }: { words: WordType[] }) => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
       <div className="px-4 xs:px-3 pb-4 bg-white overflow-x-auto">
-        <div className="min-w-[1150px] xs:min-w-[1750px]">
+        <div className="min-w-[1280px] xs:min-w-[1750px]">
           <div className="flex items-center mb-1 ">
             <div className="flex-1 grid grid-cols-5">
               <div className="col-span-1 font-bold text-gray-400 text-sm text-center">単語 </div>
