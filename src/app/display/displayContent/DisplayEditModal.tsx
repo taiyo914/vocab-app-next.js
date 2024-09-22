@@ -83,7 +83,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
   const formatDate = (dateString: string) => {
     if (!dateString) return;
     const parsedUTCDate = parseISO(dateString); //デフォルトでその土地の時間で計算してくれます
-    return format(parsedUTCDate, "yyyy年M月d日 H:m");
+    return format(parsedUTCDate, "yyyy年M月d日 H:mm");
   };
 
   const [isWordLangOpen, setIsWordLangOpen] = useState(false);
