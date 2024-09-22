@@ -7,12 +7,22 @@ export async function GET(req:Request) {
   const { searchParams } = new URL(req.url);
   const searchQuery = searchParams.get('searchQuery');
 
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  console.log("ユーザーの取得", user, userError)
+
+  if (userError || !user) {
+    return NextResponse.json({ error: 'ログインユーザーが見つかりません' });
+  }
+
   if (!searchQuery) {
     return NextResponse.json({ error: '検索クエリが必要です' });
   }
 
   const { data, error } = await supabase
-    .rpc('search_words', { query: searchQuery });
+    .rpc('search_words', { query: searchQuery, user_id: user.id, });
 
   if (error) {
     return NextResponse.json({ error: error.message });
