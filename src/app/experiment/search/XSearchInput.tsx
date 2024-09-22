@@ -1,15 +1,15 @@
 "use client";
 import { MagnifyingGlassIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { AnimatePresence, motion } from "framer-motion";
-import { useState, useEffect, useRef, useCallback } from "react";
-import debounce from "lodash/debounce";
+import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 
 const SearchInput = () => {
   const [isOpen, setIsOpen] = useState(false);
+
   const [inputValue, setInputValue] = useState("");
   const [results, setResults] = useState([]); // 検索結果
-  const [isDataFetched, setIsDataFetched] = useState(false); // データ取得完了フラグ
-  const [isContainerVisible, setIsContainerVisible] = useState(false); // コンテナの可視性フラグ
+  const [isFirstSearch, setIsFirstSearch] = useState(true); // 最初の検索を制御するフラグ
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -27,41 +27,50 @@ const SearchInput = () => {
   const handleClear = () => {
     setInputValue("");
     setResults([]);
-    setIsDataFetched(false);
-    setIsContainerVisible(false); // コンテナが非表示になる
+    setIsFirstSearch(true)
     setIsOpen(false);
   };
 
-  // デバウンスされた検索関数
-  const fetchResults = useCallback(
-    debounce(async (searchTerm) => {
-      if (!searchTerm.trim()) {
-        setResults([]);
-        setIsDataFetched(false); // データが空の場合にフラグをリセット
-        return;
-      }
-      setIsDataFetched(false); // データ取得前にリセット
-      const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
-      const data = await res.json();
-      setResults(data);
-      setIsDataFetched(true); // データ取得完了フラグ
-    }, 300), 
-    []
-  );
-
   useEffect(() => {
-    if (!inputValue.trim()) {
-      setResults([]);
-      setIsContainerVisible(false); // 入力が空白になったらコンテナを非表示に
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node) &&
+        inputValue === "" // 入力があるときは閉じない
+      ) {
+        setIsOpen(false); 
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [inputValue]);
+
+
+  // 検索結果を取得する関数
+  const fetchResults = async (searchTerm: string) => {
+    if (!searchTerm.trim()) {
+      setResults([]); // 空白の場合は結果をクリア
       return;
     }
+    const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
+    const data = await res.json();
+    setResults(data); // 取得した結果をセット
+    setIsFirstSearch(false); // 最初の検索完了時にフラグをfalseにする
+  };
 
-    if (!isContainerVisible) {
-      setIsContainerVisible(true); // 最初の入力時にコンテナを表示
+  // 入力が変わるたびにデータを取得
+  useEffect(() => {
+    if (inputValue) {
+      fetchResults(inputValue);
+    } else {
+      setResults([]); // 入力が空の場合、結果をクリア
+      setIsFirstSearch(true); // 入力が空の場合、フラグをリセット
     }
-
-    fetchResults(inputValue); // 入力が変わるたびにデバウンスされた検索を呼び出す
-  }, [inputValue, fetchResults, isContainerVisible]);
+  }, [inputValue]);
 
   return (
     <div ref={containerRef} className="flex items-center relative">
@@ -93,37 +102,20 @@ const SearchInput = () => {
         </div>
       </motion.div>
 
-      {/* コンテナのアニメーションは最初の表示時のみ */}
-      <AnimatePresence>
-        {isContainerVisible && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }} // ✗ボタンで閉じるときに滑らかに消える
-            transition={{ duration: 0.3 }}
-            className="absolute top-7 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto"
-          >
-            {/* 結果表示のアニメーション */}
-            {isDataFetched && results.length > 0 ? (
-              <motion.ul
-                key="results"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="max-h-60"
-              >
-                {results.map((word: any) => (
-                  <li key={word.id} className="p-2 hover:bg-gray-100">
-                    {word.word}
-                  </li>
-                ))}
-              </motion.ul>
-            ) : (
-              inputValue.trim() && isDataFetched && <p className="p-2">結果なし</p> // 結果がない場合の表示
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* 検索結果の表示 */}
+      { inputValue && results.length > 0 && (
+        <ul className="absolute top-10 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
+          {results.map((word: any) => (
+            <li key={word.id} className="p-2 hover:bg-gray-100">
+              {word.word}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* 結果がない場合 */}
+      {!isFirstSearch && inputValue && results.length === 0 && <ul className="absolute top-10 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto"><li>結果なし</li></ul>}
+  
     </div>
   );
 };

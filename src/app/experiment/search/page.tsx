@@ -60,8 +60,8 @@ export default function SearchWords() {
           <div className="flex items-center justify-between">
             <Tabs/>
             <div className="flex ">
-              {/* <XSearchInput/> */}
-              <SimpleSearchInput/>
+              <XSearchInput/>
+              {/* <SimpleSearchInput/> */}
               <SettingsButton/>
             </div>
           </div>
