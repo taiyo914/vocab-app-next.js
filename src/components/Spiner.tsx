@@ -4,15 +4,12 @@ interface SpinnerProps {
   borderColor? : string;
   size? : string;
   borderWeight? : string;
+  props? : string;
 }
 
-const Spinner: React.FC<SpinnerProps> = ({ borderColor = "border-gray-100 border-t-gray-300", size = "h-8 w-8", borderWeight = "border-2" }) => {
+const Spinner: React.FC<SpinnerProps> = ({ borderColor = "border-gray-200 border-t-blue-300", size = "h-5 w-5", borderWeight = "border-[0.25rem]", props = "" }) => {
   return (
-    <div className={`flex justify-center items-center`}>
-      <div className="flex justify-center" >
-        <div className={`${size} ${borderWeight} ${borderColor} animate-spin rounded-full`}></div>
-      </div>
-    </div>
+    <div className={`${size} ${borderWeight} ${borderColor} ${props} animate-spin rounded-full`}></div>
   );
 };
 
