@@ -354,7 +354,7 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
             <div className="animate-bounce"> 🎉</div>
           </h1>
           <p className="text-lg mb-5"></p>
-          {reviewStatus !== "done" 
+          {reviewStatus !== "done"
             ?<>
               <button
                 onClick={onClick}
@@ -365,7 +365,9 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
                 hover:bg-orange-200 transition duration-300 shadow-md"
               >
                 {reviewStatus === "loading" 
-                ? <Spinner size="h-4 w-4" borderColor="border-gray-100 border-t-yellow-500" />
+                ? <div className="flex items-center justify-center">
+                    <Spinner size="h-4 w-4" borderColor="border-orange-200 border-t-yellow-500" />
+                  </div>
                 : "復習を記録する"
                 }
               </button>
