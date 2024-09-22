@@ -12,9 +12,7 @@ export async function GET(req:Request) {
   }
 
   const { data, error } = await supabase
-    .from('words')
-    .select('word')
-    .ilike('word', `%${searchQuery}%`); // 大文字・小文字を無視して検索
+    .rpc('search_words', { query: searchQuery });
 
   if (error) {
     return NextResponse.json({ error: error.message });
