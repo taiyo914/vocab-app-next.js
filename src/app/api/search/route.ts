@@ -13,7 +13,7 @@ export async function GET(req:Request) {
 
   const { data, error } = await supabase
     .from('words')
-    .select('*')
+    .select('word')
     .ilike('word', `%${searchQuery}%`); // 大文字・小文字を無視して検索
 
   if (error) {
