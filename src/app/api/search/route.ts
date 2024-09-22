@@ -11,7 +11,6 @@ export async function GET(req:Request) {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
-  console.log("ユーザーの取得", user, userError)
 
   if (userError || !user) {
     return NextResponse.json({ error: 'ログインユーザーが見つかりません' });
