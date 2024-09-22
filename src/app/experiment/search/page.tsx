@@ -1,29 +1,34 @@
 "use client"
+import Spinner from '@/components/Spiner';
 import { useState, useEffect } from 'react';
 
 export default function SearchWords() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [counter, setCounter] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (searchTerm) {
-        const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
-        const data = await res.json();
-        setResults(data);
-      } else {
+      if (!searchTerm.trim()) {
         setResults([]); // 検索ワードが空の時は結果をクリア
+        return; // 処理を中断
       }
+
+      setIsLoading(true); // データ取得開始時にローディング状態をオン
+      const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
+      const data = await res.json();
+      setResults(data);
+      setIsLoading(false); // データ取得完了時にローディング状態をオフ
       setCounter(counter+1)
     }, 10); // 0.01秒のデバウンス（）
     
     return () => clearTimeout(delayDebounceFn); // 前回のタイマーをクリア
   }, [searchTerm]);
 
-
   return (
     <div>
+      <Spinner/>
       <div>{counter}</div>
       <input 
         type="text" 
@@ -36,12 +41,19 @@ export default function SearchWords() {
         検索
       </button> */}
       <ul>
-        {results
-          ? results.map((word: any) => (
-          <li key={word.id}>{word.word}</li>
-        ))
-         : <p>結果なし</p>
-        }
+        {isLoading ? (
+          <Spinner/>
+        ) : (
+          // 結果が空の時の表示
+          searchTerm && results.length === 0 ? (
+            <p>結果なし</p> // 結果がない時
+          ) : (
+            results.map((word: any) => (
+              <li key={word.id}>{word.word}</li>
+            ))
+          )
+        )}
+          
       </ul>
       
     </div>
