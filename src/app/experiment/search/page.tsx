@@ -37,9 +37,6 @@ export default function SearchWords() {
         placeholder="単語を入力" 
         className="border p-2"
       />
-      {/* <button onClick={handleSearch} className="bg-blue-500 text-white p-2">
-        検索
-      </button> */}
       <ul>
         {isLoading ? (
           <Spinner/>
