@@ -72,7 +72,7 @@ const CardsItem = ({ word }:{ word: WordType}) => {
             onClick={handleClick} 
             key="back"
           >
-            <button onClick={(e)=>handleEditClick(e, word)} className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition duration-200"><PencilSquareIcon className="h-5"/></button>
+            <button onClick={(e)=>handleEditClick(e, word)} className="absolute top-1 right-1 p-1 rounded-2xl text-gray-400 hover:text-gray-600 transition duration-200"><PencilSquareIcon className="h-5"/></button>
             <h2 className="text-[1.2rem] font-semibold text-center">{word.meaning}</h2>
           </div>
         
