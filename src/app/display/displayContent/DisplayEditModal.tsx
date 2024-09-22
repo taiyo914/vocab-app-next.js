@@ -9,6 +9,8 @@ import Spinner from "@/components/Spiner";
 import { format, parseISO } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import useShowDetailsStore from "@/store/showDetailsStore";
+import { handleSpeak }from "@/components/SpeechButton";
+import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
 
 interface DisplayEditModalProps {
   isOpen: boolean;
@@ -46,54 +48,6 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
     }
   };
 
-  //ブラウザ側でsupabaseを使う最もシンプルなパターン
-  // const handleDelete = async () => {
-  //   setDeleteLoading(true)
-  //   try {
-  //     const { error } = await supabase
-  //       .from("words")
-  //       .update({ deleted_at: new Date().toISOString() }) // deleted_atを更新
-  //       .eq("id", editWord!.id);
-
-  //     if (error) {
-  //       throw new Error("Error deleting word: " + error.message);
-  //     }
-
-  //     await fetchWords()
-  //     onClose(); // モーダルを閉じる
-  //   } catch (err: any) {
-  //     console.error(err.message);
-  //   } finally {
-  //     setDeleteLoading(false);
-  //   }
-  // };
-
-  //ブラウザ側でsupabaseを実行し、PromiseAllで最低0.5秒は待つパターン
-  // const handleDelete = async () => {
-  //   setDeleteLoading(true)
-  //   try {
-  //     const deleteRequest = supabase //awaitはつけない
-  //       .from("words")
-  //       .update({ deleted_at: new Date().toISOString() })
-  //       .eq("id", editWord!.id);
-
-  //     const delay = new Promise((resolve) => setTimeout(resolve, 500)); // 0.5秒の遅延
-  //     // 削除処理と1秒の遅延を並列で実行し、両方が完了するまで待つ（最低0.5秒は待つ）
-  //     const [{ error }] = await Promise.all([deleteRequest, delay]);
-
-  //     if (error) throw new Error(error.message);
-  //     else console.log("削除に成功しました！");
-
-  //     await fetchWords();
-
-  //     onClose();
-  //   } catch (err: any) {
-  //     console.error("削除エラー:", err.message);
-  //   } finally {
-  //     setDeleteLoading(false);
-  //   }
-  // };
-
   //APIを使うパターン（ちょっと遅い...?）
   const handleDelete = async () => {
     setDeleteLoading(true);
@@ -126,17 +80,53 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
     return format(parsedUTCDate, "yyyy年M月d日 H:m");
   };
 
+  const [isWordLangOpen, setIsWordLangOpen] = useState(false);
+  const [isExampleLangOpen, setIsExampleLangOpen] = useState(false);
+
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} >
 
-      <div className="relative flex items-center justify-center mt-2 xs:mt-0 mb-3">
-        <PencilSquareIcon className="h-5" />
-        <h2 className="font-bold text-xl ">単語カード</h2>
-      </div>
+        <div className="flex items-center justify-center mt-3 xs:mt-0 mb-4">
+          <PencilSquareIcon className="h-5" />
+          <h2 className="font-bold text-xl ">単語カード</h2>
+        </div>
 
       <div>
         <div className="mb-5">
-          <label className="text-gray-600 ml-1">単語</label>
+          <label className="text-gray-600 ml-1 flex items-center justify-between gap-1.5">
+            <div>単語</div>
+            <div
+              className="relative inline-block "
+              onMouseEnter={()=>setIsWordLangOpen(true)}
+              onMouseLeave={()=>setIsWordLangOpen(false)}
+            >
+              <button className="text-gray-500 text-[1.5rem] flex justify-end w-full">
+                <SpeakerWaveIcon className="h-[1.2rem] cursor-pointer mr-1"/>
+              </button>
+              <AnimatePresence>
+                {isWordLangOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute right-0 top-0  bg-white border rounded-xl border-gray-300 shadow-lg "
+                  >
+                    <div 
+                       onClick = {()=>handleSpeak(editWord?.word, "en-US")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-t-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>US</div>
+                    <div 
+                       onClick = {()=>handleSpeak(editWord?.word, "en-GB")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150             "><SpeakerWaveIcon className="h-[1.2rem]"/>UK</div>
+                    <div 
+                       onClick = {()=>handleSpeak(editWord?.word, "en-AU")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-b-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>AUS</div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </label>
           <input
             type="text"
             value={editWord?.word}
@@ -150,7 +140,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
           />
         </div>
 
-        <div className="mb-5">
+        <div className="mb-6">
           <label className="text-gray-600 ml-1">意味</label>
           <input
             type="text"
@@ -164,7 +154,39 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
         </div>
 
         <div className="mb-4">
-          <label className="text-gray-600 ml-1">例文</label>
+          <label className="text-gray-600 ml-1 flex items-center  justify-between gap-1.5">
+            <div>例文</div>
+            <div
+              className="relative inline-block "
+              onMouseEnter={()=>setIsExampleLangOpen(true)}
+              onMouseLeave={()=>setIsExampleLangOpen(false)}
+            >
+              <button className="text-gray-500 text-[1.5rem] flex justify-end w-full">
+                <SpeakerWaveIcon className="h-[1.2rem] cursor-pointer mr-1"/>
+              </button>
+              <AnimatePresence>
+                {isExampleLangOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute right-0 top-0  bg-white border rounded-xl border-gray-300 shadow-lg "
+                  >
+                    <div 
+                       onClick = {()=>handleSpeak(editWord?.example, "en-US")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-t-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>US</div>
+                    <div 
+                       onClick = {()=>handleSpeak(editWord?.example, "en-GB")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150             "><SpeakerWaveIcon className="h-[1.2rem]"/>UK</div>
+                    <div 
+                       onClick = {()=>handleSpeak(editWord?.example, "en-AU")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-b-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>AUS</div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </label>
           <textarea
             value={editWord?.example}
             onChange={(e) => setEditWord((prev) => prev && { ...prev, example: e.target.value })}
