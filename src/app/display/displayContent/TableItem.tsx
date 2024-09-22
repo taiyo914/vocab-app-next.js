@@ -1,16 +1,29 @@
 import React from "react";
+import { useState } from "react";
 import { WordType } from "@/types/Types";
 import { motion } from "framer-motion";
+import DisplayEditModal from "./DisplayEditModal";
 
-const VocabListItem = ({ word, onClick } : {word : WordType, onClick: ()=> void}) => {
+const VocabListItem = ({ word } : {word : WordType}) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editWord, setEditWord] = useState<WordType | null>(null);
+  const handleEditClick = (word: WordType) => {
+    setEditWord(word);
+    setIsEditModalOpen(true);
+  };
 
-  return (
+  const closeModal = () => {
+    setIsEditModalOpen(false);
+    setEditWord(null);
+  };
+
+  return (<>
     <motion.div className="flex items-center" 
       whileHover={{ scale: 1.01}} 
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div 
-        onClick={onClick}
+        onClick={() => handleEditClick(word)}
         className="min-h-[5.8rem] cursor-pointer flex-1 grid grid-cols-5 border-gray-200 bg-white border shadow-sm xs:shadow rounded-xl py-3 hover:shadow-md transition-all duration-300"
       >
         <div className="col-span-1 flex items-center border-r border-gray-200 pl-3 pr-3 font-bold text-lg ">
@@ -35,7 +48,14 @@ const VocabListItem = ({ word, onClick } : {word : WordType, onClick: ()=> void}
         </div>
       </div>
     </motion.div>
-  );
+
+    <DisplayEditModal
+      isOpen={isEditModalOpen}
+      onClose={closeModal}
+      editWord={editWord}
+      setEditWord={setEditWord}
+    />
+  </>);
 };
 
 export default VocabListItem;
