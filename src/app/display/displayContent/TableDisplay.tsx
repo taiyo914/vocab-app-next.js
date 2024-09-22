@@ -3,20 +3,8 @@ import { useState } from "react";
 import { WordType } from "@/types/Types";
 import TableItem from "./TableItem";
 import { motion } from "framer-motion";
-import DisplayEditModal from "./DisplayEditModal";
 
 const TableDisplay = ({ words }: { words: WordType[] }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editWord, setEditWord] = useState<WordType | null>(null);
-  const handleEditClick = (word: WordType) => {
-    setEditWord(word);
-    setIsEditModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsEditModalOpen(false);
-    setEditWord(null);
-  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
@@ -33,19 +21,11 @@ const TableDisplay = ({ words }: { words: WordType[] }) => {
           </div>
           <div className="space-y-2">
             {words.map((word) => (
-                <TableItem  key={word.id} word={word} onClick={() => handleEditClick(word)}/>
+                <TableItem  key={word.id} word={word}/>
             ))}
           </div>
         </div>
       </div>
-
-      <DisplayEditModal
-        isOpen={isEditModalOpen}
-        onClose={closeModal}
-        editWord={editWord}
-        setEditWord={setEditWord}
-      />
-
     </motion.div>
   );
 };
