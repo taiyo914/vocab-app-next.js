@@ -6,6 +6,20 @@ import ReactCardFlip from 'react-card-flip';
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import DisplayEditModal from "./DisplayEditModal";
 
+const backgroundColors = [
+  'rgb(250, 250, 250)',  // sliderColor-0
+  'rgb(233, 255, 248)',  // sliderColor-1
+  'rgb(227, 252, 242)',  // sliderColor-2
+  'rgb(215, 248, 235)',  // sliderColor-3
+  'rgb(255, 252, 235)',  // sliderColor-4
+  'rgb(255, 250, 224)',  // sliderColor-5
+  'rgb(255, 247, 213)',  // sliderColor-6
+  'rgb(255, 240, 230)',  // sliderColor-7
+  'rgb(255, 236, 220)',  // sliderColor-8
+  'rgb(255, 232, 232)',  // sliderColor-9
+  'rgb(255, 221, 221)'   // sliderColor-10
+];
+
 const CardsItem = ({ word }:{ word: WordType}) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -29,23 +43,27 @@ const CardsItem = ({ word }:{ word: WordType}) => {
   return (<>
     <motion.div
       layout
-      whileHover={{ scale: 1.03 }}
+      className="cursor-pointer"
+      whileHover={{ scale: 1.04 }}
+      transition={{ duration: 0.15}}
     >
-      <ReactCardFlip isFlipped={isFlipped} flipDirection="vertical" flipSpeedBackToFront={0.4} flipSpeedFrontToBack={0.4} infinite={false}>
+      <ReactCardFlip isFlipped={isFlipped} flipDirection="vertical" flipSpeedBackToFront={0.35} flipSpeedFrontToBack={0.35} infinite={false}>
         <div
             className="
               shadow-md min-h-32
-              px-6 py-8 
+              px-6 py-8 bg-white
               rounded-lg border border-gray-200 
               flex items-center justify-center"
             onClick={handleClick} 
             key="front"
           >
-            
-            <h2 className="text-[1.4rem] font-bold text-center overflow-auto">{word.word}</h2>
+            <h2 className="text-[1.4rem] font-bold text-center overflow-auto" >{word.word}</h2>
           </div>
 
           <div
+            style={{
+              backgroundColor: backgroundColors[word.index],
+            }}
             className="
               shadow-md min-h-32
               px-6 py-8 relative
@@ -55,7 +73,7 @@ const CardsItem = ({ word }:{ word: WordType}) => {
             key="back"
           >
             <button onClick={(e)=>handleEditClick(e, word)} className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition duration-200"><PencilSquareIcon className="h-5"/></button>
-            <h2 className="text-[1.2rem] font-semibold text-center bg-white">{word.meaning}</h2>
+            <h2 className="text-[1.2rem] font-semibold text-center">{word.meaning}</h2>
           </div>
         
       </ReactCardFlip>
