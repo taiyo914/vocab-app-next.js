@@ -5,11 +5,9 @@ import { useState, useEffect, useRef } from "react";
 
 const SearchInput = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const [inputValue, setInputValue] = useState("");
-  const [results, setResults] = useState([]); // 検索結果
-  const [isFirstSearch, setIsFirstSearch] = useState(true); // 最初の検索を制御するフラグ
-
+  const [results, setResults] = useState([]); 
+  const [isFirstSearch, setIsFirstSearch] = useState(true); 
   const [showResults, setShowResults] = useState(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -22,7 +20,6 @@ const SearchInput = () => {
     if (!isOpen) {
       setTimeout(() => {
         inputRef.current?.focus();
-        // 検索結果を表示する
         setShowResults(true);
       }, 200);
     }
@@ -33,7 +30,7 @@ const SearchInput = () => {
     setResults([]);
     setIsFirstSearch(true);
     setIsOpen(false);
-    setShowResults(false); // 検索結果を隠す
+    setShowResults(false); 
   };
 
   useEffect(() => {
@@ -41,13 +38,12 @@ const SearchInput = () => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node) &&
-        inputValue === "" // 入力があるときは閉じない
+        inputValue === "" 
       ) {
         setIsOpen(false);
       }
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        // 検索結果のみを隠す
-        setShowResults(false);
+        setShowResults(false); //検索結果のみを隠す
       }
     };
 
@@ -58,22 +54,21 @@ const SearchInput = () => {
     };
   }, [inputValue]);
 
-    // 入力欄にフォーカスがあたったら検索結果を再表示する
+  // 入力欄にフォーカスがあたったら検索結果を再表示する
   const handleFocus = () => {
     if (inputValue) {
       setShowResults(true);
     }
   };
 
-  // 検索結果を取得する関数
   const fetchResults = async (searchTerm: string) => {
     if (!searchTerm.trim()) {
-      setResults([]); // 空白の場合は結果をクリア
+      setResults([]); 
       return;
     }
     const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
     const data = await res.json();
-    setResults(data); // 取得した結果をセット
+    setResults(data);
     setIsFirstSearch(false); // 最初の検索完了時にフラグをfalseにする
   };
 
@@ -81,10 +76,10 @@ const SearchInput = () => {
   useEffect(() => {
     if (inputValue) {
       fetchResults(inputValue);
-      setShowResults(true); // 入力があるときに検索結果を表示
+      setShowResults(true); 
     } else {
-      setResults([]); // 入力が空の場合、結果をクリア
-      setIsFirstSearch(true); // 入力が空の場合、フラグをリセット
+      setResults([]); 
+      setIsFirstSearch(true);  // 空文字になったらリセット
       setShowResults(false); // 入力がないときは検索結果を隠す
     }
   }, [inputValue]);
