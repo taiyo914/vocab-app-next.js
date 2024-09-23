@@ -14,6 +14,7 @@ import NotificationExp from "./NotificationExp";
 import DisplayEditModal from "../display/displayContent/DisplayEditModal";
 import FlipCard from "./flip_card/FlipCard";
 import MyCardFlip from "./flip_card/ReactCardFlip";
+import ExpandContainer from "./expandContainer/page";
 
 export default function page() {
   const wordSample = {
@@ -49,7 +50,8 @@ export default function page() {
       {/* <TaskManager /> */}
       {/* <ReviewSettingsModal/> */}
       {/* <FlipCard/> */}
-      <MyCardFlip />
+      {/* <MyCardFlip /> */}
+      <ExpandContainer/>
     </>
   );
 }
