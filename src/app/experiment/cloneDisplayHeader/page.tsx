@@ -6,6 +6,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 
+
 const DisplayHeader = () => {
   return (
     <div className="px-5 xs:px-3 max-w-[2000px] mx-auto mt-32">

@@ -69,8 +69,6 @@ export default function NewHeader() {
         </div>
       </div>
 
-      {/* コンテンツ */}
-      <div className="border h-screen bg-gray-100">コンテンツ</div>
     </>
   );
 }
