@@ -3,6 +3,7 @@ import { MagnifyingGlassIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import useSearchStore from "@/store/searchStore"
+import { WordType } from "@/types/Types";
 let lastRequestTime = 0; 
 
 const SearchInput = () => {
@@ -111,9 +112,9 @@ const SearchInput = () => {
     <div ref={containerRef} className="flex items-center relative">
       <button
         onClick={clickSearchIcon}
-        className="flex items-center hover:bg-gray-100 duration-300 rounded-lg p-1 px-2"
+        className={`flex items-center hover:bg-gray-100 duration-300 rounded-lg py-1 ${isOpen ? "px-1 mr-1":" px-2"}`}
       >
-        <MagnifyingGlassIcon className="h-5 text-gray-400 cursor-pointer " />
+        <MagnifyingGlassIcon className="h-[22px] text-gray-400 cursor-pointer" />
         {!isOpen && <span className="text-gray-500 transition-all">検索</span>}
       </button>
       <motion.div
@@ -122,20 +123,19 @@ const SearchInput = () => {
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="overflow-hidden relative"
       >
-        <div className="relative">
+        <div className="flex items-center">
           <input
             ref={inputRef}
             type="text"
             value={inputValue}
             onFocus={handleFocus} 
             onChange={(e) => setInputValue(e.target.value)}
-            className="py-1 pl-1 focus:outline-none"
+            className="w-[130px] py-1 focus:outline-none"
             placeholder="入力して検索..."
-            style={{ width: "100%" }}
           />
           {inputValue && (
-            <button onClick={handleClear} className="absolute right-0 top-0 mt-2 mr-2">
-              <XCircleIcon className="h-5 text-gray-500" />
+            <button onClick={handleClear} className="">
+              <XCircleIcon className="h-[20px] text-gray-500" />
             </button>
           )}
         </div>
@@ -143,9 +143,14 @@ const SearchInput = () => {
 
       {/* 検索結果の表示 */}
       { showResults && inputValue && tempResults.length > 0 && (
-        <ul className="absolute top-[100%] z-10 mr-3 bg-white border rounded-lg shadow-lg max-h-[400px] overflow-y-auto">
-          {tempResults.map((word: any) => (
-            <li key={word.id} className="p-2 hover:bg-gray-100">
+        <ul className="
+          absolute top-[100%] z-10 p-2
+          bg-white border rounded-lg shadow-lg 
+          max-h-[400px] w-[185px] 
+          overflow-y-auto">
+          {tempResults.map((word: WordType) => (
+            <li key={word.id} 
+              className="rounded-md p-2 hover:bg-gray-100 transition-all duration-100 break-words cursor-pointer">
               {word.word}
             </li>
           ))}
@@ -154,7 +159,7 @@ const SearchInput = () => {
 
       {/* 結果がない場合 */}
       { showResults  && !isFirstSearch && inputValue && tempResults.length === 0 && (
-        <ul className="absolute top-10 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
+        <ul className="p-2 text-gray-400 absolute top-10 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
           <li>結果なし</li>
         </ul>
       )}
