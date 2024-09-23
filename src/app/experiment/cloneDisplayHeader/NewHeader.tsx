@@ -4,6 +4,7 @@ import {
   MagnifyingGlassIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import HeaderAnimation from "./HeaderAnimation";
 
 export default function NewHeader() {
   const commonProps = "rounded-t-lg font-semibold py-1 border-t";
@@ -70,6 +71,8 @@ export default function NewHeader() {
         </div>
       </div>
 
+      <HeaderAnimation/>
+      
       {/* コンテンツ */}
       <div className="border h-screen bg-gray-100">コンテンツ</div>
     </>
