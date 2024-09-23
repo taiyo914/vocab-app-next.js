@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import useSearchStore from "@/store/searchStore"
 import { WordType } from "@/types/Types";
+import DisplayEditModal from "../displayContent/DisplayEditModal";
 let lastRequestTime = 0; 
 
 const SearchInput = () => {
@@ -12,6 +13,13 @@ const SearchInput = () => {
   const [isFirstSearch, setIsFirstSearch] = useState(true); 
   const [ showResults, setShowResults ] = useState(false);
   const [tempResults, setTempResults] = useState([]); 
+
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [selectedWord, setSelectedWord] = useState<WordType | null>(null); 
+  const handleWordClick = (word: WordType) => {
+    setSelectedWord(word);  
+    setIsModalOpen(true);  
+  };
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -149,7 +157,7 @@ const SearchInput = () => {
           max-h-[400px] w-[185px] 
           overflow-y-auto">
           {tempResults.map((word: WordType) => (
-            <li key={word.id} 
+            <li key={word.id} onClick={() => handleWordClick(word)} 
               className="rounded-md p-2 hover:bg-gray-100 transition-all duration-100 break-words cursor-pointer">
               {word.word}
             </li>
@@ -163,6 +171,13 @@ const SearchInput = () => {
           <li>結果なし</li>
         </ul>
       )}
+
+      <DisplayEditModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)} 
+        editWord={selectedWord} 
+        setEditWord={setSelectedWord} 
+      />
     </div>
   );
 };
