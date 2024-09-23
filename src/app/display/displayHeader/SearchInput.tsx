@@ -3,12 +3,11 @@ import { MagnifyingGlassIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import useSearchStore from "@/store/searchStore"
-import { ifError } from "assert";
 
 const SearchInput = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const { results, setResults, searchTriggered, setSearchTriggered } = useSearchStore();
+  const { setResults, searchTriggered, setSearchTriggered } = useSearchStore();
   const [isFirstSearch, setIsFirstSearch] = useState(true); 
   const [ showResults, setShowResults ] = useState(false);
   const [tempResults, setTempResults] = useState([]); 
@@ -16,24 +15,24 @@ const SearchInput = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleSearch = () => {
+  const clickSearchIcon = () => {
     
-    if (!inputValue.trim()) { //もし入力がされていなかったら,
-      setIsOpen(!isOpen); //検索欄を閉じ,
-      setSearchTriggered(false);  //検索トリガーはoff
+    if (!inputValue.trim()) { 
+      setIsOpen(!isOpen); 
+      setSearchTriggered(false);  
     }
 
-    if (!isOpen) { //もし検索欄が閉じていたら
-      setTimeout(() => { //0.5秒後に
-        inputRef.current?.focus(); //input要素にフォーカスを当て,
-        setShowResults(true); //検索結果が見れるようにする
+    if (!isOpen) { 
+      setTimeout(() => { 
+        inputRef.current?.focus(); 
+        setShowResults(true);
       }, 500);
     }
     
-    if (inputValue.trim()) { //もし（空白を除いて）入力があれば
-      setResults(tempResults); //一時的な結果を表示させる結果にセット
-      setSearchTriggered(true); // 検索表示トリガーをon
-      setShowResults(false); //検索結果を隠す
+    if (inputValue.trim()) { 
+      setResults(tempResults); 
+      setSearchTriggered(true); 
+      setShowResults(false); 
     }
   };
 
@@ -47,32 +46,18 @@ const SearchInput = () => {
   };
 
   useEffect(() => {
-    // const handleClickOutside = (event: MouseEvent) => {
-    //   if (
-    //     containerRef.current &&
-    //     !containerRef.current.contains(event.target as Node) &&
-    //     inputValue === "" 
-    //   ) {
-    //     setIsOpen(false);
-    //     setSearchTriggered(false)
-    //   }
-    //   if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-    //     setShowResults(false); //検索結果のみを隠す
-    //   }
-    // };
     const handleClickOutside = (event: MouseEvent) => {
       // クリックされた要素がinputの外のとき
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        
-        if (inputValue.trim() === "") { // 入力が空のときは,
-          handleClear() //初期状態に戻す
+        if (inputValue.trim() === "") { 
+          handleClear() 
         } 
-        else { // 入力が空でないときで,
-          if( searchTriggered ) { //検索トリガーがonときは
-            setShowResults(false); // 検索結果のみを隠す
+        else { 
+          if( searchTriggered ) { 
+            setShowResults(false); 
           }
-          else { //検索トリガーがoffのときは、
-            handleClear() //初期状態に戻す
+          else { 
+            handleClear() 
           } 
         }
       }
@@ -100,7 +85,7 @@ const SearchInput = () => {
     const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
     const data = await res.json();
     setTempResults(data);
-    setIsFirstSearch(false); // 最初の検索完了時にフラグをfalseにする
+    setIsFirstSearch(false); 
   };
 
   // 入力が変わるたびにデータを取得
@@ -118,7 +103,7 @@ const SearchInput = () => {
   return (
     <div ref={containerRef} className="flex items-center relative">
       <button
-        onClick={toggleSearch}
+        onClick={clickSearchIcon}
         className="flex items-center hover:bg-gray-100 duration-300 rounded-lg p-1 px-2"
       >
         <MagnifyingGlassIcon className="h-5 text-gray-400 cursor-pointer " />
@@ -135,7 +120,7 @@ const SearchInput = () => {
             ref={inputRef}
             type="text"
             value={inputValue}
-            onFocus={handleFocus} // フォーカス時に検索結果を表示
+            onFocus={handleFocus} 
             onChange={(e) => setInputValue(e.target.value)}
             className="py-1 pl-1 focus:outline-none"
             placeholder="入力して検索..."
