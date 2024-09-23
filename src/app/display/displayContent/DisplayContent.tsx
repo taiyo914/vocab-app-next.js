@@ -12,6 +12,7 @@ import { debounce } from "lodash";
 import CardsDisplay from "./CardsDisplay";
 import LoadingDots from "@/components/LoadingDots";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
+import useSearchStore from "@/store/searchStore";
 
 const DisplayContent = () => {
   const { currentTab } = useTabStore();
@@ -25,6 +26,7 @@ const DisplayContent = () => {
     fetchWords,
   } = useUserStore();
   const { fields, showEmptyCards, accent, fetchReviewSettings } = useReviewSettingsStore();
+  const { results, searchTriggered } = useSearchStore();
 
   useEffect(() => {
     fetchUserId(); // 初回のみ取得、キャッシュ済みなら何もしない
@@ -79,6 +81,33 @@ const DisplayContent = () => {
         <LoadingDots />
       </div>
     );
+  }
+
+  if (searchTriggered) {
+    //検索トリガーが実行されて
+    if (results.length > 0) {
+      //検索結果があれば
+      return (
+        //次を表示する
+        <div className="border rounded rounded-tl-none shadow">
+          <p className="text-right p-2">検索結果数: {results.length}</p>
+          {currentTab === "cards" ? (
+            <CardsDisplay key={fetchingKey} words={results} />
+          ) : (
+            <TableDisplay key={fetchingKey} words={results} />
+          )}
+        </div>
+      );
+    } else {
+      //検索結果がなければ
+      return (
+        //次を表示する
+        <div className="border rounded rounded-tl-none shadow">
+          <p className="text-right p-2">検索結果数: {results.length}</p>
+          <TableDisplay key={fetchingKey} words={results} />
+        </div>
+      );
+    }
   }
 
   return (
