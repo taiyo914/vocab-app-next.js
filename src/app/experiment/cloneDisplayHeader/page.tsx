@@ -8,14 +8,15 @@ import {
 
 const DisplayHeader = () => {
   return (
-    <div className="px-5 xs:px-3 max-w-[2000px] mx-auto mt-10">
-      <div className="flex items-center justify-between">
+    <div className="px-5 xs:px-3 max-w-[2000px] mx-auto mt-32">
+      {/* <div className="flex items-center justify-between">
         <Tabs />
         <div className="flex ">
           <SearchInput />
           <SettingsButton />
         </div>
-      </div>
+      </div> */}
+      <NewHeader/>
     </div>
   );
 };
@@ -61,6 +62,7 @@ const Tabs = () => {
         className={`
           cursor-pointer 
           py-2 px-5
+          xs:py-1 px-3
           border-t border-l border-r
           rounded-tl-lg rounded-tr-lg
           duration-300
@@ -81,6 +83,7 @@ const Tabs = () => {
         className={`
           cursor-pointer 
           py-2 px-3 
+          xs:py-1 px-[1.5]
           border-t border-r 
           rounded-tl-lg rounded-tr-lg
           transition-all
@@ -102,7 +105,7 @@ const Tabs = () => {
 import { useRef } from "react";
 import useSearchStore from "@/store/searchStore";
 let lastRequestTime = 0;
-import {   AnimatePresence } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 
 const SearchInput = () => {
   const [inputValue, setInputValue] = useState("");
@@ -204,18 +207,18 @@ const SearchInput = () => {
   }, [inputValue]);
 
   return (
-    <div ref={containerRef} className="flex items-center relative border ">
+    <div ref={containerRef} className="flex items-center relative xs:-mr-2">
       <button
         onClick={clickSearchIcon}
-        className="flex items-center hover:bg-gray-100 duration-300 rounded-lg p-1 px-2"
+        className="flex items-center hover:bg-gray-100 duration-300 rounded-lg py-1 px-2"
       >
-        <MagnifyingGlassIcon className="h-5 text-gray-400 cursor-pointer " />
-        {!isOpen && <span className="text-gray-500 transition-all">検索</span>}
+        <MagnifyingGlassIcon className="h-5 text-gray-400 cursor-pointer xs:h-6" />
+        {!isOpen && <span className="text-gray-500 transition-all xs:hidden">検索</span>}
       </button>
       
       { isOpen && (
         <div 
-          className="relative w-full border"
+          className="relative w-full border w-[120px]"
         >
           <input
             ref={inputRef}
@@ -258,6 +261,7 @@ const SearchInput = () => {
 };
 
 import useWordsSettingsModalStore from "@/store/wordsSettingsModalStore";
+import NewHeader from "./NewHeader";
 const SettingsButton = () => {
   const { toggleModal } = useWordsSettingsModalStore();
   const { isOpen } = useSearchStore();
@@ -269,8 +273,8 @@ const SettingsButton = () => {
           onClick={toggleModal}
           className="cursor-pointer flex items-center text-gray-500 hover:bg-gray-100 duration-300 rounded-lg p-1 px-2"
         >
-          <AdjustmentsHorizontalIcon className="h-6 text-gray-400 " />
-          設定
+          <AdjustmentsHorizontalIcon className="h-6 text-gray-400 xs:h-7" />
+          <span className="xs:hidden">設定</span>
         </button>
       ) }
     </>
