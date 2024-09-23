@@ -2,48 +2,79 @@
 import { MagnifyingGlassIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import useSearchStore from "@/store/searchStore"
+import { ifError } from "assert";
 
 const SearchInput = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [results, setResults] = useState([]); 
+  const { results, setResults, searchTriggered, setSearchTriggered } = useSearchStore();
   const [isFirstSearch, setIsFirstSearch] = useState(true); 
-  const [showResults, setShowResults] = useState(false);
+  const [ showResults, setShowResults ] = useState(false);
+  const [tempResults, setTempResults] = useState([]); 
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const toggleSearch = () => {
-    if (!inputValue) {
-      setIsOpen(!isOpen);
+    
+    if (!inputValue.trim()) { //もし入力がされていなかったら,
+      setIsOpen(!isOpen); //検索欄を閉じ,
+      setSearchTriggered(false);  //検索トリガーはoff
     }
-    if (!isOpen) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-        setShowResults(true);
-      }, 200);
+
+    if (!isOpen) { //もし検索欄が閉じていたら
+      setTimeout(() => { //0.5秒後に
+        inputRef.current?.focus(); //input要素にフォーカスを当て,
+        setShowResults(true); //検索結果が見れるようにする
+      }, 500);
+    }
+    
+    if (inputValue.trim()) { //もし（空白を除いて）入力があれば
+      setResults(tempResults); //一時的な結果を表示させる結果にセット
+      setSearchTriggered(true); // 検索表示トリガーをon
+      setShowResults(false); //検索結果を隠す
     }
   };
 
   const handleClear = () => {
     setInputValue("");
     setResults([]);
+    setSearchTriggered(false)
     setIsFirstSearch(true);
     setIsOpen(false);
     setShowResults(false); 
   };
 
   useEffect(() => {
+    // const handleClickOutside = (event: MouseEvent) => {
+    //   if (
+    //     containerRef.current &&
+    //     !containerRef.current.contains(event.target as Node) &&
+    //     inputValue === "" 
+    //   ) {
+    //     setIsOpen(false);
+    //     setSearchTriggered(false)
+    //   }
+    //   if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+    //     setShowResults(false); //検索結果のみを隠す
+    //   }
+    // };
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node) &&
-        inputValue === "" 
-      ) {
-        setIsOpen(false);
-      }
+      // クリックされた要素がinputの外のとき
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setShowResults(false); //検索結果のみを隠す
+        
+        if (inputValue.trim() === "") { // 入力が空のときは,
+          handleClear() //初期状態に戻す
+        } 
+        else { // 入力が空でないときで,
+          if( searchTriggered ) { //検索トリガーがonときは
+            setShowResults(false); // 検索結果のみを隠す
+          }
+          else { //検索トリガーがoffのときは、
+            handleClear() //初期状態に戻す
+          } 
+        }
       }
     };
 
@@ -52,7 +83,7 @@ const SearchInput = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [inputValue]);
+  }, [inputValue , searchTriggered]);
 
   // 入力欄にフォーカスがあたったら検索結果を再表示する
   const handleFocus = () => {
@@ -63,12 +94,12 @@ const SearchInput = () => {
 
   const fetchResults = async (searchTerm: string) => {
     if (!searchTerm.trim()) {
-      setResults([]); 
+      setTempResults([]); 
       return;
     }
     const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
     const data = await res.json();
-    setResults(data);
+    setTempResults(data);
     setIsFirstSearch(false); // 最初の検索完了時にフラグをfalseにする
   };
 
@@ -78,9 +109,9 @@ const SearchInput = () => {
       fetchResults(inputValue);
       setShowResults(true); 
     } else {
-      setResults([]); 
-      setIsFirstSearch(true);  // 空文字になったらリセット
-      setShowResults(false); // 入力がないときは検索結果を隠す
+      setTempResults([]); 
+      setIsFirstSearch(true);  
+      setShowResults(false);
     }
   }, [inputValue]);
 
@@ -119,9 +150,9 @@ const SearchInput = () => {
       </motion.div>
 
       {/* 検索結果の表示 */}
-      { showResults && inputValue && results.length > 0 && (
+      { showResults && inputValue && tempResults.length > 0 && (
         <ul className="absolute top-10 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
-          {results.map((word: any) => (
+          {tempResults.map((word: any) => (
             <li key={word.id} className="p-2 hover:bg-gray-100">
               {word.word}
             </li>
@@ -130,7 +161,7 @@ const SearchInput = () => {
       )}
 
       {/* 結果がない場合 */}
-      { showResults  && !isFirstSearch && inputValue && results.length === 0 && (
+      { showResults  && !isFirstSearch && inputValue && tempResults.length === 0 && (
         <ul className="absolute top-10 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
           <li>結果なし</li>
         </ul>
