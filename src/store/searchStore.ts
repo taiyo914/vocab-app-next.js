@@ -8,6 +8,9 @@ interface SearchState {
   setResults: (newResults: WordType[]) => void; 
   setSearchTriggered: (triggered: boolean) => void; // 検索が実行されたことをセット
   clearResults: () => void; 
+
+  isOpen: boolean;
+  setIsOpen: (prev: boolean) => void;
 }
 
 const useSearchStore = create<SearchState>((set) => ({
@@ -16,6 +19,9 @@ const useSearchStore = create<SearchState>((set) => ({
   setResults: (newResults) => set({ results: newResults }),
   clearResults: () => set({ results: [], searchTriggered: false }), // 検索結果をクリアしフラグもリセット
   setSearchTriggered: (triggered: boolean) => set({ searchTriggered: triggered }),
+
+  isOpen: false,
+  setIsOpen: (status) => set({ isOpen: status }),
 }));
 
 export default useSearchStore;

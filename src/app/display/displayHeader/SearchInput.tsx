@@ -6,9 +6,8 @@ import useSearchStore from "@/store/searchStore"
 let lastRequestTime = 0; 
 
 const SearchInput = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const { setResults, searchTriggered, setSearchTriggered } = useSearchStore();
+  const { setResults, searchTriggered, setSearchTriggered, isOpen, setIsOpen } = useSearchStore();
   const [isFirstSearch, setIsFirstSearch] = useState(true); 
   const [ showResults, setShowResults ] = useState(false);
   const [tempResults, setTempResults] = useState([]); 
@@ -144,7 +143,7 @@ const SearchInput = () => {
 
       {/* 検索結果の表示 */}
       { showResults && inputValue && tempResults.length > 0 && (
-        <ul className="absolute top-10 z-10 w-full bg-white border rounded shadow-lg max-h-60 overflow-y-auto">
+        <ul className="absolute top-[100%] z-10 mr-3 bg-white border rounded-lg shadow-lg max-h-[400px] overflow-y-auto">
           {tempResults.map((word: any) => (
             <li key={word.id} className="p-2 hover:bg-gray-100">
               {word.word}
