@@ -3,6 +3,7 @@ import { MagnifyingGlassIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import useSearchStore from "@/store/searchStore"
+let lastRequestTime = 0; 
 
 const SearchInput = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,10 +83,17 @@ const SearchInput = () => {
       setTempResults([]); 
       return;
     }
+
+    const requestTime = Date.now();
+    lastRequestTime = requestTime;
+
     const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
     const data = await res.json();
-    setTempResults(data);
-    setIsFirstSearch(false); 
+
+    if (requestTime === lastRequestTime) {
+      setTempResults(data);
+      setIsFirstSearch(false); 
+    }
   };
 
   // 入力が変わるたびにデータを取得
