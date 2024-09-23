@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { InitialInfoProps, WordType } from "@/types/Types";
 import Pagination from "./Pagination";
 import TableDisplay from "./TableDisplay";
 //ZustandからStoreを取得
@@ -84,13 +83,12 @@ const DisplayContent = () => {
   }
 
   if (searchTriggered) {
-    //検索トリガーが実行されて
     if (results.length > 0) {
-      //検索結果があれば
       return (
-        //次を表示する
-        <div className="border rounded rounded-tl-none shadow">
-          <p className="text-right p-2">検索結果数: {results.length}</p>
+        <div className="border rounded rounded-tl-none shadow pb-8">
+          <div className="flex justify-end items-start gap-1 mt-3 mr-[1.1rem] mb-0.5 text-gray-500">
+            <div className="">検索結果: {results.length}件</div>
+          </div>
           {currentTab === "cards" ? (
             <CardsDisplay key={fetchingKey} words={results} />
           ) : (
@@ -99,12 +97,9 @@ const DisplayContent = () => {
         </div>
       );
     } else {
-      //検索結果がなければ
       return (
-        //次を表示する
         <div className="border rounded rounded-tl-none shadow">
-          <p className="text-right p-2">検索結果数: {results.length}</p>
-          <TableDisplay key={fetchingKey} words={results} />
+          <div className="text-center py-3 text-gray-500">該当する単語はありません</div>
         </div>
       );
     }
