@@ -39,7 +39,7 @@ const Tabs = () => {
         className={`
           cursor-pointer 
           py-2 px-5
-          border-t border-l 
+          border-t border-l border-r
           rounded-tl-lg rounded-tr-lg
           duration-300
           ease-out
@@ -47,7 +47,7 @@ const Tabs = () => {
           ${isLoading
             ? 'text-gray-400 font-semibold border-r' 
             : currentTab === 'cards' 
-            ? 'border-r font-bold bg-gray-100' 
+            ? 'font-bold bg-gray-100' 
             : 'hover:bg-gray-50 text-gray-400 font-semibold '}`}
       >
         カード
@@ -64,7 +64,7 @@ const Tabs = () => {
           ${isLoading
             ? 'text-gray-400 font-semibold' 
             : currentTab === 'table' 
-            ? 'bg-gray-100 font-bold border-l' 
+            ? 'bg-gray-100 font-bold' 
             : 'hover:bg-gray-50 text-gray-400 font-semibold '}`}
       >
         テーブル
