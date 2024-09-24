@@ -3,23 +3,25 @@ import { create } from "zustand";
 import { WordType } from "@/types/Types";
 
 interface SearchState {
-  results: WordType[]; 
-  searchTriggered: boolean; // 検索が実行されたかどうか
-  setResults: (newResults: WordType[]) => void; 
-  setSearchTriggered: (triggered: boolean) => void; // 検索が実行されたことをセット
-  clearResults: () => void; 
-
+  results: WordType[];
+  tempResults: WordType[];
+  searchTriggered: boolean;
+  setResults: (newResults: WordType[]) => void;
+  setTempResults: (tempResults: WordType[]) => void;
+  setSearchTriggered: (triggered: boolean) => void;
+  clearResults: () => void;
   isOpen: boolean;
   setIsOpen: (prev: boolean) => void;
 }
 
 const useSearchStore = create<SearchState>((set) => ({
-  results: [], 
+  results: [],
+  tempResults: [],
   searchTriggered: false,
   setResults: (newResults) => set({ results: newResults }),
-  clearResults: () => set({ results: [], searchTriggered: false }), // 検索結果をクリアしフラグもリセット
+  setTempResults: (tempResults) => set({ tempResults }),
+  clearResults: () => set({ results: [], searchTriggered: false }),
   setSearchTriggered: (triggered: boolean) => set({ searchTriggered: triggered }),
-
   isOpen: false,
   setIsOpen: (status) => set({ isOpen: status }),
 }));
