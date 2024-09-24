@@ -329,7 +329,7 @@ const StartSlide = () => {
     <div className="flex items-center justify-center h-full w-full bg-gray-50">
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-4xl font-bold mb-4 flex items-center gap-2 mt-12">
-          Let's Get Started
+          Let&apos;s Get Started
           <ArrowRightIcon className="h-7" />
         </h1>
         <p className="text-gray-400 mb-2 text-center notxs:hidden">

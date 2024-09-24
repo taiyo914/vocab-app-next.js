@@ -251,7 +251,7 @@ const Review = () => {
         >
           <SwiperSlide>
             <div className="h-full flex flex-col items-center justify-center text-3xl text-gray-500 opacity-20">
-              <div className="text-3xl font-bold mb-4">Let's get started ! ➞</div>
+              <div className="text-3xl font-bold mb-4">Let&apos;s get started ! ➞</div>
             </div>
           </SwiperSlide>
           <div>

@@ -52,24 +52,25 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
   });
   const sensors = useSensors(mouseSensor, touchSensor);
   
-  if (!fields || showEmptyCards === null) {
-    // alert("fieldsとshowEmptyCardsが取得できていません");
-    return;
-  }
-
-  //一時的なfieldsとshowEmptyCardsを設定し、useEffectで初期値をセット（
   const [temporaryFields, setTemporaryFields] = useState<string[]>([]);  
   const [temporaryShowEmptyCards, setTemporaryShowEmptyCards] = useState<boolean>(false);  
   const [temporaryAccent, setTemporaryAccent] = useState<string>("en-US");
+  
+  
+  //一時的なfieldsとshowEmptyCardsを設定し、useEffectで初期値をセット（
   useEffect(() => {
-    if (isOpen) {
+    if (fields && showEmptyCards !== null && isOpen) {
       setTemporaryFields(fields);
       setTemporaryShowEmptyCards(showEmptyCards);
       setTemporaryAccent(accent || "en-US");
     }
     console.log("復習設定モーダルのuseEffectが走りました")
   }, [isOpen, fields, showEmptyCards, accent]);
-
+  
+  if (!fields || showEmptyCards === null) {
+    // alert("fieldsとshowEmptyCardsが取得できていません");
+    return;
+  }
 
   const visibleFields = temporaryFields.filter((field: string) => !field.startsWith("-"));
   const hiddenFields = temporaryFields
@@ -233,7 +234,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
                 : "hover:bg-gray-100 "
             }`}
           >
-            <img src = "/images/icon-us.png" className="h-4 w-4 mb-0.5"/>
+            <Image alt="Country Flag" src = "/images/icon-us.png" className="h-4 w-4 mb-0.5"/>
             US
           </button>
           <button
@@ -247,7 +248,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
                 : "hover:bg-gray-100  "
             }`}
           >
-            <img src = "/images/icon-uk.png" className="h-4 w-4 mb-0.5"/>
+            <Image alt="Country Flag" src = "/images/icon-uk.png" className="h-4 w-4 mb-0.5"/>
             UK
           </button>
           <button
@@ -261,7 +262,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
                 : "hover:bg-gray-100"
             }`}
           >
-            <img src = "/images/icon-aus.png" className="h-4 w-4 mb-0.5"/>
+            <Image alt="Country Flag" src = "/images/icon-aus.png" className="h-4 w-4 mb-0.5"/>
             AUS
           </button>
       </div>
@@ -286,6 +287,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
 };
 
 import { CSS } from "@dnd-kit/utilities";
+import Image from "next/image";
 
 interface SortableItemProps {
   field: string;
