@@ -116,14 +116,14 @@ const MobileSearchInput = () => {
               </div>
            </div>
            {/* 検索結果の表示 */}
-           <div className="mt-3 overflow-y-auto flex-grow">
+           <div className="mt-3 overflow-y-scroll flex-grow">
              {inputValue && tempResults.length > 0 && (
-               <ul className="max-h-full overflow-y-auto">
+               <ul className="max-h-full overflow-y-scroll">
                  {tempResults.map((word: WordType) => (
                    <li
                      key={word.id}
                      onClick={() => handleWordClick(word)}
-                     className="rounded-md py-2 px-4 rounded hover:bg-gray-100 transition-all duration-100 break-words cursor-pointer"
+                     className="text-[1.2rem] rounded-md py-2 px-5 rounded hover:bg-gray-100 transition-all duration-100 break-words cursor-pointer"
                    >
                      {word.word}
                    </li>
@@ -134,7 +134,7 @@ const MobileSearchInput = () => {
 
              {/* 結果がない場合 */}
              {!isFirstSearch && inputValue && tempResults.length === 0 && (
-               <ul className="p-2 text-gray-400 mt-4">
+               <ul className="py-2 px-4  text-gray-400 mt-4">
                  <li>結果なし</li>
                </ul>
              )}
