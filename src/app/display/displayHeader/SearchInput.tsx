@@ -10,12 +10,10 @@ let lastRequestTime = 0;
 
 const SearchInput = () => {
   const [inputValue, setInputValue] = useState("");
-  const { setResults, searchTriggered, setSearchTriggered, isOpen, setIsOpen } = useSearchStore();
+  const { tempResults, setTempResults, setResults, searchTriggered, setSearchTriggered, isOpen, setIsOpen } = useSearchStore();
   const incrementfechingKey = useUserStore((state) => state.incrementFetchingKey);
   const [isFirstSearch, setIsFirstSearch] = useState(true);
   const [showResults, setShowResults] = useState(false);
-  const [tempResults, setTempResults] = useState([]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedWord, setSelectedWord] = useState<WordType | null>(null);
   const handleWordClick = (word: WordType) => {
