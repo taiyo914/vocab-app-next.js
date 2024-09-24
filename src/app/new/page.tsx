@@ -6,7 +6,7 @@ import { createClient } from "../../utils/supabase/client";
 import useUserStore from "@/store/userStore";
 import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import CustomSlider from "@/components/CustomSlider"; 
-
+import useNotificationStore from "@/store/useNotificationStore";
 
 interface FormData {
   word: string;
@@ -31,6 +31,7 @@ export default function AddNewWord() {
   const [formData, setFormData] = useState<FormData>(initialValue);
   const { userId, fetchUserId } = useUserStore();
   const router = useRouter();
+  const showNotification = useNotificationStore(state => state.showNotification)
 
   useEffect(() => {
     fetchUserId(); // キャッシュ済みなら何もしない
@@ -44,23 +45,16 @@ export default function AddNewWord() {
     }));
   };
 
-  const handleSliderChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      index: Number(e.target.value),
-    }));
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await saveDataToDatabase(formData);
-    router.push("/");
+    const error = await saveDataToDatabase(formData);
+    if (!error) router.push("/") 
   };
 
   const handleSubmitAndContinue = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await saveDataToDatabase(formData);
-    setFormData(initialValue);
+    const error = await saveDataToDatabase(formData);
+    if (!error) setFormData(initialValue);
   };
 
   const saveDataToDatabase = async (data: FormData) => {
@@ -68,12 +62,13 @@ export default function AddNewWord() {
     const { error: insertError } = await supabase
       .from("words")
       .insert([{ user_id: userId, ...data }]);
-
+    
     if (insertError) {
-      alert("データの追加に失敗しました: " + insertError.message);
+      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`, 10000);
+      return insertError
     } else {
       setFormData(initialValue);
-      alert("単語の追加に成功しました");
+      showNotification("単語の追加に成功しました");
     }
   };
 
