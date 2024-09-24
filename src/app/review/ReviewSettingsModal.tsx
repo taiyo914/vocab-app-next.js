@@ -17,6 +17,7 @@ import {  EyeSlashIcon, ArrowsUpDownIcon, XMarkIcon, XCircleIcon, SpeakerWaveIco
 import { FiLayers } from "react-icons/fi";
 import Modal from "@/components/Modal";
 import { RiDraggable } from "react-icons/ri";
+import useNotificationStore from "@/store/useNotificationStore";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -56,6 +57,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
   const [temporaryShowEmptyCards, setTemporaryShowEmptyCards] = useState<boolean>(false);  
   const [temporaryAccent, setTemporaryAccent] = useState<string>("en-US");
   
+  const showNotification = useNotificationStore(state => state.showNotification)
   
   //一時的なfieldsとshowEmptyCardsを設定し、useEffectで初期値をセット（
   useEffect(() => {
@@ -64,7 +66,6 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
       setTemporaryShowEmptyCards(showEmptyCards);
       setTemporaryAccent(accent || "en-US");
     }
-    console.log("復習設定モーダルのuseEffectが走りました")
   }, [isOpen, fields, showEmptyCards, accent]);
   
   if (!fields || showEmptyCards === null) {
@@ -118,8 +119,8 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
       try{
         await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards, temporaryAccent);
         onClose(); 
-      } catch (err) {
-        setError("設定の保存中にエラーが発生しました");
+      } catch (err:any) {
+        showNotification(`設定の保存に失敗しました...エラーメッセージ:${err.message}`);
       }
       return;
     }
@@ -135,8 +136,8 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
       await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards, temporaryAccent);
       goToFirstSlide(); 
       onClose(); 
-    } catch (err) {
-      setError("設定の保存中にエラーが発生しました");
+    } catch (err:any) {
+      showNotification(`設定の保存に失敗しました...エラーメッセージ:${err.message}`);
     }
   };
 
