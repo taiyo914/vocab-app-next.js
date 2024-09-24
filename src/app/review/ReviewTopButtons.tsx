@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { BiHomeAlt2 } from "react-icons/bi";
 import { ArrowUturnLeftIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import useUserStore from '@/store/userStore';
+import Spinner from '@/components/Spiner';
 
 interface ReviewTopButtonsProps{
   goToFirstSlide: () => void;
@@ -14,9 +15,12 @@ interface ReviewTopButtonsProps{
 export default function ReviewTopButtons({goToFirstSlide, toggleSettingsModal}: ReviewTopButtonsProps) {
   const router = useRouter();
   const fetchWords = useUserStore( state => state.fetchWords);
+  const [isLoading, setIsLoading] = useState(false);
   const goToHome = async () =>{
+    setIsLoading(true)
     await fetchWords()
     router.push("/")
+    setIsLoading(false)
   }
   return (
     <div className="w-full short:hidden">
@@ -26,13 +30,13 @@ export default function ReviewTopButtons({goToFirstSlide, toggleSettingsModal}: 
                 onClick = {goToHome}
                 className="
                   text-gray-600 text-lg short:text-base
-                  w-full bg-gray-50
+                  w-full bg-gray-50 cursor-pointer
                   py-3
                   hover:bg-gray-200 hover:shadow-sm
                   transition duration-200 ease-in-out
                   flex items-center justify-center gap-1"
               >
-                <BiHomeAlt2 />
+                {isLoading ? <Spinner borderWeight='border-[0.25rem]'/> :<BiHomeAlt2 />}
                 <div>ホームへ</div>
               </div>
             </div>
