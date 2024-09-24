@@ -165,11 +165,10 @@ const MobileSearchInput = () => {
          animate={{ y: isOpen ? "0%" : "120%" }}
          exit={{ y: "120%" }}
          transition={{ duration: 0.3, ease: "easeOut" }}
-         className={`overflow-y-scroll fixed top-20 left-0 w-full bottom-0 bg-white z-10 p-4 ${ isOpen && "shadow-lg"} `}
+         className={`fixed top-20 left-0 w-full bottom-0 bg-white z-10 ${ isOpen && "shadow-lg"} `}
        >
-         <div className="relative">
-           <div className="flex items-center justify-between gap-2 
-             absolute top-0 left-0 right-0 bg-white">
+          <div className="mt-3 px-2 flex flex-col h-full">
+           <div className="flex items-center justify-between gap-2bg-white">
              <button onClick={clickSearchIcon}>
                <MagnifyingGlassIcon className="h-[24px]  text-gray-400 cursor-pointer" />
              </button>
@@ -186,9 +185,9 @@ const MobileSearchInput = () => {
              </button>
            </div>
            {/* 検索結果の表示 */}
-           <div className="overflow-y-auto h-[100%]">
+           <div className="mt-4 overflow-y-auto flex-grow">
              {showResults && inputValue && tempResults.length > 0 && (
-               <ul className="">
+               <ul className="max-h-full overflow-y-auto">
                  {tempResults.map((word: WordType) => (
                    <li
                      key={word.id}
@@ -198,6 +197,7 @@ const MobileSearchInput = () => {
                      {word.word}
                    </li>
                  ))}
+                 <li className="h-6"> </li>
                </ul>
              )}
 
