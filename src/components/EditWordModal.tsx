@@ -12,6 +12,7 @@ import useShowDetailsStore from "@/store/showDetailsStore";
 import { handleSpeak }from "@/components/SpeechButton";
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import useSearchStore from "@/store/searchStore";
+import useNotificationStore from "@/store/useNotificationStore";
 
 interface EditWordModalProps {
   isOpen: boolean;
@@ -34,17 +35,16 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { showDetails, toggleDetails} = useShowDetailsStore();
+  const showNotification = useNotificationStore(state => state.showNotification);
 
   const handleSaveChanges = async () => {
     try {
-
       const updatedAt = new Date().toISOString(); 
       const updatedWord = { ...editWord, updated_at: updatedAt }; 
 
       const { error } = await supabase.from("words").update(editWord).eq("id", editWord!.id);
 
       if (error) throw new Error(error.message);
-      else console.log("変更に成功しました！");
 
       if (searchTriggered) {
         const updatedResults = results!.map((word) => 
@@ -60,7 +60,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
 
       onClose(); 
     } catch (err: any) {
-      console.error("更新エラー:", err.message);
+      showNotification(`更新に失敗しました...エラーメッセージ:${err.message}`, 10000);
     }
   };
 
@@ -78,7 +78,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error("Error deleting word");
+        throw new Error("API通信に失敗しました");
       }
 
       await fetchWords();
@@ -86,9 +86,10 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       setResults(results.filter((word) => word.id !== editWord!.id));
       setTempResults(tempResults.filter((word) => word.id !== editWord!.id));
 
+      showNotification("単語を削除しました")
       onClose();
     } catch (err: any) {
-      console.error(err.message);
+      showNotification(`単語の削除に失敗しました。エラー:${err.message}`, 10000);
     } finally {
       setDeleteLoading(false);
       setIsDeleteConfirmOpen(false)
