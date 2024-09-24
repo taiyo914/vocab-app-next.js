@@ -167,8 +167,8 @@ const MobileSearchInput = () => {
          transition={{ duration: 0.3, ease: "easeOut" }}
          className={`fixed top-20 left-0 w-full bottom-0 bg-white z-10 ${ isOpen && "shadow-lg"} `}
        >
-          <div className="mt-3 px-2 flex flex-col h-full">
-           <div className="flex items-center justify-between gap-2bg-white">
+          <div className="mt-3 flex flex-col h-full">
+           <div className="flex items-center justify-between gap-2 px-2 bg-white">
              <button onClick={clickSearchIcon}>
                <MagnifyingGlassIcon className="h-[24px]  text-gray-400 cursor-pointer" />
              </button>
@@ -192,7 +192,7 @@ const MobileSearchInput = () => {
                    <li
                      key={word.id}
                      onClick={() => handleWordClick(word)}
-                     className="rounded-md p-2 hover:bg-gray-100 transition-all duration-100 break-words cursor-pointer"
+                     className="rounded-md py-2 px-4 rounded hover:bg-gray-100 transition-all duration-100 break-words cursor-pointer"
                    >
                      {word.word}
                    </li>
