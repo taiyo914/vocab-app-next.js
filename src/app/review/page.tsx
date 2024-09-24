@@ -204,13 +204,12 @@ const Review = () => {
         <div
           className="
             xs:hidden
-            h-[32px] w-[32px]
             text-gray-500
             absolute top-[50%] -mt-[70px] right-[19px]    
-            hover:text-gray-600
+            hover:text-gray-700
             transition duration-200"
         >
-          <SpeechButton word={content} accent={accent} />
+          <SpeechButton word={content} accent={accent} props="h-[32px] w-[32px]" />
         </div>
       </div>
     );
