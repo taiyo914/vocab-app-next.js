@@ -151,6 +151,7 @@ const Review = () => {
     additionalSettings: string,
     accent: string
   ) => {
+    const showSpeechBtn = label === "単語" || label === "例文" //音声をつけるかどうかもカスタマイズできるようにできるといいかも。
     return (
       <div className="h-full w-full relative">
         <div className="flex flex-col h-full justify-between items-center w-full">
@@ -158,7 +159,6 @@ const Review = () => {
           <div
             className="
             flex justify-between items-start w-full h-[81px]"
-            // px-4 xs:px-2 pt-4 short:pt-2 short:px-3
           >
             {/*---長さを合わせるだけのダミー要素。スマホサイズで存在ごと消えます。---*/}
             <div className="invisible xs:hidden pt-[20px] pr-[17px]">
@@ -183,9 +183,9 @@ const Review = () => {
 
           {/* コンテンツ */}
           <div
-            className={`f-full flex flex-col items-center justify-center xs:px-[25px] px-[65px] lg:px-[80px] `}
+            className={`f-full flex flex-col items-center justify-center  `}
           >
-            <div className={`xs:mt-[55px] text-center ${additionalSettings}`}>{content}</div>
+            <div className={`text-center w-screen break-words xs:px-[25px] px-[80px] lg:px-[80px]  ${additionalSettings}`}>{content}</div>
             {content && (
               <div className="h-[25px] w-[25px] mt-[15px] text-gray-400 notxs:hidden">
                 <SpeechButton word={content} accent={accent} />
