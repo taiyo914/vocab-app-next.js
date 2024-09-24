@@ -4,17 +4,19 @@ import { AdjustmentsHorizontalIcon, MagnifyingGlassIcon, XCircleIcon } from "@he
 import Tabs from "./Tabs";
 import SearchInput from "./SearchInput";
 import SettingsButton from "./SettingsButton";
+import MobileSearchInput from "./MobileSearchInput";
 
 const DisplayHeader = () => {
-  return (
+  return (<>
     <div className="flex items-center justify-between">
       <Tabs/>
       <div className="flex ">
-        <SearchInput/>
+        {/* <SearchInput/> */}
+        <MobileSearchInput/>
         <SettingsButton/>
       </div>
     </div>
-  );
+  </>);
 };
 
 export default DisplayHeader;
