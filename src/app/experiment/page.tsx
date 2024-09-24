@@ -10,7 +10,6 @@ import WordSpeaker from "./WordSpeaker";
 import SpeechButton from "@/components/SpeechButton";
 import Spinner from "@/components/Spiner";
 import SwiperEndSlide from "./SwiperEndSlide";
-import NotificationExp from "./NotificationExp";
 import DisplayEditModal from "../../components/EditWordModal";
 import FlipCard from "./flip_card/FlipCard";
 import MyCardFlip from "./flip_card/ReactCardFlip";
