@@ -1,7 +1,7 @@
 "use client";
 import { MagnifyingGlassIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { AnimatePresence, motion } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import useSearchStore from "@/store/searchStore";
 import { WordType } from "@/types/Types";
 import EditWordModal from "@/components/EditWordModal";
