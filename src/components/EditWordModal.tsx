@@ -53,6 +53,11 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
         setResults(updatedResults as WordType[]);
       }
 
+      const updatedTempResults = tempResults!.map((word) => 
+        word.id === editWord!.id ? updatedWord : word
+      );
+      setTempResults(updatedTempResults as WordType[]);
+
       const updateWords = words!.map((word) => 
         word.id === editWord!.id ? updatedWord : word
       );
