@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowUturnLeftIcon, CheckIcon } from "@heroicons/react/24/outline";
-
+import useNotificationStore from "@/store/useNotificationStore";
 import { csvParseRows, tsvParseRows } from "d3-dsv";
 import useUserStore from "@/store/userStore";
 
@@ -15,6 +15,7 @@ const DataForm: React.FC = () => {
   const [isTSV, setIsTSV] = useState<boolean>(true);
   const [data, setData] = useState<string>("");
   const [isReverse, setIsReverse] = useState(false);
+  const showNotification = useNotificationStore(state => state.showNotification)
 
   useEffect(() => {
     fetchUserId(); // キャッシュ済みなら何もしない
@@ -53,9 +54,9 @@ const DataForm: React.FC = () => {
     const finalData = isReverse ? parsedData.reverse() : parsedData;
     const { error } = await supabase.from("words").insert(finalData);
     if (error) {
-      alert(`単語の追加に失敗しました: ${error.message}`);
+      showNotification(`単語の追加に失敗しました...エラーメッセージ: ${error.message}`, 10000);
     } else {
-      alert("単語の追加に成功しました")
+      showNotification("単語の追加に成功しました")
       router.push("/");
     }
   };
