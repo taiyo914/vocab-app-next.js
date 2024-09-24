@@ -85,7 +85,6 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
       const newIndex = temporaryFields.indexOf(over?.id as string);
       const newFields = arrayMove(temporaryFields, oldIndex, newIndex);
       setTemporaryFields(newFields);
-      console.log(newFields);
     }
   };
 
@@ -102,7 +101,6 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
       updatedFields = temporaryFields.filter((f: string) => f !== field).concat(`-${field}`);
     }
     setTemporaryFields(updatedFields);
-    console.log(updatedFields);
   };
 
   const handleSave = async () => {
@@ -234,7 +232,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
                 : "hover:bg-gray-100 "
             }`}
           >
-            <Image alt="Country Flag" src = "/images/icon-us.png" className="h-4 w-4 mb-0.5"/>
+            <Image alt="Country Flag" src = "/images/icon-us.png" width={17} height={17}/>
             US
           </button>
           <button
@@ -248,7 +246,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
                 : "hover:bg-gray-100  "
             }`}
           >
-            <Image alt="Country Flag" src = "/images/icon-uk.png" className="h-4 w-4 mb-0.5"/>
+            <Image alt="Country Flag" src = "/images/icon-uk.png" width={17} height={17}/>
             UK
           </button>
           <button
@@ -262,7 +260,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
                 : "hover:bg-gray-100"
             }`}
           >
-            <Image alt="Country Flag" src = "/images/icon-aus.png" className="h-4 w-4 mb-0.5"/>
+            <Image alt="Country Flag" src = "/images/icon-aus.png" width={17} height={17}/>
             AUS
           </button>
       </div>
