@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import useShowDetailsStore from "@/store/showDetailsStore";
 import { handleSpeak }from "@/components/SpeechButton";
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import useSearchStore from "@/store/searchStore";
 
 interface DisplayEditModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
 }) => {
   const supabase = createClient();
   const { words, setWords, fetchWords } = useUserStore();
+  const { results, setResults, searchTriggered } = useSearchStore(); 
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { showDetails, toggleDetails} = useShowDetailsStore();
@@ -42,13 +44,19 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
       if (error) throw new Error(error.message);
       else console.log("変更に成功しました！");
 
+      if (searchTriggered) {
+        const updatedResults = results!.map((word) => 
+          word.id === editWord!.id ? updatedWord : word
+        );
+        setResults(updatedResults as WordType[]);
+      }
+
       const updateWords = words!.map((word) => 
         word.id === editWord!.id ? updatedWord : word
       );
-
       setWords(updateWords as WordType[]);
 
-      onClose(); // 保存後にモーダルを閉じる
+      onClose(); 
     } catch (err: any) {
       console.error("更新エラー:", err.message);
     }
