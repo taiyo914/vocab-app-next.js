@@ -62,12 +62,7 @@ const SearchInput = () => {
           handleClear() 
         } 
         else { 
-          if( searchTriggered ) { 
-            setShowResults(false); 
-          }
-          else { 
-            handleClear() 
-          } 
+          setShowResults(false); 
         }
       }
     };
