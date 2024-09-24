@@ -345,6 +345,11 @@ const StartSlide = () => {
 
 const EndSlide = ({ onClick, reviewStatus }: any) => {
   const router = useRouter();
+  const fetchWords = useUserStore( state => state.fetchWords);
+  const goToHome = async () =>{
+    await fetchWords()
+    router.push("/")
+  }
   return (
     <>
       <div className="flex items-center justify-center h-full w-full bg-gradient-to-t from-yellow-200 to-orange-400 ">
@@ -389,7 +394,7 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
               >
                 復習を記録しました!
               </div>
-              <button onClick={()=>router.push("/")} className="text-gray-700  text-center bg-yellow-100 hover:bg-orange-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
+              <button onClick={goToHome} className="text-gray-700  text-center bg-yellow-100 hover:bg-orange-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
               <div className="text-sm h-4"></div>
             </>
           }

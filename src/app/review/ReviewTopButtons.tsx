@@ -2,6 +2,8 @@ import Link from 'next/link'
 import React from 'react'
 import { BiHomeAlt2 } from "react-icons/bi";
 import { ArrowUturnLeftIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import useUserStore from '@/store/userStore';
 
 interface ReviewTopButtonsProps{
   goToFirstSlide: () => void;
@@ -10,12 +12,18 @@ interface ReviewTopButtonsProps{
 
 
 export default function ReviewTopButtons({goToFirstSlide, toggleSettingsModal}: ReviewTopButtonsProps) {
+  const router = useRouter();
+  const fetchWords = useUserStore( state => state.fetchWords);
+  const goToHome = async () =>{
+    await fetchWords()
+    router.push("/")
+  }
   return (
     <div className="w-full short:hidden">
           <div className="flex justify-between items-center">
             <div className="w-full">
-              <Link
-                href="/"
+              <div
+                onClick = {goToHome}
                 className="
                   text-gray-600 text-lg short:text-base
                   w-full bg-gray-50
@@ -26,7 +34,7 @@ export default function ReviewTopButtons({goToFirstSlide, toggleSettingsModal}: 
               >
                 <BiHomeAlt2 />
                 <div>ホームへ</div>
-              </Link>
+              </div>
             </div>
             <button
               onClick={goToFirstSlide}
