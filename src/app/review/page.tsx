@@ -20,7 +20,7 @@ import ReviewTopButtons from "./ReviewTopButtons";
 import SpeechButton from "@/components/SpeechButton";
 import "./swiper-style.css";
 import Spinner from "@/components/Spiner";
-import ReviewEditModal from "./ReviewEditModal";
+import EditWordModal from "@/components/EditWordModal";
 
 const Review = () => {
   const supabase = createClient();
@@ -124,10 +124,10 @@ const Review = () => {
   };
 
   const handleCompleteReview = async () => {
-    setReviewStatus("loading")
+    setReviewStatus("loading");
 
     //逆につけたほうがいい気がする（処理が早すぎてスピナーが見えない）
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const wordIds = words!.map((word) => word.id);
     const { error } = await supabase.rpc("update_review_info", {
@@ -136,10 +136,10 @@ const Review = () => {
 
     if (error) {
       console.error("復習情報の更新でエラーが発生しました:", error);
-      setReviewStatus(`更新でエラーが発生しました: ${error.message}`)
+      setReviewStatus(`更新でエラーが発生しました: ${error.message}`);
     } else {
       console.log("すべての単語のreview_countとreviewed_atを更新しました!");
-      setReviewStatus("done")
+      setReviewStatus("done");
       // router.push("/");
     }
   };
@@ -306,11 +306,12 @@ const Review = () => {
       </div>
 
       {/* モーダル */}
-      <ReviewEditModal
+      <EditWordModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         editWord={editWord}
         setEditWord={setEditWord}
+        showDeleteBtn={false}
       />
       <ReviewSettingsModal
         isOpen={isSettingsModalOpen}
@@ -344,11 +345,11 @@ const StartSlide = () => {
 
 const EndSlide = ({ onClick, reviewStatus }: any) => {
   const router = useRouter();
-  const fetchWords = useUserStore( state => state.fetchWords);
-  const goToHome = async () =>{
-    await fetchWords()
-    router.push("/")
-  }
+  const fetchWords = useUserStore((state) => state.fetchWords);
+  const goToHome = async () => {
+    await fetchWords();
+    router.push("/");
+  };
   return (
     <>
       <div className="flex items-center justify-center h-full w-full bg-gradient-to-t from-yellow-200 to-orange-400 ">
@@ -358,8 +359,8 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
             <div className="animate-bounce"> 🎉</div>
           </h1>
           <p className="text-lg mb-5"></p>
-          {reviewStatus !== "done"
-            ?<>
+          {reviewStatus !== "done" ? (
+            <>
               <button
                 onClick={onClick}
                 className="
@@ -368,15 +369,18 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
                 rounded-full 
                 hover:bg-orange-200 transition duration-300 shadow-md"
               >
-                {reviewStatus === "loading" 
-                ? <div className="flex items-center justify-center">
+                {reviewStatus === "loading" ? (
+                  <div className="flex items-center justify-center">
                     <Spinner size="h-4 w-4" borderColor="border-orange-200 border-t-yellow-500" />
                   </div>
-                : "復習を記録する"
-                }
+                ) : (
+                  "復習を記録する"
+                )}
               </button>
 
-              {(reviewStatus !== "yet"  && reviewStatus !== "loading") && <p className="text-red-600 mb-3 ">{reviewStatus}</p>}
+              {reviewStatus !== "yet" && reviewStatus !== "loading" && (
+                <p className="text-red-600 mb-3 ">{reviewStatus}</p>
+              )}
 
               <p className="text-sm text-gray-50 text-center xs:font-semibold">
                 今回復習した単語の
@@ -384,7 +388,8 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
                 復習回数と復習日時が更新されます
               </p>
             </>
-            :<>
+          ) : (
+            <>
               <div
                 className="
                 bg-orange-200 text-gray-700
@@ -393,10 +398,15 @@ const EndSlide = ({ onClick, reviewStatus }: any) => {
               >
                 復習を記録しました!
               </div>
-              <button onClick={goToHome} className="text-gray-700  text-center bg-yellow-100 hover:bg-orange-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow">ホームへ</button>
+              <button
+                onClick={goToHome}
+                className="text-gray-700  text-center bg-yellow-100 hover:bg-orange-200 transition duration-200 p-1 px-3 rounded-full -mb-3 shadow"
+              >
+                ホームへ
+              </button>
               <div className="text-sm h-4"></div>
             </>
-          }
+          )}
         </div>
       </div>
     </>
