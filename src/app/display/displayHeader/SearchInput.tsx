@@ -5,11 +5,13 @@ import { useState, useEffect, useRef } from "react";
 import useSearchStore from "@/store/searchStore"
 import { WordType } from "@/types/Types";
 import DisplayEditModal from "../displayContent/DisplayEditModal";
+import useUserStore from "@/store/userStore";
 let lastRequestTime = 0; 
 
 const SearchInput = () => {
   const [inputValue, setInputValue] = useState("");
   const { setResults, searchTriggered, setSearchTriggered, isOpen, setIsOpen } = useSearchStore();
+  const incrementfechingKey = useUserStore(state => state.incrementFetchingKey);
   const [isFirstSearch, setIsFirstSearch] = useState(true); 
   const [ showResults, setShowResults ] = useState(false);
   const [tempResults, setTempResults] = useState([]); 
@@ -42,21 +44,24 @@ const SearchInput = () => {
       setResults(tempResults); 
       setSearchTriggered(true); 
       setShowResults(false); 
+      incrementfechingKey()//keyを変更してアニメーションを発火
     }
   };
 
   const handleClear = () => {
     setInputValue("");
     setResults([]);
-    setSearchTriggered(false)
     setIsFirstSearch(true);
     setIsOpen(false);
     setShowResults(false); 
+    if(searchTriggered) incrementfechingKey()//keyを変更してアニメーションを発火
+    setSearchTriggered(false)
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // クリックされた要素がinputの外のとき
+      if (!isOpen) return; //検索欄が開いているときだけ有効にする
+      
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         if (inputValue.trim() === "") { 
           handleClear() 
@@ -72,7 +77,7 @@ const SearchInput = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [inputValue , searchTriggered]);
+  }, [inputValue , searchTriggered, isOpen]);
 
   // 入力欄にフォーカスがあたったら検索結果を再表示する
   const handleFocus = () => {
