@@ -25,7 +25,7 @@ const Notification = () => {
           exit={{ opacity: 0, x: "100%" }} 
           transition={{type: "spring", stiffness: 240, damping: 30}}
           // transition ={{duration: 0.3}}
-          className="fixed top-4 right-4 rounded-lg shadow-lg border bg-white"
+          className="fixed top-4 right-4 rounded-lg shadow-lg border bg-white z-100"
         >
           <div className="relative py-[25px] pr-[30px] pl-[30px] max-w-[350px]">
             <span>{message}</span>
