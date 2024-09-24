@@ -1,18 +1,25 @@
 "use client";
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { AdjustmentsHorizontalIcon, MagnifyingGlassIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 import Tabs from "./Tabs";
 import SearchInput from "./SearchInput";
 import SettingsButton from "./SettingsButton";
 import MobileSearchInput from "./MobileSearchInput";
+import { isMobile } from 'react-device-detect';
 
 const DisplayHeader = () => {
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+
+  useEffect(() => {
+    setIsMobileDevice(isMobile); 
+  }, []);
   return (<>
     <div className="flex items-center justify-between">
       <Tabs/>
-      <div className="flex ">
-        {/* <SearchInput/> */}
-        <MobileSearchInput/>
+      <div className="flex">
+        {isMobileDevice
+          ? <MobileSearchInput/>
+          : <SearchInput/>
+        }
         <SettingsButton/>
       </div>
     </div>
