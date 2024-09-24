@@ -11,7 +11,7 @@ import SpeechButton from "@/components/SpeechButton";
 import Spinner from "@/components/Spiner";
 import SwiperEndSlide from "./SwiperEndSlide";
 import NotificationExp from "./NotificationExp";
-import DisplayEditModal from "../display/displayContent/DisplayEditModal";
+import DisplayEditModal from "../../components/EditWordModal";
 import FlipCard from "./flip_card/FlipCard";
 import MyCardFlip from "./flip_card/ReactCardFlip";
 import ExpandContainer from "./expandContainer/page";
@@ -51,7 +51,7 @@ export default function page() {
       {/* <ReviewSettingsModal/> */}
       {/* <FlipCard/> */}
       {/* <MyCardFlip /> */}
-      <ExpandContainer/>
+      <ExpandContainer />
     </>
   );
 }
