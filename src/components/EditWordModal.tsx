@@ -30,7 +30,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
 }) => {
   const supabase = createClient();
   const { words, setWords, fetchWords } = useUserStore();
-  const { results, setResults, searchTriggered } = useSearchStore(); 
+  const { results, setResults, tempResults, setTempResults , searchTriggered } = useSearchStore(); 
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const { showDetails, toggleDetails} = useShowDetailsStore();
@@ -82,11 +82,16 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       }
 
       await fetchWords();
+
+      setResults(results.filter((word) => word.id !== editWord!.id));
+      setTempResults(tempResults.filter((word) => word.id !== editWord!.id));
+
       onClose();
     } catch (err: any) {
       console.error(err.message);
     } finally {
       setDeleteLoading(false);
+      setIsDeleteConfirmOpen(false)
     }
   };
 
