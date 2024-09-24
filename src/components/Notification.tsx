@@ -1,23 +1,20 @@
+"use client"
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import useNotificationStore from "@/store/useNotificationStore";
 
-interface NotificationProps {
-  show: boolean;
-  message: string;
-  onClose: () => void;
-}
-
-const Notification: React.FC<NotificationProps> = ({ show, message, onClose }) => {
+const Notification = () => {
+  const { show, message, duration, hideNotification } = useNotificationStore();
 
   useEffect(() => {
     if (show) {
       const timer = setTimeout(() => {
-        onClose();
-      }, 3000); 
+        hideNotification();
+      }, duration); 
       return () => clearTimeout(timer);
     }
-  }, [show, onClose]);
+  }, [show, hideNotification]);
 
   return (
     <AnimatePresence>
@@ -33,7 +30,7 @@ const Notification: React.FC<NotificationProps> = ({ show, message, onClose }) =
           <div className="relative py-[25px] pr-[30px] pl-[30px] max-w-[350px]">
             <span>{message}</span>
             <button
-              onClick={onClose}
+              onClick={hideNotification}
               className="absolute top-[5px] right-[5px]"
             >
               <XMarkIcon className="h-[20px] text-gray-400 hover:bg-gray-100 p-[3px] rounded-full"/>
