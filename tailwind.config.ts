@@ -31,6 +31,9 @@ const config: Config = {
         'sliderColor-9': 'rgb(255, 116, 116)', 
         'sliderColor-10': 'rgb(253, 83, 83)',  
       },
+      zIndex: {
+        '100': '100',
+      }
     },
   },
   plugins: [],
