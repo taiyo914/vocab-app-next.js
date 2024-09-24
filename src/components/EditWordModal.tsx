@@ -13,18 +13,20 @@ import { handleSpeak }from "@/components/SpeechButton";
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import useSearchStore from "@/store/searchStore";
 
-interface DisplayEditModalProps {
+interface EditWordModalProps {
   isOpen: boolean;
   onClose: () => void;
   editWord: WordType | null;
   setEditWord: React.Dispatch<React.SetStateAction<WordType | null>>;
+  showDeleteBtn: boolean
 }
 
-const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
+const EditWordModal: React.FC<EditWordModalProps> = ({
   isOpen,
   onClose,
   editWord,
   setEditWord,
+  showDeleteBtn,
 }) => {
   const supabase = createClient();
   const { words, setWords, fetchWords } = useUserStore();
@@ -103,7 +105,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
 
       <div className="flex items-center justify-center mt-3 xs:mt-0 mb-4">
         <PencilSquareIcon className="h-5" />
-        <h2 className="font-bold text-xl ">単語カード</h2>
+        <h2 className="font-bold text-xl ">{showDeleteBtn ? "単語カード":"カード編集"}</h2>
       </div>
 
       <div>
@@ -309,7 +311,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
       </AnimatePresence>
 
     {/* ボタン */}
-      <div className="flex gap-3 mt-6 xs:-mb-1">
+      <div className={`flex gap-3 mt-6 xs:-mb-1 ${!showDeleteBtn && "mb-2"}`}>
         <button
           onClick={handleSaveChanges}
           className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold"
@@ -325,7 +327,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
       </div>
 
     {/* 削除ボタン */}
-      <div className="mt-7 flex justify-center ">
+      {showDeleteBtn && <div className="mt-7 flex justify-center ">
         <button
           onClick={() => setIsDeleteConfirmOpen(true)}
           className="
@@ -336,7 +338,7 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
           <TrashIcon className="h-4" />
           単語を削除する
         </button>
-      </div>
+      </div>}
   
       {/* 削除確認モダール */}
       {isDeleteConfirmOpen && (
@@ -382,4 +384,4 @@ const DisplayEditModal: React.FC<DisplayEditModalProps> = ({
   );
 };
 
-export default DisplayEditModal;
+export default EditWordModal;
