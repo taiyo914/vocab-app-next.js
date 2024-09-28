@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# アプリ名
+VacabApp
 
-## Getting Started
+## 概要
+VocabAppは、ユーザーが自分の好きなように英単語を登録・管理・復習できるシンプルかつ高機能な単語帳アプリです。キャッチコピーは「がっつりまとめて、サクッと復習」。データベースのような管理のしやすさと、ワンタップで簡単に例文やメモまで復習できる手軽さを両立させました。
 
-First, run the development server:
+### 従来のアプリの問題点
+私はこれまで英単語を勉強・管理するために、多くのアプリやツールを使ってきましたが、それらには次のような不満点がありました。
+- 単語帳アプリ
+  - そもそも英語に特化しているものが実は少ない
+  - カードのようなUIを採用しているものが多く、情報の一覧性・管理性が低い
+  - カードに「表」と「裏」しかなく、例文やメモなどの追加情報を確認できない
+    - できたとしても追加で別のボタンを押す必要があるなど、UI・UXが悪い
+    - 裏面にそれらの情報を書くと、表示の順番を入れ替えて「日本語→英語」の学習ができなくなる
+  - 単語の評価基準が「覚えた」or「覚えてない」など、だいぶざっくりしている
+  - デスクトップに対応していない or 使いづらい
+- 表・ノートアプリ（Exel, Notionなど）
+  - 単語帳のような手軽さがなく、復習がしづらい
+  - 単語帳としては必要以上に機能があり、操作しづらい
+  - 文字が小さく、スマホでは見づらい
+  - スマホでは編集もしづらい
+そこで、これらの単語帳のような手軽さ・復習のしやすさと表・ノートアプリのような管理・編集のしやすさを両立し、自分が本当に心から使いたいと思う英単語帳アプリを作ろうと思いました。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 実装した機能
+**アプリ全体**
+- ログイン・ログアウト機能
+- ローディング中のアニメーション
+- 右上にメッセージがアニメーションで表示される通知機能
+- アニメーションでモーダルが表示される
+- 値によって色がかわる自作スライダー（rangeタイプのinput要素）
+- スマホでも違和感のないスタイル、レスポンシブ対応
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**ホーム画面**
+- 「カードビュー」と「テーブルビュー」の2つの表示方法を実装
+  - ビューの設定はローカルストレージに保存されます
+- カードビューでのフリップアニメーション
+- 優先度によってカード裏面の色が変わる
+- 単語編集機能
+  - 音声読み上げ機能（アメリカ、イギリス、オーストラリアの発音を選べます）
+- 単語削除機能
+- 単語検索機能（順序を保った部分一致）
+  - 検索バー出現のアニメーション
+  - スタイルが崩れないように、PCとスマホで異なる出現の仕方にしました
+- 表示設定機能
+  - 以下の項目が設定でき、データベースに保存されます
+    - 表示件数
+    - 並び替え（作成日、優先度、アルファベット順、復習回数、復習日、更新日）
+    - 優先度範囲フィルター
+    - 復習回数フィルター
+    - 日付範囲フィルター（作成日、復習日、更新日）
+- ページネーション機能
+  - 表示されるページ番号はデータベースに保存されます
+- 単語を表示させるときにアニメーションがかかる
+- メニューの出現アニメーション
+- 画面トップに戻るボタン
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**単語作成画面**
+- 単語作成機能
+- 「連続で作成する」機能
+- csv, tsvのテキストから一気に単語を登録できる
+  - 上から登録するか、下から登録するか選べます
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**復習画面**
+単語に登録されている「単語」「意味」「例文」「例文訳」「メモ」のそれぞれがカードになって次々と表示されます
+- スライドアニメーション
+  - タップ、キーボード、スワイプでの操作が可能
+  - スマホの縦画面ではナビゲーションアイコンをなくし、そのかわりタップが反応する画面の高さいっぱいに広げました
+  - 最初に戻るボタン
+- 音声読み上げ機能
+  - 日本、アメリカ、イギリス、オーストラリア
+- 各カードに優先度を変える自作スライダーと編集ボタンを配置
+  - 同じ単語のカードには変更が即座に反映されます
+- 復習設定機能
+  - 表示させる項目と順番の指定
+    - どの項目のカードを表示させるか指定できます
+      - 例）「単語」「意味」「例文」のみ表示など
+    - ドラッグアンドドロップで表示する項目の順番を変えられます
+      - 例）「意味」→「単語」→「例文」など
+  - 未入力のカードの表示/非表示設定
+  - 読み上げ音声のアクセント設定
+    - アメリカ、イギリス、オーストラリア
+- 復習を記録する機能
+  - 復習した単語の「復習回数」が +1 され、「復習日」が更新されます
 
-## Learn More
+### これから追加したい機能
+- ユーザー情報の編集機能
+- ユーザーアイコンの設定
+- メール認証とセキュリティの強化
+- 外部サービスによる認証（Oauth）
+- RLSの実装
+- ユーザ情報編集画面
+- 進捗管理/進捗の表示
+- フォルダ機能
+- csv, tsvファイルを読み込んで単語カードを作る
+- 復習画面での自動めくり&読み上げ機能をつける
+- 画像を保存/表示できるようにする
+- YouGlishや辞書アプリなど外部サイトに繋げられる
+- メール通知機能
+- SRS(Spaced Repetition System: 間隔反復システム)の実装
+- きれいなレイアウトによるA4プリント機能
+- 英語対応（i18n）
 
-To learn more about Next.js, take a look at the following resources:
+## 技術スタック
+**言語・フレームワーク**
+  - Next.js14 (App Router)
+  - TypeScript
+**データベース・認証**
+  - Supabase
+**スタイリング**
+  - TailwindCSS
+  - Heroicons
+  - React Icons
+**状態管理**
+  - Zustand
+**アニメーション**
+  - Framer Motion
+  - Swiper
+  - react-card-flip
+**ユーティリティ**
+  - lodash （ユーティリティライブラリ）
+  - d3-dsv （CSV,TSVフォーマット解析ライブラリ）
+  - react-device-detect（デバイス検出ライブラリ）
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
