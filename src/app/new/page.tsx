@@ -7,7 +7,6 @@ import useUserStore from "@/store/userStore";
 import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import CustomSlider from "@/components/CustomSlider"; 
 import useNotificationStore from "@/store/useNotificationStore";
-import Spinner from '@/components/Spiner';
 
 interface FormData {
   word: string;
@@ -30,12 +29,9 @@ const initialValue = {
 export default function AddNewWord() {
   const supabase = createClient();
   const [formData, setFormData] = useState<FormData>(initialValue);
-  const { userId, fetchUserId } = useUserStore();
+  const { userId, fetchUserId , fetchWords} = useUserStore();
   const router = useRouter();
   const showNotification = useNotificationStore(state => state.showNotification)
-
-  const fetchWords = useUserStore( state => state.fetchWords);
-  const [isLoading, setIsLoading] = useState(false);
   const [initialAddAndContinue, setInitialAddAndContinue] = useState(false)
 
   useEffect(() => {
@@ -52,14 +48,12 @@ export default function AddNewWord() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true)
     const error = await saveDataToDatabase(formData);
     if (error) {
       showNotification( `単語の追加に失敗しました...エラーメッセージ: ${error.message}`, 10000);
     } else {
       await fetchWords()
       router.push("/")
-      setIsLoading(false)
     }
   };
 
@@ -81,15 +75,15 @@ export default function AddNewWord() {
     } else {
       setInitialAddAndContinue(true)
       setFormData(initialValue);
-      showNotification("単語の追加に成功しました");
+      showNotification("単語を追加しました");
     }
   };
 
   const handleBack = async () =>{
     if(initialAddAndContinue){
       await fetchWords()
-      router.push("/")
     }
+    router.push("/")
   }
 
   return (
@@ -99,7 +93,7 @@ export default function AddNewWord() {
           <div
             onClick={handleBack}
             className="
-              text-gray-500 
+              text-gray-500 cursor-pointer
               p-2 rounded-full
               hover:text-gray-700 hover:bg-gray-100 transition duration-200 
               flex items-center space-x-1"
@@ -240,9 +234,7 @@ export default function AddNewWord() {
               className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-full transition duration-300
                 flex items-center justify-center gap-1"
             >
-              {isLoading && <Spinner borderWeight='border-[0.25rem] invisible'/> }
               追 加
-              {isLoading && <Spinner borderWeight='border-[0.25rem]'/> }
             </button>
             <button
               type="button"
