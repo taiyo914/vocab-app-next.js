@@ -11,7 +11,7 @@ import useUserStore from "@/store/userStore";
 const DataForm: React.FC = () => {
   const supabase = createClient();
   const router = useRouter();
-  const { userId, fetchUserId } = useUserStore()
+  const { userId, fetchUserId, fetchWords } = useUserStore()
   const [isTSV, setIsTSV] = useState<boolean>(true);
   const [data, setData] = useState<string>("");
   const [isReverse, setIsReverse] = useState(false);
@@ -57,6 +57,7 @@ const DataForm: React.FC = () => {
       showNotification(`単語の追加に失敗しました...エラーメッセージ: ${error.message}`, 10000);
     } else {
       showNotification("単語の追加に成功しました")
+      await fetchWords()
       router.push("/");
     }
   };
