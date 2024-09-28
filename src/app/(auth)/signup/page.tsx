@@ -3,8 +3,8 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FaArrowRight } from "react-icons/fa";
 import LoadingDots from "@/components/LoadingDots";
+import Spinner from "@/components/Spiner";
 
 export default function SignIn() {
   const supabase = createClient();
@@ -61,15 +61,16 @@ export default function SignIn() {
 
   return (
     <>
-      {loading && (
-        <div className="fixed inset-0 bg-black opacity-40 flex flex-col items-center justify-center gap-2">
-          <div className="text-center">
-            <div className="text-white">アカウント作成中...</div>
-            <div className="text-white">しばらくお待ち下さい</div>
-          </div>
-          <LoadingDots />
+      {loading && (<>
+        <div className="fixed inset-0 bg-black opacity-40 "></div>
+        <div className="fixed inset-0 flex flex-col items-center justify-center gap-2">
+            <div className="text-center space-y-1 font-medium text-lg">
+              <div className="text-white">アカウント作成中...</div>
+              <div className="text-white">しばらくお待ち下さい</div>
+            </div>
+            <Spinner borderColor = "border-gray-100 border-t-blue-300 border-r-blue-300" size = "h-7 w-7" borderWeight = "border-[0.25rem]" props = "mt-1"/>
         </div>
-      )}
+      </>)}
       <div className="h-screen flex flex-col justify-center items-center">
         <div className="rounded-lg p-8 w-full max-w-md ">
           <h1 className="text-3xl font-bold mb-8 text-center">新規アカウント登録</h1>
