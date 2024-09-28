@@ -7,6 +7,7 @@ import useUserStore from "@/store/userStore";
 import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import CustomSlider from "@/components/CustomSlider"; 
 import useNotificationStore from "@/store/useNotificationStore";
+import Spinner from '@/components/Spiner';
 
 interface FormData {
   word: string;
@@ -33,6 +34,10 @@ export default function AddNewWord() {
   const router = useRouter();
   const showNotification = useNotificationStore(state => state.showNotification)
 
+  const fetchWords = useUserStore( state => state.fetchWords);
+  const [isLoading, setIsLoading] = useState(false);
+  const [initialAddAndContinue, setInitialAddAndContinue] = useState(false)
+
   useEffect(() => {
     fetchUserId(); // キャッシュ済みなら何もしない
   }, [fetchUserId]);
@@ -47,8 +52,15 @@ export default function AddNewWord() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true)
     const error = await saveDataToDatabase(formData);
-    if (!error) router.push("/") 
+    if (error) {
+      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${error.message}`, 10000);
+    } else {
+      await fetchWords()
+      router.push("/")
+      setIsLoading(false)
+    }
   };
 
   const handleSubmitAndContinue = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -67,17 +79,25 @@ export default function AddNewWord() {
       showNotification( `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`, 10000);
       return insertError
     } else {
+      setInitialAddAndContinue(true)
       setFormData(initialValue);
       showNotification("単語の追加に成功しました");
     }
   };
 
+  const handleBack = async () =>{
+    if(initialAddAndContinue){
+      await fetchWords()
+      router.push("/")
+    }
+  }
+
   return (
     <div >
       <div className="px-5 xs:p-0 mt-4 mx-auto max-w-3xl">
         <div className="flex justify-between items-center mb-3 px-0.5 xs:pr-5 xs:pl-3">
-          <Link
-            href="/"
+          <div
+            onClick={handleBack}
             className="
               text-gray-500 
               p-2 rounded-full
@@ -86,7 +106,7 @@ export default function AddNewWord() {
           >
             <ArrowUturnLeftIcon className="h-4" />
             <div>戻る</div>
-          </Link>
+          </div>
           <Link
             href="new/import"
             className="
@@ -217,9 +237,12 @@ export default function AddNewWord() {
           <div className="flex justify-center space-x-3 my-4 xs:px-5">
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-full transition duration-300"
+              className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-full transition duration-300
+                flex items-center justify-center gap-1"
             >
+              {isLoading && <Spinner borderWeight='border-[0.25rem] invisible'/> }
               追 加
+              {isLoading && <Spinner borderWeight='border-[0.25rem]'/> }
             </button>
             <button
               type="button"
