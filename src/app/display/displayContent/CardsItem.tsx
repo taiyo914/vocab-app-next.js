@@ -58,7 +58,7 @@ const CardsItem = ({ word }: { word: WordType }) => {
           <div
             className="
               shadow-md min-h-32
-              px-6 py-8 bg-white
+              p-6 bg-white
               rounded-lg border border-gray-200 
               flex items-center justify-center"
             onClick={handleClick}
@@ -73,7 +73,7 @@ const CardsItem = ({ word }: { word: WordType }) => {
             }}
             className="
               shadow-md min-h-32
-              px-6 py-8 relative
+              p-6 relative
               rounded-lg border border-gray-200 
               flex items-center justify-center"
             onClick={handleClick}
