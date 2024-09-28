@@ -120,10 +120,10 @@ VocabAppは、英単語を登録・管理・復習できるシンプルかつ高
   - Framer Motion
   - Swiper
   - react-card-flip
-  
+
 **ユーティリティ**
-  - lodash （ユーティリティライブラリ）
-  - d3-dsv （CSV,TSVフォーマット解析ライブラリ）
-  - react-device-detect（デバイス検出ライブラリ）
+  - lodash （ユーティリティ）
+  - d3-dsv （CSV,TSV解析）
+  - react-device-detect（デバイス検出）
 
 
