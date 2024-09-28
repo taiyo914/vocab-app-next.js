@@ -112,7 +112,7 @@ export default function AddNewWord() {
               flex space-x-1"
           >
             <ArrowDownTrayIcon className="h-5" />
-            <span className=""> {"CSV/TSV"}</span>からインポート
+            <span className=""> {"TSV/CSV"}</span>からインポート
           </Link>
         </div>
         <form onSubmit={handleSubmit} autoComplete="off">
