@@ -54,9 +54,9 @@ const DataForm: React.FC = () => {
     const finalData = isReverse ? parsedData.reverse() : parsedData;
     const { error } = await supabase.from("words").insert(finalData);
     if (error) {
-      showNotification(`単語の追加に失敗しました...エラーメッセージ: ${error.message}`, 10000, "red");
+      showNotification(`単語の追加に失敗しました...エラーメッセージ: ${error.message}`, "error");
     } else {
-      showNotification("単語の追加に成功しました", 4000, "green")
+      showNotification("単語の追加に成功しました", "success")
       await fetchWords()
       router.push("/");
     }

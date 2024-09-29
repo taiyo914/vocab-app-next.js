@@ -120,7 +120,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
         await saveReviewSettings(userId, temporaryFields, temporaryShowEmptyCards, temporaryAccent);
         onClose(); 
       } catch (err:any) {
-        showNotification(`設定の保存に失敗しました...エラーメッセージ:${err.message}`,10000, "red");
+        showNotification(`設定の保存に失敗しました...エラーメッセージ:${err.message}`, "error");
       }
       return;
     }
@@ -137,7 +137,7 @@ const ReviewSettingsModal = ({ isOpen, onClose, goToFirstSlide }: SettingsModalP
       goToFirstSlide(); 
       onClose(); 
     } catch (err:any) {
-      showNotification(`設定の保存に失敗しました...エラーメッセージ:${err.message}`,10000, "red");
+      showNotification(`設定の保存に失敗しました...エラーメッセージ:${err.message}`, "error");
     }
   };
 

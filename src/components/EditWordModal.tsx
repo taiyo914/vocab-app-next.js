@@ -3,14 +3,20 @@ import { createClient } from "@/utils/supabase/client";
 import CustomSlider from "@/components/CustomSlider";
 import useUserStore from "@/store/userStore";
 import { WordType } from "@/types/Types";
-import { ChevronDownIcon, ChevronRightIcon, PencilSquareIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import Modal from "@/components/Modal";
 import Spinner from "@/components/Spiner";
 import { format, parseISO } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import useShowDetailsStore from "@/store/showDetailsStore";
-import { handleSpeak }from "@/components/SpeechButton";
-import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { handleSpeak } from "@/components/SpeechButton";
+import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
 import useSearchStore from "@/store/searchStore";
 import useNotificationStore from "@/store/useNotificationStore";
 
@@ -19,7 +25,7 @@ interface EditWordModalProps {
   onClose: () => void;
   editWord: WordType | null;
   setEditWord: React.Dispatch<React.SetStateAction<WordType | null>>;
-  showDeleteBtn: boolean
+  showDeleteBtn: boolean;
 }
 
 const EditWordModal: React.FC<EditWordModalProps> = ({
@@ -31,41 +37,39 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
 }) => {
   const supabase = createClient();
   const { words, setWords, fetchWords } = useUserStore();
-  const { results, setResults, tempResults, setTempResults , searchTriggered } = useSearchStore(); 
+  const { results, setResults, tempResults, setTempResults, searchTriggered } = useSearchStore();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const { showDetails, toggleDetails} = useShowDetailsStore();
-  const showNotification = useNotificationStore(state => state.showNotification);
+  const { showDetails, toggleDetails } = useShowDetailsStore();
+  const showNotification = useNotificationStore((state) => state.showNotification);
 
   const handleSaveChanges = async () => {
     try {
-      const updatedAt = new Date().toISOString(); 
-      const updatedWord = { ...editWord, updated_at: updatedAt }; 
+      const updatedAt = new Date().toISOString();
+      const updatedWord = { ...editWord, updated_at: updatedAt };
 
       const { error } = await supabase.from("words").update(editWord).eq("id", editWord!.id);
 
       if (error) throw new Error(error.message);
 
       if (searchTriggered) {
-        const updatedResults = results!.map((word) => 
+        const updatedResults = results!.map((word) =>
           word.id === editWord!.id ? updatedWord : word
         );
         setResults(updatedResults as WordType[]);
       }
 
-      const updatedTempResults = tempResults!.map((word) => 
+      const updatedTempResults = tempResults!.map((word) =>
         word.id === editWord!.id ? updatedWord : word
       );
       setTempResults(updatedTempResults as WordType[]);
 
-      const updateWords = words!.map((word) => 
-        word.id === editWord!.id ? updatedWord : word
-      );
+      const updateWords = words!.map((word) => (word.id === editWord!.id ? updatedWord : word));
       setWords(updateWords as WordType[]);
 
-      onClose(); 
+      onClose();
     } catch (err: any) {
-      showNotification(`更新に失敗しました...エラーメッセージ:${err.message}`, 10000, "red");
+      showNotification(`更新に失敗しました...エラーメッセージ:${err.message}`, "error");
     }
   };
 
@@ -91,13 +95,13 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       setResults(results.filter((word) => word.id !== editWord!.id));
       setTempResults(tempResults.filter((word) => word.id !== editWord!.id));
 
-      showNotification("単語を削除しました", 4000, "blue")
+      showNotification("単語を削除しました", "delete");
       onClose();
     } catch (err: any) {
-      showNotification(`単語の削除に失敗しました。エラー:${err.message}`, 10000, "red");
+      showNotification(`単語の削除に失敗しました。エラー:${err.message}`,"error");
     } finally {
       setDeleteLoading(false);
-      setIsDeleteConfirmOpen(false)
+      setIsDeleteConfirmOpen(false);
     }
   };
 
@@ -110,13 +114,11 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
   const [isWordLangOpen, setIsWordLangOpen] = useState(false);
   const [isExampleLangOpen, setIsExampleLangOpen] = useState(false);
 
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose} >
-
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex items-center justify-center mt-3 xs:mt-0 mb-4">
         <PencilSquareIcon className="h-5" />
-        <h2 className="font-bold text-xl ">{showDeleteBtn ? "単語カード":"カード編集"}</h2>
+        <h2 className="font-bold text-xl ">{showDeleteBtn ? "単語カード" : "カード編集"}</h2>
       </div>
 
       <div>
@@ -125,30 +127,42 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
             <div>単語</div>
             <div
               className="relative inline-block "
-              onMouseEnter={()=>setIsWordLangOpen(true)}
-              onMouseLeave={()=>setIsWordLangOpen(false)}
+              onMouseEnter={() => setIsWordLangOpen(true)}
+              onMouseLeave={() => setIsWordLangOpen(false)}
             >
               <button className="text-gray-500 text-[1.5rem] flex justify-end w-full">
-                <SpeakerWaveIcon className="h-[1.2rem] cursor-pointer mr-1"/>
+                <SpeakerWaveIcon className="h-[1.2rem] cursor-pointer mr-1" />
               </button>
               <AnimatePresence>
                 {isWordLangOpen && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
                     className="absolute right-0 top-0  bg-white border rounded-xl border-gray-300 shadow-lg "
                   >
-                    <div 
-                       onClick = {()=>handleSpeak(editWord?.word, "en-US")}
-                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-t-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>US</div>
-                    <div 
-                       onClick = {()=>handleSpeak(editWord?.word, "en-GB")}
-                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150             "><SpeakerWaveIcon className="h-[1.2rem]"/>UK</div>
-                    <div 
-                       onClick = {()=>handleSpeak(editWord?.word, "en-AU")}
-                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-b-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>AUS</div>
+                    <div
+                      onClick={() => handleSpeak(editWord?.word, "en-US")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-t-xl"
+                    >
+                      <SpeakerWaveIcon className="h-[1.2rem]" />
+                      US
+                    </div>
+                    <div
+                      onClick={() => handleSpeak(editWord?.word, "en-GB")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150             "
+                    >
+                      <SpeakerWaveIcon className="h-[1.2rem]" />
+                      UK
+                    </div>
+                    <div
+                      onClick={() => handleSpeak(editWord?.word, "en-AU")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-b-xl"
+                    >
+                      <SpeakerWaveIcon className="h-[1.2rem]" />
+                      AUS
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -185,30 +199,42 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
             <div>例文</div>
             <div
               className="relative inline-block "
-              onMouseEnter={()=>setIsExampleLangOpen(true)}
-              onMouseLeave={()=>setIsExampleLangOpen(false)}
+              onMouseEnter={() => setIsExampleLangOpen(true)}
+              onMouseLeave={() => setIsExampleLangOpen(false)}
             >
               <button className="text-gray-500 text-[1.5rem] flex justify-end w-full">
-                <SpeakerWaveIcon className="h-[1.2rem] cursor-pointer mr-1"/>
+                <SpeakerWaveIcon className="h-[1.2rem] cursor-pointer mr-1" />
               </button>
               <AnimatePresence>
                 {isExampleLangOpen && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
                     className="absolute right-0 top-0  bg-white border rounded-xl border-gray-300 shadow-lg "
                   >
-                    <div 
-                       onClick = {()=>handleSpeak(editWord?.example, "en-US")}
-                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-t-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>US</div>
-                    <div 
-                       onClick = {()=>handleSpeak(editWord?.example, "en-GB")}
-                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150             "><SpeakerWaveIcon className="h-[1.2rem]"/>UK</div>
-                    <div 
-                       onClick = {()=>handleSpeak(editWord?.example, "en-AU")}
-                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-b-xl"><SpeakerWaveIcon className="h-[1.2rem]"/>AUS</div>
+                    <div
+                      onClick={() => handleSpeak(editWord?.example, "en-US")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-t-xl"
+                    >
+                      <SpeakerWaveIcon className="h-[1.2rem]" />
+                      US
+                    </div>
+                    <div
+                      onClick={() => handleSpeak(editWord?.example, "en-GB")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150             "
+                    >
+                      <SpeakerWaveIcon className="h-[1.2rem]" />
+                      UK
+                    </div>
+                    <div
+                      onClick={() => handleSpeak(editWord?.example, "en-AU")}
+                      className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-b-xl"
+                    >
+                      <SpeakerWaveIcon className="h-[1.2rem]" />
+                      AUS
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -254,7 +280,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
             <label className="text-gray-600 ml-0.5">優先度</label>
             <div className="">{editWord?.index}</div>
           </div>
-          <CustomSlider 
+          <CustomSlider
             sliderValue={editWord?.index || 0}
             onChange={(value) => setEditWord((prev) => prev && { ...prev, index: value })}
           />
@@ -267,24 +293,31 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
           className=" rounded-lg text-gray-600  hover:text-gray-500 transition-all duration-100 "
           onClick={toggleDetails}
         >
-          {showDetails 
-            ? (<div className="flex items-center justify-center gap-0.5"><ChevronDownIcon className="h-5"/>詳細情報</div>) 
-            : (<div className="flex items-center justify-center gap-0.5"><ChevronRightIcon className="h-5"/>詳細情報</div>)}
+          {showDetails ? (
+            <div className="flex items-center justify-center gap-0.5">
+              <ChevronDownIcon className="h-5" />
+              詳細情報
+            </div>
+          ) : (
+            <div className="flex items-center justify-center gap-0.5">
+              <ChevronRightIcon className="h-5" />
+              詳細情報
+            </div>
+          )}
         </button>
       </div>
-    
-    {/* 詳細情報 */}
+
+      {/* 詳細情報 */}
       <AnimatePresence>
         {showDetails && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity:1}}
+            animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
             <div className="flex flex-col gap-3 ml-1 mt-4 mb-1 text-gray-600  ">
-          
               <div className="flex">
                 <span className="w-[5.1rem]">復習回数</span>
                 <span className="mx-1">:</span>
@@ -295,10 +328,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
                 <span className="w-[5.1rem]">最終復習日</span>
                 <span className="mx-1">:</span>
                 <span className="ml-1 ">
-                  {editWord?.reviewed_at
-                    ? (formatDate(editWord?.reviewed_at))
-                    : "未復習"
-                  }
+                  {editWord?.reviewed_at ? formatDate(editWord?.reviewed_at) : "未復習"}
                 </span>
               </div>
 
@@ -318,10 +348,11 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
                 </span>
               </div>
             </div>
-          </motion.div>)}
+          </motion.div>
+        )}
       </AnimatePresence>
 
-    {/* ボタン */}
+      {/* ボタン */}
       <div className={`flex gap-3 mt-6 xs:-mb-1 ${!showDeleteBtn && "mb-2"}`}>
         <button
           onClick={handleSaveChanges}
@@ -330,27 +361,29 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
           保 存
         </button>
         <button
-          onClick = {onClose} 
-          className="cursor-pointer text-center py-2 border rounded-xl text-white w-full bg-gray-500 hover:bg-gray-600 transition-colors duration-300 font-semibold" 
+          onClick={onClose}
+          className="cursor-pointer text-center py-2 border rounded-xl text-white w-full bg-gray-500 hover:bg-gray-600 transition-colors duration-300 font-semibold"
         >
           閉じる
         </button>
       </div>
 
-    {/* 削除ボタン */}
-      {showDeleteBtn && <div className="mt-7 flex justify-center ">
-        <button
-          onClick={() => setIsDeleteConfirmOpen(true)}
-          className="
+      {/* 削除ボタン */}
+      {showDeleteBtn && (
+        <div className="mt-7 flex justify-center ">
+          <button
+            onClick={() => setIsDeleteConfirmOpen(true)}
+            className="
             w-40 py-2 rounded-full text-sm -mb-1
           hover:bg-gray-200 text-gray-600 font-medium transition duration-300
             flex items-center justify-center gap-0.5"
-        >
-          <TrashIcon className="h-4" />
-          単語を削除する
-        </button>
-      </div>}
-  
+          >
+            <TrashIcon className="h-4" />
+            単語を削除する
+          </button>
+        </div>
+      )}
+
       {/* 削除確認モダール */}
       {isDeleteConfirmOpen && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 w-full">
@@ -367,16 +400,15 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
                     hover:bg-red-600 transition duration-200
                     flex justify-center items-center gap-1"
               >
-                {deleteLoading
-                  ? (
-                    <Spinner
-                      size="h-5 w-5"
-                      borderColor="border-gray-100 border-t-red-300"
-                      borderWeight="border-[3px]"
-                    />
-                  ) : (
-                    <TrashIcon className="h-5" />
-                  )}
+                {deleteLoading ? (
+                  <Spinner
+                    size="h-5 w-5"
+                    borderColor="border-gray-100 border-t-red-300"
+                    borderWeight="border-[3px]"
+                  />
+                ) : (
+                  <TrashIcon className="h-5" />
+                )}
                 <span>削除</span>
               </button>
               <button
