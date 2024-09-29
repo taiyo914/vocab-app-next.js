@@ -54,6 +54,7 @@ export default function AddNewWord() {
     const error = await saveDataToDatabase(formData);
     if(!error){
       await fetchWords()
+      showNotification("単語を追加しました", "success");
       router.push("/")
     } 
     setAddLoading(false);
@@ -62,7 +63,10 @@ export default function AddNewWord() {
   const handleSubmitAndContinue = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const error = await saveDataToDatabase(formData);
-    if (!error) setFormData(initialValue);
+    if (!error) {
+      setFormData(initialValue);
+      showNotification("単語を追加しました", "success");
+    }
     setInitialAddAndContinue(true)
   };
 
@@ -73,8 +77,6 @@ export default function AddNewWord() {
     if (insertError) {
       showNotification( `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`, "error");
       return insertError
-    } else {
-      showNotification("単語を追加しました", "success");
     }
   };
 
