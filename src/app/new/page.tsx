@@ -7,6 +7,7 @@ import useUserStore from "@/store/userStore";
 import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import CustomSlider from "@/components/CustomSlider"; 
 import useNotificationStore from "@/store/useNotificationStore";
+import Spinner from "@/components/Spiner";
 
 interface FormData {
   word: string;
@@ -33,6 +34,7 @@ export default function AddNewWord() {
   const router = useRouter();
   const showNotification = useNotificationStore(state => state.showNotification)
   const [initialAddAndContinue, setInitialAddAndContinue] = useState(false)
+  const [ addLoading, setAddLoading] = useState(false);
 
   useEffect(() => {
     fetchUserId(); // キャッシュ済みなら何もしない
@@ -48,33 +50,30 @@ export default function AddNewWord() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setAddLoading(true);
     const error = await saveDataToDatabase(formData);
-    if (error) {
-      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${error.message}`, "error");
-    } else {
+    if(!error){
       await fetchWords()
       router.push("/")
-    }
+    } 
+    setAddLoading(false);
   };
 
   const handleSubmitAndContinue = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const error = await saveDataToDatabase(formData);
     if (!error) setFormData(initialValue);
+    setInitialAddAndContinue(true)
   };
 
   const saveDataToDatabase = async (data: FormData) => {
-    // 新しい単語をSupabaseに挿入
     const { error: insertError } = await supabase
       .from("words")
       .insert([{ user_id: userId, ...data }]);
-    
     if (insertError) {
       showNotification( `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`, "error");
       return insertError
     } else {
-      setInitialAddAndContinue(true)
-      setFormData(initialValue);
       showNotification("単語を追加しました", "success");
     }
   };
@@ -234,12 +233,15 @@ export default function AddNewWord() {
               className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-full transition duration-300
                 flex items-center justify-center gap-1"
             >
+              {addLoading && <Spinner borderWeight='border-[0.25rem]' props="invisible"/>}
               追 加
+              {addLoading &&  <Spinner borderWeight='border-[0.25rem]'/>}
             </button>
             <button
               type="button"
               onClick={handleSubmitAndContinue}
-              className="w-full py-3 px-4 bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full transition duration-300"
+              className="w-full py-3 px-4 bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full transition duration-300
+                flex items-center justify-center gap-1"
             >
               追加 & 新規作成
             </button>
