@@ -7,6 +7,7 @@ import { ArrowUturnLeftIcon, CheckIcon } from "@heroicons/react/24/outline";
 import useNotificationStore from "@/store/useNotificationStore";
 import { csvParseRows, tsvParseRows } from "d3-dsv";
 import useUserStore from "@/store/userStore";
+import Spinner from "@/components/Spiner";
 
 const DataForm: React.FC = () => {
   const supabase = createClient();
@@ -16,6 +17,7 @@ const DataForm: React.FC = () => {
   const [data, setData] = useState<string>("");
   const [isReverse, setIsReverse] = useState(false);
   const showNotification = useNotificationStore(state => state.showNotification)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchUserId(); // キャッシュ済みなら何もしない
@@ -31,7 +33,7 @@ const DataForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const parsedData = isTSV
       ? tsvParseRows(data.trim(), (row, i) => ({
           user_id: userId,
@@ -56,10 +58,11 @@ const DataForm: React.FC = () => {
     if (error) {
       showNotification(`単語の追加に失敗しました...エラーメッセージ: ${error.message}`, "error");
     } else {
-      showNotification("単語の追加に成功しました", "success")
       await fetchWords()
+      showNotification("単語の追加に成功しました", "success")
       router.push("/");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -140,9 +143,12 @@ const DataForm: React.FC = () => {
 
         <button
           type="submit"
-          className="w-2/3 mt-4 py-3 bg-black text-white font-semibold rounded-full hover:opacity-75 focus:outline-none transition"
+          className="w-2/3 mt-4 py-3 bg-black text-white font-semibold rounded-full hover:opacity-75 focus:outline-none transition
+            flex items-center justify-center"
         >
-          {isTSV ? "TSV" : "CSV"}からインポート
+          {isLoading && <Spinner borderWeight='border-[0.23rem]' props="invisible xs:hidden"/>}
+            {isTSV ? "TSV" : "CSV"}からインポート 
+          {isLoading &&  <Spinner borderWeight='border-[0.23rem]' size="xs:h-4 xs:w-4 h-5 w-5" borderColor="border-gray-300 border-t-white border-r-white" props="opacity-80"/>}
         </button>
       </form>
     </div>
