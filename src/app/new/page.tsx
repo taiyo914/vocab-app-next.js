@@ -50,7 +50,7 @@ export default function AddNewWord() {
     e.preventDefault();
     const error = await saveDataToDatabase(formData);
     if (error) {
-      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${error.message}`, 10000);
+      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${error.message}`, 10000, "red");
     } else {
       await fetchWords()
       router.push("/")
@@ -70,12 +70,12 @@ export default function AddNewWord() {
       .insert([{ user_id: userId, ...data }]);
     
     if (insertError) {
-      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`, 10000);
+      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`, 10000, "red");
       return insertError
     } else {
       setInitialAddAndContinue(true)
       setFormData(initialValue);
-      showNotification("単語を追加しました");
+      showNotification("単語を追加しました", 4000 , "green");
     }
   };
 

@@ -65,7 +65,7 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
 
       onClose(); 
     } catch (err: any) {
-      showNotification(`更新に失敗しました...エラーメッセージ:${err.message}`, 10000);
+      showNotification(`更新に失敗しました...エラーメッセージ:${err.message}`, 10000, "red");
     }
   };
 
@@ -91,10 +91,10 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
       setResults(results.filter((word) => word.id !== editWord!.id));
       setTempResults(tempResults.filter((word) => word.id !== editWord!.id));
 
-      showNotification("単語を削除しました")
+      showNotification("単語を削除しました", 4000, "blue")
       onClose();
     } catch (err: any) {
-      showNotification(`単語の削除に失敗しました。エラー:${err.message}`, 10000);
+      showNotification(`単語の削除に失敗しました。エラー:${err.message}`, 10000, "red");
     } finally {
       setDeleteLoading(false);
       setIsDeleteConfirmOpen(false)
