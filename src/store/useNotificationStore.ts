@@ -5,22 +5,38 @@ interface NotificationState {
   message: string;
   duration: number;
   backgroundColor: string; 
-  showNotification: (message: string, duration? :number, backgroundColor?: "green" | "red" | "blue") => void;
+  messageType?: "success" | "error" | "delete";
+  showNotification: (message: string, messageType?: "success" | "error" | "delete") => void;
   hideNotification: () => void;
 }
 
 const useNotificationStore = create<NotificationState>((set) => ({
   show: false,
   message: "",
-  duration: 3000,
+  duration: 4000,
   backgroundColor: "white", 
-  showNotification: (message: string, duration: number = 4000,  backgroundColor:string = "white") => {
-    let bgColor = "white"; // デフォルトの色
-    if (backgroundColor === "green") bgColor = "#d8f0dd";
-    if (backgroundColor === "red") bgColor = "#ffdcdf";
-    if (backgroundColor === "blue") bgColor = "#e0eafc";
+  icon: null, 
+  showNotification: (message: string, messageType?: "success" | "error" | "delete" ) => {
+    let bgColor = "white"; 
+    let duration = 4000;   
+
+    switch (messageType) {
+      case "success":
+        bgColor = "#e4f7e8";
+        duration = 4000;
+        break;
+      case "error":
+        bgColor = "#fcdfe2";
+        duration = 10000;
+        break;
+      case "delete":
+        bgColor = "#eaf0fb";
+        duration = 4000;
+        break;
+    }
     
-    set({ show: true, message, duration, backgroundColor: bgColor })
+    set({ show: true, message, duration, backgroundColor: bgColor, messageType })
+    console.log()
   },
   hideNotification: () => set({ show: false, message: "", duration: 4000,  backgroundColor: "white" }),
 }));
