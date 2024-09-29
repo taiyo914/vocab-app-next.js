@@ -235,9 +235,9 @@ export default function AddNewWord() {
               className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-full transition duration-300
                 flex items-center justify-center gap-1"
             >
-              {addLoading && <Spinner borderWeight='border-[0.25rem]' props="invisible"/>}
+              {addLoading && <Spinner borderWeight='border-[0.23rem]' props="invisible"/>}
               追 加
-              {addLoading &&  <Spinner borderWeight='border-[0.25rem]'/>}
+              {addLoading &&  <Spinner  borderWeight='border-[0.23rem]' size="xs:h-4 xs:w-4 h-5 w-5" borderColor="border-gray-300 border-t-white border-r-white" props="opacity-80"/>}
             </button>
             <button
               type="button"
