@@ -7,7 +7,7 @@ import TopButtons from "./TopButtons";
 
 export default async function Home() {
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col min-h-screen text-black">
       <Header />
       <TopButtons />
       <Display />

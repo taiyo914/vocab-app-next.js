@@ -153,7 +153,7 @@ const Review = () => {
   ) => {
     const showSpeechBtn = label === "単語" || label === "例文" //音声をつけるかどうかもカスタマイズできるようにできるといいかも。
     return (
-      <div className="h-full w-full relative">
+      <div className="h-full w-full relative text-black">
         <div className="flex flex-col h-full justify-between items-center w-full">
           {/* カードのヘッダー */}
           <div
@@ -222,7 +222,7 @@ const Review = () => {
           word,
           "単語",
           word.word,
-          "xs:text-[2.5rem] text-5xl  lg:text-6xl font-bold leading-snug xs:leading-[1.2]",
+          "xs:text-[2.5rem] text-5xl  lg:text-6xl font-bold leading-snug lg:leading-[1.3] xs:leading-[1.2]",
           accent
         );
       case "meaning":
@@ -230,7 +230,7 @@ const Review = () => {
           word,
           "意味",
           word.meaning,
-          "xs:text-[2.3rem] text-5xl  lg:text-6xl  font-bold leading-snug xs:leading-[1.3] short:leading-[1.25]",
+          "xs:text-[2.3rem] text-5xl  lg:text-6xl  font-bold leading-snug lg:leading-[1.3] xs:leading-[1.3] short:leading-[1.25]",
           "ja-JP"
         );
       case "example":
@@ -238,7 +238,7 @@ const Review = () => {
           word,
           "例文",
           word.example,
-          "xs:text-[2rem] text-4xl lg:text-5xl font-semibold leading-snug xs:leading-[1.3] short:leading-[1.26]",
+          "xs:text-[2rem] text-4xl lg:text-5xl  font-semibold  leading-snug lg:leading-[1.3] xs:leading-[1.3] short:leading-[1.26]",
           accent
         );
       case "example_translation":
@@ -246,7 +246,7 @@ const Review = () => {
           word,
           "例文訳",
           word.example_translation,
-          "xs:text-[1.93rem] text-4xl  lg:text-5xl  font-[580] leading-[1.45] xs:leading-[1.39] short:leading-[1.39] ",
+          "xs:text-[1.93rem] text-4xl  lg:text-5xl  font-[580] leading-[1.45] lg:leading-[1.3] xs:leading-[1.39] short:leading-[1.39] ",
           "ja-JP"
         );
       case "memo":
@@ -254,7 +254,7 @@ const Review = () => {
           word,
           "メモ",
           word.memo,
-          "xs:text-[1.93rem] text-4xl lg:text-5xl text-gray-700 leading-[1.45] xs:leading-[1.39] short:leading-[1.39]",
+          "xs:text-[1.93rem] text-4xl lg:text-5xl text-gray-700 leading-[1.45] lg:leading-[1.3] xs:leading-[1.39] short:leading-[1.39]",
           "ja-JP"
         );
       default:
@@ -264,7 +264,7 @@ const Review = () => {
 
   return (
     <>
-      <div className="fixed inset-0 flex flex-col items-center ">
+      <div className="fixed inset-0 flex flex-col items-center text-black">
         <ReviewTopButtons
           goToFirstSlide={goToFirstSlide}
           toggleSettingsModal={() => setIsSettingsModalOpen(true)}

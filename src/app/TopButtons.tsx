@@ -12,7 +12,7 @@ const TopButtons = () => {
           <Link
             href="new"
             className="
-              text-center font-semibold
+              text-center font-semibold text-black
               xs:font-bold xs:text-lg
               w-full py-2.5 xs:py-2  
               border rounded-md shadow-md 

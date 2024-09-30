@@ -28,7 +28,7 @@ const Menubar = ({ isMenuOpen, onClose }: MenuProps) => {
           <XMarkIcon className="h-9 text-gray-400 cursor-pointer hover:bg-gray-200 rounded-full p-1 transition-all duration-300" onClick={onClose} />
         </div>
         <div className="p-4">
-          <h2 className="text-3xl p-3 pt-0 font-bold ">Menu</h2>
+          <h2 className="text-3xl p-3 pt-0 font-bold text-black">Menu</h2>
           <div className="text-lg text-gray-700 rounded-lg p-3 duration-200 transition-all hover:bg-gray-200  flex items-center">
             <HomeIcon className="h-5 mr-1" />
             <a href="#">Home</a>
