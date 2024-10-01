@@ -25,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, width = "md:w-3/5 w-4/5 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 flex justify-center items-center z-50">
+        <div className="fixed inset-0 flex justify-center items-center z-50 text-black">
           {/* オーバーレイ */}
           <motion.div
             className="absolute inset-0 bg-black z-40"

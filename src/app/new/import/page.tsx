@@ -66,7 +66,7 @@ const DataForm: React.FC = () => {
   };
 
   return (
-    <div className="py-4 px-5 xs:p-0 mx-auto max-w-3xl">
+    <div className="py-4 px-5 xs:p-0 mx-auto max-w-3xl text-black">
       <div className="mb-1 xs:mb-0 xs:ml-3 xs:mt-3">
         <Link
           href="/new"

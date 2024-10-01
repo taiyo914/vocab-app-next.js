@@ -97,8 +97,8 @@ export default function SettingsModal() {
 
   return (
     <Modal isOpen ={isOpen} onClose={onClose} width="w-3/5 max-w-2xl">
-      <h1 className="text-2xl font-bold mb-3 text-center">設定</h1>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 ">
+      <h1 className="text-2xl font-bold mb-3 text-center text-black">設定</h1>
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 text-black">
         <div className="mb-4">
           <label className="block notxs:font-medium mb-1 ml-0.5 text-gray-600">表示件数</label>
           <input

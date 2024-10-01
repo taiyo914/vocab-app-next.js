@@ -40,7 +40,7 @@ const Notification = () => {
           exit={{ opacity: 0, x: "100%" }} 
           transition={{type: "spring", stiffness: 240, damping: 30}}
           // transition ={{duration: 0.3}}
-          className="fixed top-4 right-4 rounded-xl shadow-lg border z-100"
+          className="fixed top-4 right-4 rounded-xl shadow-lg border z-100 text-black"
           style={{ backgroundColor }}
         >
           <div className="relative py-[25px] pr-[30px] pl-[30px] max-w-[350px]">

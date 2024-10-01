@@ -40,7 +40,7 @@ export default function SignIn() {
           <Spinner borderColor = "border-gray-100 border-t-blue-300 border-r-blue-300" size = "h-7 w-7" borderWeight = "border-[0.25rem]" props = "mt-1"/>
       </div>
     </>)}
-    <div className="h-screen flex flex-col justify-center items-center">
+    <div className="h-screen flex flex-col justify-center items-center text-black">
       <div className="p-8 w-full max-w-md">
         <h1 className="text-3xl font-bold mb-8 text-center">ログイン</h1>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="mb-4 border border-gray-300 w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" />
