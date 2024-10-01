@@ -2,10 +2,10 @@
 import Link from "next/link";
 import { useState, useEffect, FormEvent, ChangeEvent, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "../../utils/supabase/client";
+import { createClient } from "../../../utils/supabase/client";
 import useUserStore from "@/store/userStore";
 import { ArrowUturnLeftIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
-import CustomSlider from "@/components/CustomSlider"; 
+import CustomSlider from "@/components/CustomSlider";
 import useNotificationStore from "@/store/useNotificationStore";
 import Spinner from "@/components/Spiner";
 
@@ -30,11 +30,11 @@ const initialValue = {
 export default function AddNewWord() {
   const supabase = createClient();
   const [formData, setFormData] = useState<FormData>(initialValue);
-  const { userId, fetchUserId , fetchWords} = useUserStore();
+  const { userId, fetchUserId, fetchWords } = useUserStore();
   const router = useRouter();
-  const showNotification = useNotificationStore(state => state.showNotification)
-  const [initialAddAndContinue, setInitialAddAndContinue] = useState(false)
-  const [ addLoading, setAddLoading] = useState(false);
+  const showNotification = useNotificationStore((state) => state.showNotification);
+  const [initialAddAndContinue, setInitialAddAndContinue] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
 
   useEffect(() => {
     fetchUserId(); // キャッシュ済みなら何もしない
@@ -52,11 +52,11 @@ export default function AddNewWord() {
     e.preventDefault();
     setAddLoading(true);
     const error = await saveDataToDatabase(formData);
-    if(!error){
-      await fetchWords()
+    if (!error) {
+      await fetchWords();
       showNotification("単語を追加しました", "success");
-      router.push("/")
-    } 
+      router.push("/");
+    }
     setAddLoading(false);
   };
 
@@ -67,7 +67,7 @@ export default function AddNewWord() {
       setFormData(initialValue);
       showNotification("単語を追加しました", "success");
     }
-    setInitialAddAndContinue(true)
+    setInitialAddAndContinue(true);
   };
 
   const saveDataToDatabase = async (data: FormData) => {
@@ -75,20 +75,23 @@ export default function AddNewWord() {
       .from("words")
       .insert([{ user_id: userId, ...data }]);
     if (insertError) {
-      showNotification( `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`, "error");
-      return insertError
+      showNotification(
+        `単語の追加に失敗しました...エラーメッセージ: ${insertError.message}`,
+        "error"
+      );
+      return insertError;
     }
   };
 
-  const handleBack = async () =>{
-    if(initialAddAndContinue){
-      await fetchWords()
+  const handleBack = async () => {
+    if (initialAddAndContinue) {
+      await fetchWords();
     }
-    router.push("/")
-  }
+    router.push("/");
+  };
 
   return (
-    <div >
+    <div>
       <div className="px-5 xs:p-0 mt-4 mx-auto max-w-3xl">
         <div className="flex justify-between items-center mb-3 px-0.5 xs:pr-5 xs:pl-3">
           <div
@@ -174,7 +177,7 @@ export default function AddNewWord() {
                   focus:outline-none focus:border-gray-700 focus:border-1 transition-colors
                   h-20"
                 autoComplete="off"
-                placeholder = "例: An apple a day keeps the doctors away"
+                placeholder="例: An apple a day keeps the doctors away"
               ></textarea>
             </div>
 
@@ -194,7 +197,7 @@ export default function AddNewWord() {
                   focus:outline-none focus:border-gray-700 focus:border-1 transition-colors
                   h-20"
                 autoComplete="off"
-                placeholder = "例: 1日1個のりんごで医者いらず"
+                placeholder="例: 1日1個のりんごで医者いらず"
               ></textarea>
             </div>
 
@@ -224,7 +227,10 @@ export default function AddNewWord() {
                 <div className="text-gray-500  pl-2">{formData.index}</div>
               </div>
               <div className="flex w-full px-0.5">
-                <CustomSlider sliderValue={formData.index} onChange={(value) => setFormData({ ...formData, index: value })} />
+                <CustomSlider
+                  sliderValue={formData.index}
+                  onChange={(value) => setFormData({ ...formData, index: value })}
+                />
               </div>
             </div>
           </div>
@@ -235,9 +241,15 @@ export default function AddNewWord() {
               className="w-full py-3 px-4 bg-gray-900 hover:bg-gray-700 text-white font-bold rounded-full transition duration-300
                 flex items-center justify-center gap-1"
             >
-              {addLoading && <Spinner borderWeight='border-[0.23rem]' props="invisible"/>}
-              追 加
-              {addLoading &&  <Spinner  borderWeight='border-[0.23rem]' size="xs:h-4 xs:w-4 h-5 w-5" borderColor="border-gray-300 border-t-white border-r-white" props="opacity-80"/>}
+              {addLoading && <Spinner borderWeight="border-[0.23rem]" props="invisible" />}追 加
+              {addLoading && (
+                <Spinner
+                  borderWeight="border-[0.23rem]"
+                  size="xs:h-4 xs:w-4 h-5 w-5"
+                  borderColor="border-gray-300 border-t-white border-r-white"
+                  props="opacity-80"
+                />
+              )}
             </button>
             <button
               type="button"
@@ -251,7 +263,6 @@ export default function AddNewWord() {
         </form>
 
         <div className="h-80"></div>
-
       </div>
     </div>
   );
