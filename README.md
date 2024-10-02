@@ -218,6 +218,18 @@ https://github.com/user-attachments/assets/2af2df47-9f87-44a2-aa9c-6a6fd08e2075
 
 https://github.com/user-attachments/assets/b6721ad5-ed0c-40a4-b0e9-8efd2473b55e
 
+<br/>
+
+## 9. [新機能]マークダウン記法
+
+ユーザーが例文やメモなどで太字や下線を使えるように、マークダウン記法を使えるようにしました。
+
+**で囲むと太字になり、__で囲むと下線が引けます。シンプルさと必要性を考えて、この2つの記法のみを導入しました｡
+
+太字の太さや下線のオフセット（文字との距離）を細かく調節できるように、あえてライブラリは使わず自分で文字列を解析する関数を作り実装しました。
+
+https://github.com/user-attachments/assets/1ff3533e-9a43-45a3-b29f-dee49d821d99
+
 
 <br/>
 
