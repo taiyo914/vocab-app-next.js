@@ -3,6 +3,77 @@ import { useState } from "react";
 import { WordType } from "@/types/Types";
 import { motion } from "framer-motion";
 import EditWordModal from "@/components/EditWordModal";
+import { isMobile } from "react-device-detect";
+
+const parseCustomMarkup = (text: string, lang:string = "en" ): React.ReactNode[] => {
+  let parts: React.ReactNode[] = [];
+
+  const fontWeight = isMobile ? "font-[700]" : "font-[650]"
+  const underlineOffset = isMobile 
+    ? lang === "ja" ? "underline underline-offset-[3.3px]" : "underline underline-offset-[2px]"  
+    : lang === "ja" ? "underline underline-offset-[3.6px]" : "underline underline-offset-[2.2px]" ;
+  const underlineThickness = ""
+  // まず**で分割
+  let boldSplit = text.split(/(\*\*)/);
+  let isBold = false;
+  let isUnderline = false;
+
+  boldSplit.forEach((part, index) => {
+    //**が来るたびに太字にするかどうかを切り替える/
+    if (part === '**') {
+      isBold = !isBold;  
+      return;
+    }
+
+    //次に__で分割
+    let underlineSplit = part.split(/(__)/);
+    underlineSplit.forEach((subPart, subIndex) => {
+      //__が来るたびに下線にするかどうかを切り替える
+      if (subPart === '__') {
+        isUnderline = !isUnderline;  
+        return;
+      }
+
+      //isBoldもisUnderlineもfalseのときはif文に引っかからないのでこのまま/
+      let element = <span key={`${index}-${subIndex}`}>{subPart}</span>;
+
+      if (isBold && isUnderline) {
+        // 両方がtrueの場合（太字+下線）
+        element = (
+          <span 
+            key={`${index}-${subIndex}`} 
+            className={`${fontWeight}  ${underlineOffset}`}
+            style={{ textDecorationThickness: underlineThickness }}
+          >
+            {subPart}
+          </span>
+        );
+      } else if (isBold) {
+        // 太字のみ
+        element = (
+          <span key={`${index}-${subIndex}`} className={`${fontWeight}`}>
+            {subPart}
+          </span>
+        );
+      } else if (isUnderline) {
+        // 下線のみ
+        element = (
+          <span 
+            key={`${index}-${subIndex}`} 
+            className={`${underlineOffset}`}
+            style={{ textDecorationThickness: underlineThickness }}
+          >
+            {subPart}
+          </span>
+        );
+      } 
+
+      parts.push(element);
+    });
+  });
+
+  return parts;
+};
 
 const VocabListItem = ({ word }: { word: WordType }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -34,19 +105,20 @@ const VocabListItem = ({ word }: { word: WordType }) => {
             >
               {word.index}
             </div>
-            <div className="text-start text-xl overflow-auto">{word.word}</div>
+            <div className="text-start text-xl overflow-auto">{parseCustomMarkup(word.word)}</div>
           </div>
-          <div className="col-span-1 flex items-center justify-center border-r border-gray-200 px-2 font-semibold text-lg">
-            {word.meaning}
+          <div className="col-span-1 my-auto text-center border-r border-gray-200 px-2 font-semibold text-lg">
+            {parseCustomMarkup(word.meaning, "ja")}
           </div>
-          <div className="col-span-1 flex items-center justify-center border-r border-gray-200 pl-3 pr-2 text-center">
-            {word.example}
+          <div className="col-span-1 border-r border-gray-200 pl-3 pr-2 text-center my-auto">
+            {parseCustomMarkup(word.example)}
+            {/* {word.example} */}
           </div>
-          <div className="col-span-1 flex items-center justify-center border-r border-gray-200 px-3 ">
-            {word.example_translation}
+          <div className="col-span-1  border-r border-gray-200 px-3 my-auto">
+            {parseCustomMarkup(word.example_translation, "ja")}
           </div>
-          <div className="col-span-1 flex items-center px-3 text-[0.95rem] text-gray-700">
-            {word.memo}
+          <div className="col-span-1  px-3 text-[0.95rem] text-gray-700 my-auto">
+            {parseCustomMarkup(word.memo, "ja")}
           </div>
         </div>
       </motion.div>
