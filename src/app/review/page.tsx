@@ -21,6 +21,81 @@ import SpeechButton from "@/components/SpeechButton";
 import "./swiper-style.css";
 import Spinner from "@/components/Spiner";
 import EditWordModal from "@/components/EditWordModal";
+import { isMobile } from "react-device-detect";
+
+const parseCustomMarkup = (text: string, lang:string = "en" ): React.ReactNode[] => {
+  let parts: React.ReactNode[] = [];
+
+  const fontWeight = "font-[700]"
+  const underlineOffset = isMobile 
+    ? lang === "ja" ? "underline underline-offset-[5px]" : "underline underline-offset-[4px]"  
+    : lang === "ja" ? "underline underline-offset-[6px] lg:underline-offset-[8px]" : "underline underline-offset-[5px] lg:underline-offset-[6px]" ;
+  const underlineThickness = isMobile 
+    ? lang === "ja" ?"2px" :"2.4px"
+    : lang === "ja" ?"2.5px" :"3.3px"
+
+  // まず**で分割
+  let boldSplit = text.split(/(\*\*)/);
+  let isBold = false;
+  let isUnderline = false;
+
+  boldSplit.forEach((part, index) => {
+    //**が来るたびに太字にするかどうかを切り替える/
+    if (part === '**') {
+      isBold = !isBold;  
+      return;
+    }
+
+    //次に__で分割
+    let underlineSplit = part.split(/(__)/);
+    underlineSplit.forEach((subPart, subIndex) => {
+      //__が来るたびに下線にするかどうかを切り替える
+      if (subPart === '__') {
+        isUnderline = !isUnderline;  
+        return;
+      }
+
+      //isBoldもisUnderlineもfalseのときはif文に引っかからないのでこのまま/
+      let element = <span key={`${index}-${subIndex}`}>{subPart}</span>;
+
+      if (isBold && isUnderline) {
+        // 両方がtrueの場合（太字+下線）
+        element = (
+          <span 
+            key={`${index}-${subIndex}`} 
+            className={`${fontWeight}  ${underlineOffset}`}
+            style={{ textDecorationThickness: underlineThickness }}
+          >
+            {subPart}
+          </span>
+        );
+      } else if (isBold) {
+        // 太字のみ
+        element = (
+          <span key={`${index}-${subIndex}`} className={`${fontWeight}`}>
+            {subPart}
+          </span>
+        );
+      } else if (isUnderline) {
+        // 下線のみ
+        element = (
+          <span 
+            key={`${index}-${subIndex}`} 
+            className={`${underlineOffset}`}
+            style={{ textDecorationThickness: underlineThickness }}
+          >
+            {subPart}
+          </span>
+        );
+      } 
+
+      parts.push(element);
+    });
+  });
+
+  return parts;
+};
+
 
 const Review = () => {
   const supabase = createClient();
@@ -147,7 +222,8 @@ const Review = () => {
   const commonDisplay = (
     word: WordType,
     label: string,
-    content: string,
+    stringContent: string,
+    parsedContent: React.ReactNode,
     additionalSettings: string,
     accent: string
   ) => {
@@ -185,10 +261,10 @@ const Review = () => {
           <div
             className={`f-full flex flex-col items-center justify-center  `}
           >
-            <div className={`text-center w-screen break-words xs:px-[25px] px-[80px] lg:px-[80px]  ${additionalSettings}`}>{content}</div>
-            {content && (
+            <div className={`text-center w-screen break-words xs:px-[25px] px-[80px] lg:px-[80px]  ${additionalSettings}`}>{parsedContent}</div>
+            {stringContent && (
               <div className="h-[25px] w-[25px] mt-[15px] text-gray-400 notxs:hidden">
-                <SpeechButton word={content} accent={accent} />
+                <SpeechButton word={stringContent} accent={accent} />
               </div>
             )}
           </div>
@@ -209,7 +285,7 @@ const Review = () => {
             hover:text-gray-700
             transition duration-200"
         >
-          <SpeechButton word={content} accent={accent} props="h-[32px] w-[32px]" />
+          <SpeechButton word={stringContent} accent={accent} props="h-[32px] w-[32px]" />
         </div>
       </div>
     );
@@ -222,7 +298,8 @@ const Review = () => {
           word,
           "単語",
           word.word,
-          "xs:text-[2.5rem] text-5xl  lg:text-6xl font-bold leading-snug lg:leading-[1.3] xs:leading-[1.2]",
+          parseCustomMarkup(word.word),
+          "xs:text-[2.5rem] text-5xl  lg:text-6xl font-bold leading-snug lg:leading-[1.4] xs:leading-[1.2]",
           accent
         );
       case "meaning":
@@ -230,7 +307,8 @@ const Review = () => {
           word,
           "意味",
           word.meaning,
-          "xs:text-[2.3rem] text-5xl  lg:text-6xl  font-bold leading-snug lg:leading-[1.3] xs:leading-[1.3] short:leading-[1.25]",
+          parseCustomMarkup(word.meaning, "ja"),
+          "xs:text-[2.3rem] text-5xl  lg:text-6xl font-bold leading-snug lg:leading-[1.4] xs:leading-[1.3] short:leading-[1.25]",
           "ja-JP"
         );
       case "example":
@@ -238,7 +316,8 @@ const Review = () => {
           word,
           "例文",
           word.example,
-          "xs:text-[2rem] text-4xl lg:text-5xl  font-semibold  leading-snug lg:leading-[1.3] xs:leading-[1.3] short:leading-[1.26]",
+          parseCustomMarkup(word.example),
+          "xs:text-[2rem] text-4xl lg:text-5xl font-[450] leading-[1.45] lg:leading-[1.4] xs:leading-[1.3] short:leading-[1.26]",
           accent
         );
       case "example_translation":
@@ -246,7 +325,8 @@ const Review = () => {
           word,
           "例文訳",
           word.example_translation,
-          "xs:text-[1.93rem] text-4xl  lg:text-5xl  font-[580] leading-[1.45] lg:leading-[1.3] xs:leading-[1.39] short:leading-[1.39] ",
+          parseCustomMarkup(word.example_translation, "ja"),
+          "xs:text-[1.93rem] text-4xl  lg:text-5xl font-[450] leading-[1.45] lg:leading-[1.4] xs:leading-[1.39] short:leading-[1.39] ",
           "ja-JP"
         );
       case "memo":
@@ -254,7 +334,8 @@ const Review = () => {
           word,
           "メモ",
           word.memo,
-          "xs:text-[1.93rem] text-4xl lg:text-5xl text-gray-700 leading-[1.45] lg:leading-[1.3] xs:leading-[1.39] short:leading-[1.39]",
+          parseCustomMarkup(word.memo, "ja"),
+          "xs:text-[1.93rem] text-4xl lg:text-5xl text-gray-700 leading-[1.45] lg:leading-[1.4] xs:leading-[1.39] short:leading-[1.39]",
           "ja-JP"
         );
       default:
