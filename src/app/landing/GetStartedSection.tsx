@@ -35,7 +35,7 @@ export default function GetStartedSection() {
               w-full text-center 
               px-4 py-3 rounded-md font-medium
               border 
-              bg-transparent text-white border-white hover:bg-indigo-400 transition-colors duration-300">
+              bg-transparent text-white border-white hover:bg-blue-500 transition-colors duration-300">
               ログイン
             </Link>
           </div>
