@@ -7,32 +7,34 @@ import {
   Bars3Icon, 
 } from "@heroicons/react/24/outline";
 import Link from "next/link"
+import Footer from '@/app/Footer';
 
 export default function Layout({children}:{children: React.ReactNode}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   return (
     <div className='text-black'>
-      <header className="max-w-[2000px] mx-auto py-4 xs:py-3 px-5 xs:px-4 fixed w-full bg-white z-50 shadow-md flex items-center justify-between">
-        <Link className="" href="#">
-          <span className="xs:ml-0 text-3xl font-bold">VocabApp</span>
-        </Link>
-        <nav className="ml-auto hidden sm:flex gap-4 sm:gap-6">
-          <Link className="text-gray-500 font-medium hover:text-blue-500 transition-colors cursor-pointer" href="#">
-            使い方
+      <header className='mx-auto py-4 xs:py-3 px-5 xs:px-4 fixed w-full bg-white z-50 shadow-md flex justify-center'>
+        <div  className="max-w-[1400px] flex items-center justify-between w-full">
+          <Link className="" href="#">
+            <span className="xs:ml-0 text-3xl font-bold">VocabApp</span>
           </Link>
-          <Link className="text-gray-500 font-medium hover:text-blue-500 transition-colors cursor-pointer" href="#">
-            ログイン
-          </Link>
-        </nav>
-        <button
-          className="sm:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <Bars3Icon className="h-8 w-8" />
-        </button>
+          <nav className="">
+            <Link className="font-medium transition-colors cursor-pointer py-1.5 px-4  text-gray-500 border rounded-full hover:bg-gray-100 -mr-1" href="/signin">
+              ログイン
+            </Link>
+          </nav>
+          {/* <button
+            className="sm:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <Bars3Icon className="h-8 w-8" />
+          </button> */}
+        </div>
       </header>
 
-    <AnimatePresence>
+    {/* とりあえずナビゲーションバーは保留 */}
+
+    {/* <AnimatePresence>
       {isMenuOpen && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -50,8 +52,11 @@ export default function Layout({children}:{children: React.ReactNode}) {
           </nav>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence> */}
+
       {children}
+
+      <Footer/>
     </div>
   );
 }
