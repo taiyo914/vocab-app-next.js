@@ -88,29 +88,29 @@ export default function HeroSection() {
             >
               <SwiperSlide>
                 <Image
-                  src="/images/table_screen_shot.png"
+                  src="/images/table_screen.jpeg"
                   alt="アプリのスクリーンショット"
                   layout="responsive"
-                  width={500}
-                  height={500}
+                  width={400}
+                  height={300}
                 />
               </SwiperSlide>
               <SwiperSlide>
                 <Image
-                  src="/images/cards_screen_shot.png"
+                  src="/images/cards_screen.jpeg"
                   alt="アプリのスクリーンショット"
                   layout="responsive"
-                  width={500}
-                  height={500}
+                  width={400}
+                  height={300}
                 />
               </SwiperSlide>
               <SwiperSlide>
                 <Image
-                  src="/images/review_screen_shot.png"
+                  src="/images/review_screen.jpeg"
                   alt="アプリのスクリーンショット"
                   layout="responsive"
-                  width={500}
-                  height={500}
+                  width={400}
+                  height={300}
                 />
               </SwiperSlide>
             </Swiper>
