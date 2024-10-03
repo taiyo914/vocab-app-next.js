@@ -20,10 +20,10 @@ export default function HeroSection() {
       <div className="xs:px-5 px-8 md:px-10 lg:pl-16 lg:pr-12 xl:pr-16 relative z-10">
         <div className="flex gap-x-12 xs:gap-y-7 gap-y-10  items-center lg:flex-row flex-col ">
           <motion.div
-            initial={{ opacity: 0, x: -100 }}
+            initial={{ opacity: 0, x:10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="xs:space-y-4 space-y-6 w-full lg:w-1/2"
+            className="xs:space-y-4 space-y-6 w-full lg:w-1/2 relative"
           >
             <h1 className="
                 xs:text-5xl text-6xl 
@@ -66,10 +66,10 @@ export default function HeroSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="w-full lg:w-1/2 shadow-2xl xs:shadow-xl rounded-xl max-w-[620px]"
+            className="w-full lg:w-1/2 shadow-2xl xs:shadow-xl rounded-xl max-w-[620px] relative"
           >
             <Swiper
               spaceBetween={30}
@@ -87,31 +87,37 @@ export default function HeroSection() {
               className="rounded-xl"
             >
               <SwiperSlide>
+              <div className="max-w-full lg:w-[620px]">
                 <Image
                   src="/images/table_screen.jpeg"
                   alt="アプリのスクリーンショット"
                   layout="responsive"
                   width={400}
-                  height={300}
+                  height={900}
                 />
+              </div>
               </SwiperSlide>
               <SwiperSlide>
-                <Image
-                  src="/images/cards_screen.jpeg"
-                  alt="アプリのスクリーンショット"
-                  layout="responsive"
-                  width={400}
-                  height={300}
-                />
+                <div className="max-w-full lg:w-[620px]">
+                  <Image
+                    src="/images/cards_screen.jpeg"
+                    alt="アプリのスクリーンショット"
+                    layout="responsive"
+                    width={400}
+                    height={300}
+                  />
+                </div>
               </SwiperSlide>
               <SwiperSlide>
-                <Image
-                  src="/images/review_screen.jpeg"
-                  alt="アプリのスクリーンショット"
-                  layout="responsive"
-                  width={400}
-                  height={300}
-                />
+                <div className="max-w-full lg:w-[620px]">
+                  <Image
+                    src="/images/review_screen.jpeg"
+                    alt="アプリのスクリーンショット"
+                    layout="responsive"
+                    width={400}
+                    height={300}
+                  />
+                </div>
               </SwiperSlide>
             </Swiper>
           </motion.div>
