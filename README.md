@@ -1,4 +1,4 @@
-# 英単語帳アプリ VacabApp
+# 英単語帳アプリ VocabApp
 
 **アプリURL**
 https://new-vocab-app.vercel.app
