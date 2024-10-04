@@ -2,11 +2,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { SparklesIcon, ClipboardIcon, ArrowTopRightOnSquareIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-
+import Image  from "next/image"
+import useNotificationStore from "@/store/useNotificationStore";
+ 
 
 interface ChatGPTButtonProps {
-  label: string;
+  label:string;
   input: string;
+  prompt: string;
+  openModal: ()=>void;
 }
 
 const copyPromptAndRedirect = (prompt: string) => {
@@ -19,6 +23,15 @@ const copyPromptAndRedirect = (prompt: string) => {
     newTab.focus();
   }
 };
+
+const redirect = () =>{
+  const url = "https://chat.openai.com/";
+  const newTab = window.open(url, "_blank");
+
+  if (newTab) {
+    newTab.focus();
+  }
+}
 
 const copyToClipboard = (text: string) => {
   if (navigator.clipboard) {
@@ -53,29 +66,21 @@ const copyToClipboardFallback = (text: string) => {
   document.body.removeChild(textArea);
 };
 
-const generatePrompt = (label: string, input: string) => {
-  switch (label) {
-    case "word":
-      return `${input}の意味を教えて`;
-    case "meaning":
-      return `${input}を英語で言うと？`;
-    case "example":
-      return `${input}を日本語に翻訳すると？`;
-    case "example_translation":
-      return `${input}を英語で言うと？`;
-    case "memo":
-      return `メモ: ${input}`;
-    default:
-      return "";
-  }
+const generatePrompt = (prompt:string, input:string) => {
+  return prompt.replace("{input}", input);
 };
 
-const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input}) => {
+const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input, prompt, openModal}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const showNotification = useNotificationStore(state => state.showNotification);
+  const handleCopy = () =>{
+    copyToClipboard(generatePrompt(prompt, input))
+    showNotification(`${label}の質問「${generatePrompt(prompt, input)}」をコピーしました`, "success")
+  }
 
-  return (
+  return (<>
     <div 
-      className="relative"
+      className="relative bg-white "
       onMouseEnter={() => setIsMenuOpen(true)}
       onMouseLeave={() => setIsMenuOpen(false)}
     >
@@ -89,45 +94,51 @@ const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input}) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute right-0 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+            className="absolute right-0 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-20 p-2"
           >
-            <div className="block px-4 pt-3 pb-1 text-black font-semibold">
-                ChatGPTに聞く
+            <div onClick={()=> copyPromptAndRedirect(generatePrompt(prompt,input))}
+              className="hover:bg-gray-100 rounded-lg cursor-pointer py-2 group">
+              <div className="block px-2 text-black font-[550] flex items-center gap-2">
+                  <Image src="/chatgpt_icon.svg" alt="ChatGPTのアイコン"  width={15} height={15} className="mb-0.5"/>
+                  ChatGPTに質問する
+              </div>
+              <p className="text-[0.7rem] text-gray-400 px-2">{label}の質問をコピーして移動します</p>
             </div>
             <ul className="text-[0.9rem]">
               <li
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer
-                  flex items-center gap-1
+                className="block p-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer
+                  flex items-center gap-2
                 "
-                onClick={() => copyToClipboard(generatePrompt(label, input))}
+                onClick={handleCopy}
               >
                 <ClipboardIcon className="h-4 w-4"/>
-                質問をコピー
+                {label}の質問をコピー
               </li>
               <li
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer
-                  flex items-center gap-1
+                className="block p-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer
+                  flex items-center gap-2
                 "
-                onClick={()=> copyPromptAndRedirect(generatePrompt(label,input))}
+                onClick={redirect}
               >
                 <ArrowTopRightOnSquareIcon  className="h-4 w-4"/>
-                ChatGPTへ移動
+                ChatGPTに移動
               </li>
               <li
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer
-                  flex items-center gap-1
+                className="block p-2 text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer
+                  flex items-center gap-2
                 "
-                onClick={() => console.log("編集できるようにしよう")}
+                onClick={openModal}
               >
                 <PencilSquareIcon className="h-4 w-4"/>
-                質問を編集
+                 質問を編集
               </li>
             </ul>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
+
+  </>);
 };
 
 export default ChatGPTButton;

@@ -55,7 +55,7 @@ const ChatGPTPrompt: React.FC = () => {
 
   return (<>
     <div className="container mx-auto text-center mt-10">
-      <h1 className="text-2xl font-bold mb-5">ChatGPT用のプロンプト生成</h1>
+      {/* <h1 className="text-2xl font-bold mb-5">ChatGPT用のプロンプト生成</h1>
       <input
         type="text"
         value={word}
@@ -70,7 +70,7 @@ const ChatGPTPrompt: React.FC = () => {
       >
         「{word}の意味を教えて」をコピーしてChatGPTを開く
       </button>
-      {copied && <p className="text-green-500 mt-2">プロンプトをコピーしました！</p>}
+      {copied && <p className="text-green-500 mt-2">プロンプトをコピーしました！</p>} */}
     </div>
     <AddNewWord/>
   </>);
