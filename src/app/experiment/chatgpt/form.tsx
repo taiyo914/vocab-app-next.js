@@ -4,7 +4,11 @@ import { useState, useEffect, FormEvent, ChangeEvent, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import useUserStore from "@/store/userStore";
-import { ArrowUturnLeftIcon, ArrowDownTrayIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowUturnLeftIcon,
+  ArrowDownTrayIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/outline";
 import CustomSlider from "@/components/CustomSlider";
 import useNotificationStore from "@/store/useNotificationStore";
 import Spinner from "@/components/Spiner";
@@ -42,16 +46,16 @@ export default function AddNewWord() {
   const [addLoading, setAddLoading] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { prompts, setPrompts, fetchPrompts, updatePrompts } = usePromptStore();
+  const { prompts, fetchPrompts, updatePrompts } = usePromptStore();
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const [localPrompts, setLocalPrompts] = useState({
-    word: '',
-    meaning: '',
-    example: '',
-    example_sentence: '',
-    memo: ''
+    word: "",
+    meaning: "",
+    example: "",
+    example_sentence: "",
+    memo: "",
   });
 
   useEffect(() => {
@@ -60,15 +64,18 @@ export default function AddNewWord() {
     }
   }, [isModalOpen, prompts]);
 
-  const handleCloseModal = () =>{
-    closeModal()
-    setLocalPrompts(prompts)
- }
+  const handleCloseModal = () => {
+    closeModal();
+    setLocalPrompts(prompts);
+  };
   const handleSavePrompts = async () => {
-    if(userId){
-      setPrompts(localPrompts);
-      await updatePrompts(userId); //updateはlocalPromptsを代入するようにして、それが成功したらsetPromptsに代入するようにする
-      setIsModalOpen(false); 
+    if (userId) {
+      const error = await updatePrompts(userId, localPrompts); //updateはlocalPromptsを代入するようにして、それが成功したらsetPromptsに代入するようにする
+      if (error) {
+        showNotification(`プロンプトを更新できませんでした...エラー:${error.message}`, "error");
+      } else {
+        setIsModalOpen(false);
+      }
     }
   };
 
@@ -77,11 +84,15 @@ export default function AddNewWord() {
   }, [fetchUserId]);
 
   useEffect(() => {
-   if(userId){
-    fetchPrompts(userId) //もしユーザーidがあれば、proptsを取得し、セット
-   }
+    if (!userId) return;
+    const loadPrompts = async () => {
+      const error = await fetchPrompts(userId); //もしユーザーidがあれば、proptsを取得し、セット
+      if (error) {
+        showNotification(`プロンプトを取得できませんでした...エラー:${error.message}`, "error");
+      }
+    };
+    loadPrompts();
   }, [userId, fetchPrompts]);
-  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -169,7 +180,12 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
                   単語
                 </label>
-                <ChatGPTButton label="単語"  input={formData.word} prompt ={prompts.word} openModal ={openModal}/>
+                <ChatGPTButton
+                  label="単語"
+                  input={formData.word}
+                  prompt={prompts.word}
+                  openModal={openModal}
+                />
               </div>
               <input
                 type="text"
@@ -192,7 +208,12 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="meaning">
                   意味
                 </label>
-                <ChatGPTButton label="意味"  input={formData.meaning} prompt ={prompts.meaning} openModal ={openModal}/>
+                <ChatGPTButton
+                  label="意味"
+                  input={formData.meaning}
+                  prompt={prompts.meaning}
+                  openModal={openModal}
+                />
               </div>
               <input
                 type="text"
@@ -215,7 +236,12 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="example">
                   例文
                 </label>
-                <ChatGPTButton label="例文"  input={formData.example} prompt ={prompts.example} openModal ={openModal}/>
+                <ChatGPTButton
+                  label="例文"
+                  input={formData.example}
+                  prompt={prompts.example}
+                  openModal={openModal}
+                />
               </div>
               <textarea
                 name="example"
@@ -238,7 +264,12 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="example_translation">
                   例文訳
                 </label>
-                <ChatGPTButton label="例文訳"  input={formData.example_translation} prompt ={prompts.example_sentence} openModal ={openModal}/>
+                <ChatGPTButton
+                  label="例文訳"
+                  input={formData.example_translation}
+                  prompt={prompts.example_sentence}
+                  openModal={openModal}
+                />
               </div>
               <textarea
                 name="example_translation"
@@ -261,7 +292,12 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="memo">
                   メモ
                 </label>
-                <ChatGPTButton label="メモ"  input={formData.memo} prompt ={prompts.memo} openModal ={openModal} />
+                <ChatGPTButton
+                  label="メモ"
+                  input={formData.memo}
+                  prompt={prompts.memo}
+                  openModal={openModal}
+                />
               </div>
               <textarea
                 name="memo"
@@ -325,15 +361,19 @@ export default function AddNewWord() {
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} width="w-3/5 max-w-lg">
         <h3 className="text-center font-bold text-2xl mb-2 mt-4 flex items-center justify-center gap-1">
-          <PencilSquareIcon className="h-6 w-6"/>
+          <PencilSquareIcon className="h-6 w-6" />
           質問の編集
         </h3>
-        <p className="text-center text-gray-500 mb-10 text-sm md:text-base">{"{input}"}に入力した内容が入ります</p>
+        <p className="text-center text-gray-500 mb-10 text-sm md:text-base">
+          {"{input}"}に入力した内容が入ります
+        </p>
         <div className="flex flex-col gap-6">
           <label>
             <div className="flex justify-between items-center">
               <div className="text-gray-700 font-semibold ml-1">単語の質問</div>
-              <div className="text-gray-500 text-xs hidden md:block">{"{input}"}には入力した単語が入ります</div>
+              <div className="text-gray-500 text-xs hidden md:block">
+                {"{input}"}には入力した単語が入ります
+              </div>
             </div>
             <textarea
               className="w-full border py-2 px-3 rounded "
@@ -345,7 +385,9 @@ export default function AddNewWord() {
           <label>
             <div className="flex justify-between items-center">
               <div className="text-gray-700 font-semibold ml-1">意味の質問</div>
-              <div className="text-gray-500 text-xs hidden md:block">{"{input}"}には入力した意味が入ります</div>
+              <div className="text-gray-500 text-xs hidden md:block">
+                {"{input}"}には入力した意味が入ります
+              </div>
             </div>
             <textarea
               className="w-full border py-2 px-3 rounded "
@@ -357,7 +399,9 @@ export default function AddNewWord() {
           <label>
             <div className="flex justify-between items-center">
               <div className="text-gray-700 font-semibold ml-1">例文の質問</div>
-              <div className="text-gray-500 text-xs hidden md:block">{"{input}"}には入力した例文が入ります</div>
+              <div className="text-gray-500 text-xs hidden md:block">
+                {"{input}"}には入力した例文が入ります
+              </div>
             </div>
             <textarea
               className="w-full border py-2 px-3 rounded "
@@ -369,19 +413,25 @@ export default function AddNewWord() {
           <label>
             <div className="flex justify-between items-center">
               <div className="text-gray-700 font-semibold ml-1">例文訳の質問</div>
-              <div className="text-gray-500 text-xs hidden md:block">{"{input}"}には入力した例文訳が入ります</div>
+              <div className="text-gray-500 text-xs hidden md:block">
+                {"{input}"}には入力した例文訳が入ります
+              </div>
             </div>
             <textarea
               className="w-full border py-2 px-3 rounded "
               placeholder="{input}を使って例文訳の質問を入力"
               value={localPrompts.example_sentence}
-              onChange={(e) => setLocalPrompts({ ...localPrompts, example_sentence: e.target.value })}
+              onChange={(e) =>
+                setLocalPrompts({ ...localPrompts, example_sentence: e.target.value })
+              }
             />
           </label>
           <label>
             <div className="flex justify-between items-center">
               <div className="text-gray-700 font-semibold ml-1">メモの質問</div>
-              <div className="text-gray-500 text-xs hidden md:block">{"{input}"}には入力したメモが入ります</div>
+              <div className="text-gray-500 text-xs hidden md:block">
+                {"{input}"}には入力したメモが入ります
+              </div>
             </div>
             <textarea
               className="w-full border py-2 px-3 rounded "
@@ -397,8 +447,8 @@ export default function AddNewWord() {
           <div
             onClick={handleSavePrompts}
             className="py-2 border rounded-xl text-white w-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300 font-semibold text-center cursor-pointer"
-              >
-              保 存
+          >
+            保 存
           </div>
           <div
             onClick={handleCloseModal}
