@@ -174,12 +174,15 @@ export default function AddNewWord() {
           </Link>
         </div>
         <form onSubmit={handleSubmit} autoComplete="off">
-          <div className="p-8 xs:py-2 xs:px-5 border xs:border-none bg-white rounded-xl shadow-lg xs:shadow-none">
-            <div className="mb-5">
+          <div className="p-8 sm:p-10 lg:px-12 lg:py-11 xs:py-2 xs:px-5 border xs:border-none bg-white rounded-xl shadow-lg xs:shadow-none">
+            <div className="xs:mb-5 mb-8">
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
-                  単語
-                </label>
+                <div className="flex items-center gap-2">
+                  <label className="block text-gray-700 font-bold ml-1 " htmlFor="word">
+                    単語
+                  </label>
+                  <SpeekerButton word={formData.word}/>
+                </div>
                 <ChatGPTButton
                   label="単語"
                   input={formData.word}
@@ -203,7 +206,7 @@ export default function AddNewWord() {
               />
             </div>
 
-            <div className="mb-5">
+            <div className="xs:mb-5 mb-9">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="meaning">
                   意味
@@ -231,11 +234,14 @@ export default function AddNewWord() {
               />
             </div>
 
-            <div className="mb-5">
+            <div className="xs:mb-5 mb-7">
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-gray-700 font-bold ml-1" htmlFor="example">
-                  例文
-                </label>
+                <div className="flex items-center gap-2">
+                  <label className="block text-gray-700 font-bold ml-1 " htmlFor="example">
+                    例文
+                  </label>
+                  <SpeekerButton word={formData.example}/>
+                </div>
                 <ChatGPTButton
                   label="例文"
                   input={formData.example}
@@ -259,7 +265,7 @@ export default function AddNewWord() {
               ></textarea>
             </div>
 
-            <div className="mb-5">
+            <div className="xs:mb-5 mb-7">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="example_translation">
                   例文訳
@@ -287,7 +293,7 @@ export default function AddNewWord() {
               ></textarea>
             </div>
 
-            <div className="mb-5">
+            <div className="xs:mb-5 mb-7">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="memo">
                   メモ
@@ -315,7 +321,7 @@ export default function AddNewWord() {
               ></textarea>
             </div>
 
-            <div className="mb-5">
+            <div className="xs:mb-5 mb-7">
               <div className="flex">
                 <label className="block text-gray-700 font-bold mb-1 ml-1">優先度 </label>
                 <div className="text-gray-500  pl-2">{formData.index}</div>
@@ -460,4 +466,56 @@ export default function AddNewWord() {
       </Modal>
     </div>
   );
+}
+
+import { handleSpeak } from "@/components/SpeechButton";
+import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
+import { AnimatePresence, motion } from "framer-motion";
+
+function SpeekerButton({word}:{word:string} ) {
+  const [isOpen, setIsOpen]=useState<boolean>(false);
+  return(<>
+    <div
+      className="relative inline-block "
+      onMouseEnter={()=>setIsOpen(true)}
+      onMouseLeave={()=>setIsOpen(false)}
+    >
+      <button className="text-gray-500 flex justify-end w-full">
+        <SpeakerWaveIcon className="h-5 cursor-pointer" />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="absolute right-0 -top-2  bg-white border rounded-xl border-gray-300 shadow-lg "
+          >
+            <div
+              onClick={() => handleSpeak(word, "en-US")}
+              className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-t-xl"
+            >
+              <SpeakerWaveIcon className="h-[1.2rem]" />
+              US
+            </div>
+            <div
+              onClick={() => handleSpeak(word, "en-GB")}
+              className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150             "
+            >
+              <SpeakerWaveIcon className="h-[1.2rem]" />
+              UK
+            </div>
+            <div
+              onClick={() => handleSpeak(word, "en-AU")}
+              className="flex items-center gap-1 w-20 px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors duration-150 rounded-b-xl"
+            >
+              <SpeakerWaveIcon className="h-[1.2rem]" />
+              AUS
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  </>)
 }
