@@ -5,7 +5,8 @@ import { SparklesIcon, ClipboardIcon, ArrowTopRightOnSquareIcon, PencilSquareIco
 
 
 interface ChatGPTButtonProps {
-  prompt: string;
+  label: string;
+  input: string;
 }
 
 const copyPromptAndRedirect = (prompt: string) => {
@@ -33,9 +34,12 @@ const copyToClipboard = (text: string) => {
   }
 };
 
+// httpsの本番環境ならすべてのブラウザでnavigator.clipboard.writeText()は動くが、念の為フォールバック
 const copyToClipboardFallback = (text: string) => {
   const textArea = document.createElement("textarea");
   textArea.value = text;
+
+  //一度ページの下にinput要素を追加し、それをコピーして最後input要素を消すという裏技
   document.body.appendChild(textArea);
   textArea.focus();
   textArea.select();
@@ -49,7 +53,24 @@ const copyToClipboardFallback = (text: string) => {
   document.body.removeChild(textArea);
 };
 
-const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({prompt}) => {
+const generatePrompt = (label: string, input: string) => {
+  switch (label) {
+    case "word":
+      return `${input}の意味を教えて`;
+    case "meaning":
+      return `${input}を英語で言うと？`;
+    case "example":
+      return `${input}を日本語に翻訳すると？`;
+    case "example_translation":
+      return `${input}を英語で言うと？`;
+    case "memo":
+      return `メモ: ${input}`;
+    default:
+      return "";
+  }
+};
+
+const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -78,7 +99,7 @@ const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({prompt}) => {
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer
                   flex items-center gap-1
                 "
-                onClick={() => copyToClipboard(prompt)}
+                onClick={() => copyToClipboard(generatePrompt(label, input))}
               >
                 <ClipboardIcon className="h-4 w-4"/>
                 質問をコピー
@@ -87,7 +108,7 @@ const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({prompt}) => {
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer
                   flex items-center gap-1
                 "
-                onClick={()=> copyPromptAndRedirect(prompt)}
+                onClick={()=> copyPromptAndRedirect(generatePrompt(label,input))}
               >
                 <ArrowTopRightOnSquareIcon  className="h-4 w-4"/>
                 ChatGPTへ移動

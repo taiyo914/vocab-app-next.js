@@ -128,9 +128,7 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
                   単語
                 </label>
-                <ChatGPTButton
-                  prompt = {`${formData.word}の意味を教えて`}
-                />
+                <ChatGPTButton label="word" input={formData.word} />
               </div>
               <input
                 type="text"
@@ -153,9 +151,7 @@ export default function AddNewWord() {
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="meaning">
                   意味
                 </label>
-                <ChatGPTButton
-                  prompt = {`${formData.meaning}を英語で言うと？`}
-                />
+                <ChatGPTButton label="meaning" input={formData.meaning} />
               </div>
               <input
                 type="text"
@@ -176,11 +172,9 @@ export default function AddNewWord() {
             <div className="mb-5">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="example">
-                  例文  
+                  例文
                 </label>
-                <ChatGPTButton
-                  prompt = {`${formData.example}を日本語に翻訳して`}
-                />
+                <ChatGPTButton label="example" input={formData.example} />
               </div>
               <textarea
                 name="example"
@@ -201,11 +195,9 @@ export default function AddNewWord() {
             <div className="mb-5">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="example_translation">
-                  単語
+                  例文訳
                 </label>
-                <ChatGPTButton
-                  prompt = {`${formData.example_translation}を英語で言うと？`}
-                />
+                <ChatGPTButton label="example_translation" input={formData.example_translation} />
               </div>
               <textarea
                 name="example_translation"
@@ -226,11 +218,9 @@ export default function AddNewWord() {
             <div className="mb-5">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-gray-700 font-bold ml-1" htmlFor="memo">
-                  単語
+                  メモ
                 </label>
-                <ChatGPTButton
-                  prompt = {`${formData.memo}`}
-                />
+                <ChatGPTButton label="memo" input={formData.memo} />
               </div>
               <textarea
                 name="memo"
