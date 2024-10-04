@@ -9,6 +9,8 @@ import CustomSlider from "@/components/CustomSlider";
 import useNotificationStore from "@/store/useNotificationStore";
 import Spinner from "@/components/Spiner";
 
+import ChatGPTButton from "./ChatGPTButton";
+
 interface FormData {
   word: string;
   meaning: string;
@@ -122,9 +124,14 @@ export default function AddNewWord() {
         <form onSubmit={handleSubmit} autoComplete="off">
           <div className="p-8 xs:py-2 xs:px-5 border xs:border-none bg-white rounded-lg shadow-lg xs:shadow-none">
             <div className="mb-5">
-              <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
-                単語
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-gray-700 font-bold ml-1" htmlFor="word">
+                  単語
+                </label>
+                <ChatGPTButton
+                  prompt = {`${formData.word}の意味を教えて`}
+                />
+              </div>
               <input
                 type="text"
                 name="word"
@@ -142,9 +149,14 @@ export default function AddNewWord() {
             </div>
 
             <div className="mb-5">
-              <label className="block text-gray-700 font-bold ml-1" htmlFor="meaning">
-                意味
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-gray-700 font-bold ml-1" htmlFor="meaning">
+                  意味
+                </label>
+                <ChatGPTButton
+                  prompt = {`${formData.meaning}を英語で言うと？`}
+                />
+              </div>
               <input
                 type="text"
                 name="meaning"
@@ -162,9 +174,14 @@ export default function AddNewWord() {
             </div>
 
             <div className="mb-5">
-              <label className="block text-gray-700 font-bold ml-1" htmlFor="example">
-                例文
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-gray-700 font-bold ml-1" htmlFor="example">
+                  例文  
+                </label>
+                <ChatGPTButton
+                  prompt = {`${formData.example}を日本語に翻訳して`}
+                />
+              </div>
               <textarea
                 name="example"
                 id="example"
@@ -182,9 +199,14 @@ export default function AddNewWord() {
             </div>
 
             <div className="mb-5">
-              <label className="block text-gray-700 font-bold ml-1" htmlFor="example_translation">
-                例文訳
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-gray-700 font-bold ml-1" htmlFor="example_translation">
+                  単語
+                </label>
+                <ChatGPTButton
+                  prompt = {`${formData.example_translation}を英語で言うと？`}
+                />
+              </div>
               <textarea
                 name="example_translation"
                 id="example_translation"
@@ -202,9 +224,14 @@ export default function AddNewWord() {
             </div>
 
             <div className="mb-5">
-              <label className="block text-gray-700 font-bold ml-1" htmlFor="memo">
-                メモ
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-gray-700 font-bold ml-1" htmlFor="memo">
+                  単語
+                </label>
+                <ChatGPTButton
+                  prompt = {`${formData.memo}`}
+                />
+              </div>
               <textarea
                 name="memo"
                 id="memo"

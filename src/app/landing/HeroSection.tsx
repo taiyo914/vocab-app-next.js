@@ -17,7 +17,7 @@ import { FaGithub } from "react-icons/fa";
 export default function HeroSection() {
   return (
     <section className="w-full py-12  md:py-16 lg:pt-20 pb-20 md:mb-8 lg:mb-10 relative overflow-hidden mx-auto max-w-[1500px]">
-      <div className="xs:px-5 px-8 md:px-10 lg:pl-16 lg:pr-12 xl:pr-16 relative z-10">
+      <div className="xs:px-5 px-8 md:px-10 lg:pl-16 lg:pr-[3.5rem] xl:pr-16 relative z-10">
         <div className="flex gap-x-12 xs:gap-y-7 gap-y-10  items-center lg:flex-row flex-col ">
           <motion.div
             initial={{ opacity: 0, x:10 }}
