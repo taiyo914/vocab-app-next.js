@@ -15,7 +15,7 @@ export default function FeaturesSection() {
       id="features"
       className="w-full xs:py-16 py-12 md:py-20 lg:py-24 pb-20 md:pb-24"
     >
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-[1400px]">
+      <div className="mx-auto xs:px-5 px-8 md:px-10 lg:px-16 max-w-[1500px]">
         <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-center mb-10 md:mb-12 lg:mb-16  bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500 ">
           豊富な機能で
           <div className="sm:hidden h-4 xs:h-3"></div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function GetStartedSection() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-t from-blue-500 to-blue-600 flex justify-center">
-      <div className="xs:px-5 px-8 md:px-10 lg:px-16 max-w-[1450px] w-full">
+      <div className="mx-auto xs:px-5 px-8 md:px-10 lg:px-16 max-w-[1500px] w-full">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-x-8">
 
           <div className="text-center lg:text-start lg:text-left w-full mb-10 lg:mb-0">
