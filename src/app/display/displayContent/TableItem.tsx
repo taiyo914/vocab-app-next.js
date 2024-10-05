@@ -107,18 +107,25 @@ const VocabListItem = ({ word }: { word: WordType }) => {
             </div>
             <div className="text-start text-xl overflow-auto">{parseCustomMarkup(word.word)}</div>
           </div>
-          <div className="col-span-1 my-auto text-center border-r border-gray-200 px-2 font-semibold text-lg">
+          <div className="col-span-1 flex justify-center items-center text-center border-r border-gray-200 px-2 font-semibold text-lg">
+            <div> {/*このdivタグはスタイルを保つうえで必要です。消さないで下さい*/}
             {parseCustomMarkup(word.meaning, "ja")}
+            </div>
           </div>
-          <div className="col-span-1 border-r border-gray-200 pl-3 pr-2 text-center my-auto">
-            {parseCustomMarkup(word.example)}
-            {/* {word.example} */}
+          <div className="col-span-1 border-r flex justify-center items-center border-gray-200 pl-3 pr-2 text-center ">
+            <div> {/*このdivタグはスタイルを保つうえで必要です。消さないで下さい*/}
+              {parseCustomMarkup(word.example)}
+            </div>
           </div>
-          <div className="col-span-1  border-r border-gray-200 px-3 my-auto">
-            {parseCustomMarkup(word.example_translation, "ja")}
+          <div className="col-span-1  border-r flex justify-center items-center border-gray-200 px-3 ">
+            <div> {/*このdivタグはスタイルを保つうえで必要です。消さないで下さい*/}
+              {parseCustomMarkup(word.example_translation, "ja")}
+            </div>
           </div>
-          <div className="col-span-1  px-3 text-[0.95rem] text-gray-700 my-auto">
-            {parseCustomMarkup(word.memo, "ja")}
+          <div className="col-span-1 flex justify-center items-center px-3 text-[0.95rem] text-gray-700 ">
+            <div> {/*このdivタグはスタイルを保つうえで必要です。消さないで下さい*/}
+               {parseCustomMarkup(word.memo, "ja")}
+            </div>
           </div>
         </div>
       </motion.div>
