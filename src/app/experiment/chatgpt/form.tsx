@@ -8,6 +8,7 @@ import {
   ArrowUturnLeftIcon,
   ArrowDownTrayIcon,
   PencilSquareIcon,
+  QuestionMarkCircleIcon
 } from "@heroicons/react/24/outline";
 import CustomSlider from "@/components/CustomSlider";
 import useNotificationStore from "@/store/useNotificationStore";
@@ -104,6 +105,18 @@ export default function AddNewWord() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (
+      !formData.word.trim() &&
+      !formData.meaning.trim() &&
+      !formData.example.trim() &&
+      !formData.example_translation.trim() &&
+      !formData.memo.trim()
+    ) {
+      showNotification("最低1つは入力してください", "error")
+      return; 
+    }
+
     setAddLoading(true);
     const error = await saveDataToDatabase(formData);
     if (!error) {
@@ -116,6 +129,16 @@ export default function AddNewWord() {
 
   const handleSubmitAndContinue = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (
+      !formData.word.trim() &&
+      !formData.meaning.trim() &&
+      !formData.example.trim() &&
+      !formData.example_translation.trim() &&
+      !formData.memo.trim()
+    ) {
+      showNotification("最低1つは入力してください", "error")
+      return; 
+    }
     const error = await saveDataToDatabase(formData);
     if (!error) {
       setFormData(initialValue);
@@ -261,7 +284,7 @@ export default function AddNewWord() {
                   focus:outline-none focus:border-gray-700 focus:border-1 transition-colors
                   h-20"
                 autoComplete="off"
-                placeholder="例: An apple a day keeps the doctors away"
+                placeholder={`例: An **apple** a day keeps the doctors away`}
               ></textarea>
             </div>
 
@@ -289,7 +312,7 @@ export default function AddNewWord() {
                   focus:outline-none focus:border-gray-700 focus:border-1 transition-colors
                   h-20"
                 autoComplete="off"
-                placeholder="例: 1日1個のりんごで医者いらず"
+                placeholder="例: 1日1個のりんごで__医者いらず__"
               ></textarea>
             </div>
 
@@ -361,8 +384,10 @@ export default function AddNewWord() {
             </button>
           </div>
         </form>
-
+        
+        <HowToUse/>
         <div className="h-80"></div>
+       
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} width="w-3/5 max-w-lg">
@@ -518,4 +543,108 @@ function SpeekerButton({word}:{word:string} ) {
       </AnimatePresence>
     </div>
   </>)
+}
+
+import { GoDotFill } from "react-icons/go";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { ArrowRightIcon } from "@heroicons/react/16/solid";
+import { SparklesIcon } from "@heroicons/react/24/outline";
+function HowToUse(){
+
+  return (
+    <div className="w-full max-w-2xl mx-auto mt-8 xs:px-5">
+      <h1 className="text-2xl font-bold mb-6 mt-12 flex items-center gap-1 text-gray-700">
+        <QuestionMarkCircleIcon className="h-7"/>
+        使い方
+      </h1>
+        <AccordionItem  title="太字と下線" >
+          <div className="space-y-5 ml-2 mt-4">
+            <p>マークダウン記法で文字を太字にしたり、下線を引いたりできます。スタイルはテーブルビューと復習画面で適用されます。</p>
+            <div className="space-y-1">
+              <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/> **{"(半角アスタリスク2個)"}で囲むと太字になります。</p>
+              <p className="ml-6  text-gray-600 ">例 : This is an **apple** <br className="notxs:hidden "/><ArrowRightIcon className="h-4 inline-block mx-1"/> This is an <span className="font-semibold">apple</span></p>
+            </div>
+            <div className="space-y-1">
+              <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/> __{"(半角アンダーバー2個)"}で囲むと下線になります。</p>
+              <p className="ml-6  text-gray-600">例 : This is an __apple__ <br className="notxs:hidden "/><ArrowRightIcon className="h-4 inline-block mx-1"/> This is an <span className="underline underline-offset-2">apple</span></p>
+            </div>
+            <div className="space-y-1">
+              <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/> 太字と下線を組み合わせることもできます。</p>
+              <p className="ml-6  text-gray-600 ">例 : This is __an **apple**__  <br className="notxs:hidden "/><ArrowRightIcon className="h-4 inline-block mx-1"/> This is <span className="underline underline-offset-2">an <span className="font-semibold">apple</span></span></p>
+            </div>
+            <div className="space-y-1 pb-1">
+              <p className="flex items-center gap-2"><AiOutlineExclamationCircle className="min-w-4"/> 単語と意味はデフォルトで太字のため、**で囲んでも変わりません。</p>
+            </div>
+        
+          </div>
+        </AccordionItem>
+
+        <AccordionItem  title="ChatGPTとの連携" >
+          <div className="space-y-5 ml-2 mt-4">
+            <div><SparklesIcon className="h-4 inline mb-1"/>のアイコンから入力された内容を使って質問（プロンプト）を生成し、すぐにChatGPTに質問できます。 </div>
+            <div className="space-y-1">
+              <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/>「ChatGPTに質問する」</p>
+              <p className="ml-6  text-gray-600 ">対応するラベルの質問をクリップボードにコピーしてChatGPTを新しいタブで開きます。</p>
+            </div>
+            <div className="space-y-1">
+              <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/>「〇〇の質問をコピー」</p>
+              <p className="ml-6  text-gray-600">対応するラベルの質問のみをコピーし、ChatGPTには移動しません。</p>
+            </div>
+            <div className="space-y-1">
+              <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/> 「ChatGPTに移動」</p>
+              <p className="ml-6  text-gray-600 ">質問をコピーせず、ChatGPTのタブを新たに開きます。</p>
+            </div>
+            <div className="space-y-1 ">
+              <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/> 「質問を編集」</p>
+              <p className="ml-6  text-gray-600 ">質問は自由に設定することができます。入力された内容は{"{input}"}で受け取ります。</p>
+              <p className="ml-6 font-[550] mt-2 text-gray-800">例 : 単語の意味を質問したいとき</p>
+              <div className="text-gray-500 space-y-1.5 mt-1 ml-6 ">
+                <p>1. 編集画面から「単語の質問」を「{"{input}"}の意味を教えて」などと編集します。</p> 
+                <p>2. 単語の入力欄に「apple」と入力します。</p>
+                <p>3. 単語の入力欄右上の<SparklesIcon className="h-4 inline mb-1"/>のアイコンから「ChatGPTに質問する」または「単語の質問をコピー」をクリックします。</p>
+                <p>4.「appleの意味を教えて」という質問が生成され、クリップボードにコピーされます。</p>
+              </div>
+            </div>
+        
+          </div>
+        </AccordionItem>
+    </div>
+  );
+}
+
+import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+
+function AccordionItem({ title, children }: {title:string, children:React.ReactNode}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // アコーディオンの内容のアニメーション設定
+  const variants = {
+    open: { height: 'auto', opacity: 1 },
+    collapsed: { height: 0, opacity: 0 },
+  };
+
+  return (
+    <div className="mb-4 border border-gray-300 rounded-lg overflow-hidden p-4">
+      <div
+        className="w-full text-left cursor-pointer focus:outline-none text-xl font-[550]"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ?<ChevronDownIcon className="h-6 w-6 inline -mt-1 mr-1"/>: <ChevronRightIcon className="h-6 w-6 inline -mt-1 mr-1"/> }
+        {title}
+      </div>
+
+      {/* アコーディオン内容 */}
+      <motion.div
+        initial={false}
+        animate={isOpen ? 'open' : 'collapsed'}
+        variants={variants}
+        transition={{ duration: 0.5 }}
+        className="overflow-hidden"
+      >
+        <div>
+          {children}
+        </div>
+      </motion.div>
+    </div>
+  );
 }
