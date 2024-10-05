@@ -170,11 +170,11 @@ export default function AddNewWord() {
   return (
     <div>
       <div className="px-5 xs:p-0 mt-4 mx-auto max-w-2xl">
-        <div className="flex justify-between items-center mb-6 px-0.5 xs:pr-5 xs:pl-3">
+        <div className="flex justify-between items-center mb-6 xs:mb-5 px-0.5 xs:pr-5 xs:pl-3">
           <div
             onClick={handleBack}
             className="
-              text-gray-500 cursor-pointer
+              text-gray-500 cursor-pointer notxs:-mb-2
               p-2 rounded-full
               hover:text-gray-700 hover:bg-gray-100 transition duration-200 
               flex items-center space-x-1"
@@ -185,18 +185,17 @@ export default function AddNewWord() {
           <Link
             href="new/import"
             className="
-              px-4 py-2.5
-              rounded-xl font-semibold
-              bg-gray-900 text-white 
-              shadow 
-              hover:bg-gray-700 transition duration-300
-              flex space-x-1"
+              px-4 py-2.5 text-black
+              border rounded-lg bg-gray-100 hover:border-gray-300
+              font-[450] hover:bg-gray-300 transition-all duration-300 
+             "
           >
-            <ArrowDownTrayIcon className="h-5" />
-            <span className=""> {"TSV/CSV"}</span>からインポート
+            <ArrowDownTrayIcon className="h-5 xs:h-4 inline -mt-1" />
+            <span className="xs:text-sm"> {"TSV/CSV"}からインポート</span>
+            
           </Link>
         </div>
-        <form onSubmit={handleSubmit} autoComplete="off">
+        <form onSubmit={handleSubmit}  autoComplete="off">
           <div className="p-8 sm:p-10 lg:px-12 lg:py-11 xs:py-2 xs:px-5 border xs:border-none bg-white rounded-xl shadow-lg xs:shadow-none">
             <div className="xs:mb-5 mb-8">
               <div className="flex justify-between items-center mb-2">
@@ -345,7 +344,7 @@ export default function AddNewWord() {
               ></textarea>
             </div>
 
-            <div className="xs:mb-5 mb-7">
+            <div className="xs:mb-5 mb-6">
               <div className="flex">
                 <label className="block text-gray-700 font-bold mb-1 ml-1">優先度 </label>
                 <div className="text-gray-500  pl-2">{formData.index}</div>
@@ -502,7 +501,7 @@ function SpeekerButton({word}:{word:string} ) {
   const [isOpen, setIsOpen]=useState<boolean>(false);
   return(<>
     <div
-      className="relative inline-block "
+      className="relative inline-block text-black"
       onMouseEnter={()=>setIsOpen(true)}
       onMouseLeave={()=>setIsOpen(false)}
     >
@@ -553,7 +552,7 @@ import { SparklesIcon } from "@heroicons/react/24/outline";
 function HowToUse(){
 
   return (
-    <div className="w-full max-w-2xl mx-auto mt-8 xs:px-5">
+    <div className="w-full max-w-2xl mx-auto mt-8 xs:px-5 text-black">
       <h1 className="text-2xl font-bold mb-6 mt-12 flex items-center gap-1 text-gray-700">
         <QuestionMarkCircleIcon className="h-7"/>
         使い方

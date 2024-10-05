@@ -80,7 +80,7 @@ const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input, prompt, open
 
   return (<>
     <div 
-      className="relative bg-white "
+      className="relative bg-white text-black"
       onMouseEnter={() => setIsMenuOpen(true)}
       onMouseLeave={() => setIsMenuOpen(false)}
     >
