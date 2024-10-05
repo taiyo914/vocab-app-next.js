@@ -94,19 +94,18 @@ const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input, prompt, open
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute right-0 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-20 p-2"
+            className="absolute right-0 w-[14.5rem] bg-white border border-gray-300 rounded-md shadow-lg z-20 p-2"
           >
             <div onClick={()=> copyPromptAndRedirect(generatePrompt(prompt,input))}
               className="hover:bg-gray-100 rounded-lg cursor-pointer py-2 group">
-              <div className="block px-2 text-black font-[550] flex items-center gap-2">
-                  <Image src="/chatgpt_icon.svg" alt="ChatGPTのアイコン"  width={15} height={15} className="mb-0.5"/>
+              <div className="block px-2 text-black xs:font-normal flex items-center gap-2">
+                  <Image src="/chatgpt_icon.svg" alt="ChatGPTのアイコン"  width={15} height={15} className="mb-0.5 ml-[1px]"/>
                   ChatGPTに質問する
               </div>
-              <p className="text-[0.7rem] text-gray-400 px-2">{label}の質問をコピーして移動します</p>
             </div>
-            <ul className="text-[0.9rem]">
+            <ul className="">
               <li
-                className="block p-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer
+                className="block p-2  hover:bg-gray-100 rounded-lg cursor-pointer
                   flex items-center gap-2
                 "
                 onClick={handleCopy}
@@ -115,7 +114,7 @@ const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input, prompt, open
                 {label}の質問をコピー
               </li>
               <li
-                className="block p-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer
+                className="block p-2  hover:bg-gray-100 rounded-lg cursor-pointer
                   flex items-center gap-2
                 "
                 onClick={redirect}
@@ -124,7 +123,7 @@ const ChatGPTButton: React.FC<ChatGPTButtonProps> = ({label, input, prompt, open
                 ChatGPTに移動
               </li>
               <li
-                className="block p-2 text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer
+                className="block p-2 hover:bg-gray-100 rounded-lg cursor-pointer
                   flex items-center gap-2
                 "
                 onClick={openModal}
