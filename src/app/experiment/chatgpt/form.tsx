@@ -223,7 +223,8 @@ export default function AddNewWord() {
                   w-full px-3 py-2 
                   border rounded-lg 
                   text-gray-800 
-                  focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
+                  transition-colors
+                  focus:outline-blue-400"
                 autoComplete="off"
                 placeholder="例: apple"
               />
@@ -251,7 +252,7 @@ export default function AddNewWord() {
                   w-full px-3 py-2 
                   border rounded-lg 
                   text-gray-800 
-                  focus:outline-none focus:border-gray-700 focus:border-1 transition-colors"
+                  focus:outline-blue-400 transition-colors"
                 autoComplete="off"
                 placeholder="例: りんご"
               />
@@ -281,7 +282,7 @@ export default function AddNewWord() {
                   w-full px-3 py-2 
                   border rounded-lg 
                   text-gray-800 
-                  focus:outline-none focus:border-gray-700 focus:border-1 transition-colors
+                  focus:outline-blue-400 transition-colors
                   h-20"
                 autoComplete="off"
                 placeholder={`例: An **apple** a day keeps the doctors away`}
@@ -309,7 +310,7 @@ export default function AddNewWord() {
                   w-full px-3 py-2 
                   border rounded-lg 
                   text-gray-800 
-                  focus:outline-none focus:border-gray-700 focus:border-1 transition-colors
+                  focus:outline-blue-400 transition-colors
                   h-20"
                 autoComplete="off"
                 placeholder="例: 1日1個のりんごで__医者いらず__"
@@ -337,7 +338,7 @@ export default function AddNewWord() {
                   w-full px-3 py-2 
                   border rounded-lg 
                   text-gray-800 
-                  focus:outline-none focus:border-gray-700 focus:border-1 transition-colors 
+                  focus:outline-blue-400 transition-colors 
                   h-20"
                 autoComplete="off"
                 placeholder="例: ウェールズ地方由来のことわざ"
@@ -407,7 +408,7 @@ export default function AddNewWord() {
               </div>
             </div>
             <textarea
-              className="w-full border py-2 px-3 rounded "
+              className="rounded-lg h-[6rem] text-gray-900 focus:outline-blue-400 w-full border py-2 px-3 rounded "
               placeholder="{input}を使って単語の質問を入力"
               value={localPrompts.word}
               onChange={(e) => setLocalPrompts({ ...localPrompts, word: e.target.value })}
@@ -421,7 +422,7 @@ export default function AddNewWord() {
               </div>
             </div>
             <textarea
-              className="w-full border py-2 px-3 rounded "
+              className="rounded-lg h-[6rem] text-gray-900 focus:outline-blue-400 w-full border py-2 px-3 rounded "
               placeholder="{input}を使って意味の質問を入力"
               value={localPrompts.meaning}
               onChange={(e) => setLocalPrompts({ ...localPrompts, meaning: e.target.value })}
@@ -435,7 +436,7 @@ export default function AddNewWord() {
               </div>
             </div>
             <textarea
-              className="w-full border py-2 px-3 rounded "
+              className="rounded-lg h-[6rem] text-gray-900 focus:outline-blue-400 w-full border py-2 px-3 rounded "
               placeholder="{input}を使って例文の質問を入力"
               value={localPrompts.example}
               onChange={(e) => setLocalPrompts({ ...localPrompts, example: e.target.value })}
@@ -449,7 +450,7 @@ export default function AddNewWord() {
               </div>
             </div>
             <textarea
-              className="w-full border py-2 px-3 rounded "
+              className="rounded-lg h-[6rem] text-gray-900 focus:outline-blue-400 w-full border py-2 px-3 rounded "
               placeholder="{input}を使って例文訳の質問を入力"
               value={localPrompts.example_sentence}
               onChange={(e) =>
@@ -465,7 +466,7 @@ export default function AddNewWord() {
               </div>
             </div>
             <textarea
-              className="w-full border py-2 px-3 rounded "
+              className="rounded-lg h-[6rem] text-gray-900 focus:outline-blue-400 w-full border py-2 px-3 rounded "
               placeholder="{input}を使ってメモの質問を入力"
               value={localPrompts.memo}
               onChange={(e) => setLocalPrompts({ ...localPrompts, memo: e.target.value })}
