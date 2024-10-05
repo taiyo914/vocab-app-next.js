@@ -505,9 +505,9 @@ function SpeekerButton({word}:{word:string} ) {
       onMouseEnter={()=>setIsOpen(true)}
       onMouseLeave={()=>setIsOpen(false)}
     >
-      <button className="text-gray-500 flex justify-end w-full">
+      <div className="text-gray-500 flex justify-end w-full ">
         <SpeakerWaveIcon className="h-5 cursor-pointer" />
-      </button>
+      </div>
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -553,8 +553,8 @@ function HowToUse(){
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 xs:px-5 text-black">
-      <h1 className="text-2xl font-bold mb-6 mt-12 flex items-center gap-1 text-gray-700">
-        <QuestionMarkCircleIcon className="h-7"/>
+      <h1 className="text-2xl xs:text-lg font-bold mb-6 mt-12 flex items-center gap-1 text-gray-700">
+        <QuestionMarkCircleIcon className="h-7 xs:h-5"/>
         使い方
       </h1>
         <AccordionItem  title="太字と下線" >
@@ -627,7 +627,7 @@ function AccordionItem({ title, children }: {title:string, children:React.ReactN
   return (
     <div className="mb-4 border border-gray-300 rounded-lg overflow-hidden p-4">
       <div
-        className="w-full text-left cursor-pointer focus:outline-none text-xl font-[550]"
+        className="w-full text-left cursor-pointer focus:outline-none text-xl xs:text-lg font-[550]"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ?<ChevronDownIcon className="h-6 w-6 inline -mt-1 mr-1"/>: <ChevronRightIcon className="h-6 w-6 inline -mt-1 mr-1"/> }
