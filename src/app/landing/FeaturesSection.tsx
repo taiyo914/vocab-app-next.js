@@ -30,7 +30,7 @@ export default function FeaturesSection() {
           <FeatureCard
             icon={<ViewColumnsIcon className="h-10 w-10 text-blue-600" />}
             title="2つの学習ビュー"
-            description="カードビューとリストビューで柔軟な学習"
+            description="カードビューとテーブルビューで柔軟な学習"
           />
           <FeatureCard
             icon={<SpeakerWaveIcon className="h-10 w-10 text-blue-600" />}
