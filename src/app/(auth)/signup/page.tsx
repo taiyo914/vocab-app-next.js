@@ -36,6 +36,10 @@ export default function SignIn() {
         .from("user_review_settings")
         .insert([{ user_id: data.user?.id }]);
 
+      const { error: promptsError } = await supabase
+      .from("prompts")
+      .insert([{ user_id: data.user?.id }]);
+
       // 単語がないと最初の単語取得でエラーになるので、初期値としてガイドも兼ねていくつかカードを作っておく
       const { error: wordsError } = await supabase.from("words").insert([
         { user_id: data.user?.id, word: "Welcome!", meaning: "ようこそ！" },
@@ -49,6 +53,9 @@ export default function SignIn() {
         setLoading(false);
       } else if (reviewSettingsError) {
         setMessage(`Error: ${reviewSettingsError.message}`);
+        setLoading(false);
+      } else if (promptsError) {
+        setMessage(`Error: ${promptsError.message}`);
         setLoading(false);
       } else if (wordsError) {
         setMessage(`Error: ${wordsError.message}`);
