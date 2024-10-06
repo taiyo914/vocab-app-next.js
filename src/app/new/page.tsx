@@ -553,13 +553,13 @@ function HowToUse(){
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 xs:px-5 text-black">
-      <h1 className="text-2xl xs:text-lg font-bold mb-6 mt-12 flex items-center gap-1 text-gray-700">
-        <QuestionMarkCircleIcon className="h-7 xs:h-5"/>
+      <h1 className="text-2xl xs:text-xl font-bold mb-6 xs:mb-4 mt-12 flex items-center gap-1 text-gray-700">
+        <QuestionMarkCircleIcon className="h-7 xs:h-6"/>
         使い方
       </h1>
         <AccordionItem  title="太字と下線" >
           <div className="space-y-5 ml-2 mt-4">
-            <p>マークダウン記法で文字を太字にしたり、下線を引いたりできます。スタイルはテーブルビューと復習画面で適用されます。</p>
+            <p><span className="font-semibold">マークダウン記法</span>で文字を太字にしたり、下線を引いたりできます。スタイルはテーブルビューと復習画面で適用されます。</p>
             <div className="space-y-1">
               <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/> **{"(半角アスタリスク2個)"}で囲むと太字になります。</p>
               <p className="ml-6  text-gray-600 ">例 : This is an **apple** <br className="notxs:hidden "/><ArrowRightIcon className="h-4 inline-block mx-1"/> This is an <span className="font-semibold">apple</span></p>
@@ -573,7 +573,7 @@ function HowToUse(){
               <p className="ml-6  text-gray-600 ">例 : This is __an **apple**__  <br className="notxs:hidden "/><ArrowRightIcon className="h-4 inline-block mx-1"/> This is <span className="underline underline-offset-2">an <span className="font-semibold">apple</span></span></p>
             </div>
             <div className="space-y-1 pb-1">
-              <p className="flex items-center gap-2"><AiOutlineExclamationCircle className="min-w-4"/> 単語と意味はデフォルトで太字のため、**で囲んでも変わりません。</p>
+              <p className="flex items-center gap-2"><AiOutlineExclamationCircle className="min-w-4"/> 単語と意味はデフォルトで太字のため、**で囲んでもより太くはなりません。</p>
             </div>
         
           </div>
@@ -584,11 +584,11 @@ function HowToUse(){
             <div><SparklesIcon className="h-4 inline mb-1"/>のアイコンから入力された内容を使って質問（プロンプト）を生成し、すぐにChatGPTに質問できます。 </div>
             <div className="space-y-1">
               <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/>「ChatGPTに質問する」</p>
-              <p className="ml-6  text-gray-600 ">対応するラベルの質問をクリップボードにコピーしてChatGPTを新しいタブで開きます。</p>
+              <p className="ml-6  text-gray-600 ">質問をクリップボードにコピーしてChatGPTを新しいタブで開きます。</p>
             </div>
             <div className="space-y-1">
               <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/>「〇〇の質問をコピー」</p>
-              <p className="ml-6  text-gray-600">対応するラベルの質問のみをコピーし、ChatGPTには移動しません。</p>
+              <p className="ml-6  text-gray-600">質問のみをコピーし、ChatGPTには移動しません。</p>
             </div>
             <div className="space-y-1">
               <p className="flex items-center gap-2 font-[550]"><GoDotFill className="min-w-4"/> 「ChatGPTに移動」</p>
@@ -625,7 +625,7 @@ function AccordionItem({ title, children }: {title:string, children:React.ReactN
   };
 
   return (
-    <div className="mb-4 border border-gray-300 rounded-lg overflow-hidden p-4">
+    <div className="mb-4 border border-gray-300 rounded-lg overflow-hidden p-4 xs:p-3">
       <div
         className="w-full text-left cursor-pointer focus:outline-none text-xl xs:text-lg font-[550]"
         onClick={() => setIsOpen(!isOpen)}
