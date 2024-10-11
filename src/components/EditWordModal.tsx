@@ -77,26 +77,28 @@ const EditWordModal: React.FC<EditWordModalProps> = ({
   const handleDelete = async () => {
     setDeleteLoading(true);
 
+    if (!editWord) {
+      throw new Error("削除する単語が指定されていません");
+    }
+
     try {
-      const response = await fetch("/api/deleteWord", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ wordId: editWord!.id }),
-      });
+      const { error } = await supabase
+      .from("words")
+      .update({ deleted_at: new Date().toISOString() }) // 削除日を設定
+      .eq("id", editWord.id); // 削除する単語のID
 
-      if (!response.ok) {
-        throw new Error("API通信に失敗しました");
-      }
+    if (error) {
+      throw new Error(`${error.message}`);
+    }
 
-      await fetchWords();
+    await fetchWords();
 
-      setResults(results.filter((word) => word.id !== editWord!.id));
-      setTempResults(tempResults.filter((word) => word.id !== editWord!.id));
+    setResults(results.filter((word) => word.id !== editWord!.id));
+    setTempResults(tempResults.filter((word) => word.id !== editWord!.id));
 
-      showNotification("単語を削除しました", "delete");
-      onClose();
+    showNotification("単語を削除しました", "delete");
+    onClose();
+
     } catch (err: any) {
       showNotification(`単語の削除に失敗しました。エラー:${err.message}`,"error");
     } finally {
