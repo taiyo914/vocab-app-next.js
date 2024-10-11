@@ -6,9 +6,11 @@ import useSearchStore from "@/store/searchStore";
 import { WordType } from "@/types/Types";
 import EditWordModal from "@/components/EditWordModal";
 import useUserStore from "@/store/userStore";
+import { createClient } from "@/utils/supabase/client";
 let lastRequestTime = 0;
 
 const SearchInput = () => {
+  const supabase = createClient()
   const [inputValue, setInputValue] = useState("");
   const { tempResults, setTempResults, setResults, searchTriggered, setSearchTriggered, isOpen, setIsOpen } = useSearchStore();
   const incrementfechingKey = useUserStore((state) => state.incrementFetchingKey);
@@ -20,6 +22,7 @@ const SearchInput = () => {
     setSelectedWord(word);
     setIsModalOpen(true);
   };
+  const userId = useUserStore(state => state.userId)
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -83,6 +86,8 @@ const SearchInput = () => {
   };
 
   const fetchResults = async (searchTerm: string) => {
+    if(!userId) alert("ユーザーidがありません。リロードして下さい。")
+
     if (!searchTerm.trim()) {
       setTempResults([]);
       return;
@@ -91,8 +96,13 @@ const SearchInput = () => {
     const requestTime = Date.now();
     lastRequestTime = requestTime;
 
-    const res = await fetch(`/api/search?searchQuery=${searchTerm}`);
-    const data = await res.json();
+    const { data, error } = await supabase
+      .rpc('search_words', { query: searchTerm, user_id: userId });
+
+    if (error) {
+      alert(`検索中にエラーが発生しました: ${error.message}`);
+      return;
+    }
 
     if (requestTime === lastRequestTime) {
       setTempResults(data);
