@@ -14,6 +14,7 @@ interface UserState {
   words: WordType[] | null;
   totalWords: number; // totalWordsを追加
   fetchingKey: number; // fetchingKeyを追加
+  page_offset: number;
   error: string | null;
   fetchUserId: () => Promise<string | null>;
   fetchUserWordsSettings: () => Promise<string | null>;
@@ -22,6 +23,7 @@ interface UserState {
   setWordsSettings: (settings: any) => void;
   setWords: (words: WordType[]) => void; // 新しくsetWordsを追加
   incrementFetchingKey: () => void;
+  setPageOffset:(newOffset:number) => void;
   incrementOffset: () => void;
   decrementOffset: () => void;
 }
@@ -33,6 +35,7 @@ const useUserStore = create<UserState>((set, get) => ({
   words: null,
   totalWords: 0, // 初期値
   fetchingKey: 0, // 初期値
+  page_offset: 1,
   error: null, 
 
   fetchUserId: async () => {
@@ -57,7 +60,10 @@ const useUserStore = create<UserState>((set, get) => ({
         .eq("user_id", get().userId)
         .single();
       if (error) throw new Error(error.message);
-      set({ wordsSettings: data || null }); 
+      set({ 
+        wordsSettings: { ...data }, 
+        page_offset: data.page_offset || 1 // page_offsetを独立してセット
+      });
       return null;
     } catch (err: any) {
       set({ error: err.message });
@@ -67,7 +73,7 @@ const useUserStore = create<UserState>((set, get) => ({
 
   fetchWords: async () => {
     try {
-      const { userId, wordsSettings, words } = get();
+      const { userId, wordsSettings, page_offset, words } = get();
       if (!userId || !wordsSettings) return null;
 
       const { data, error } = await supabase
@@ -84,7 +90,7 @@ const useUserStore = create<UserState>((set, get) => ({
       .order(wordsSettings.sort_field || "increment", {
         ascending: wordsSettings.sort_order === "ASC",
       })
-      .range((wordsSettings.page_offset - 1) * wordsSettings.display_count, wordsSettings.page_offset * wordsSettings.display_count - 1);
+      .range((page_offset - 1) * wordsSettings.display_count, page_offset * wordsSettings.display_count - 1);
       
 
       if (error) {
@@ -142,31 +148,13 @@ const useUserStore = create<UserState>((set, get) => ({
 
   incrementFetchingKey: () => set((state) => ({ fetchingKey: state.fetchingKey + 1 })),
 
-  incrementOffset: () => {
-    const { wordsSettings } = get();
-    if (!wordsSettings) {
-      set({ error: "ユーザー情報がありません。ページをリロードしてください。" });
-      return;
-    } 
-    set({
-      wordsSettings: {
-        ...wordsSettings,
-        page_offset: wordsSettings.page_offset + 1,},
-    });
-  },
+  setPageOffset: (newOffset) => set((state) => ({ page_offset: newOffset })),
 
-  decrementOffset: () => {
-    const { wordsSettings } = get();
-    if (!wordsSettings) {
-      set({ error: "ユーザー情報がありません。ページをリロードしてください。" });
-      return;
-    } 
-    set({
-      wordsSettings: {
-        ...wordsSettings,
-        page_offset: wordsSettings.page_offset - 1,},
-    });
-  },
+  incrementOffset: () => set((state) => ({ page_offset: state.page_offset + 1 })),
+
+  decrementOffset: () => set((state) => ({
+    page_offset: state.page_offset > 1 ? state.page_offset - 1 : 1,
+  })),
   
 }));
 

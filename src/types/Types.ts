@@ -25,7 +25,6 @@ export type WordsSettingsType = {
   start_date: string | null;
   end_date: string | null;
   display_count: number;
-  page_offset: number;
 };
 
 export type InitialInfoProps = {
