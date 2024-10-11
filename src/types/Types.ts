@@ -6,7 +6,6 @@ export type WordType = {
   example_translation: string;
   memo: string;
   index: number;
-  favorite: boolean;
   review_count:number;
   reviewed_at: string | null;
   created_at: string;

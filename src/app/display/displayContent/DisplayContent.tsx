@@ -23,6 +23,7 @@ const DisplayContent = () => {
     fetchUserId,
     fetchUserWordsSettings,
     fetchWords,
+    fetchTotalWords
   } = useUserStore();
   const { fields, showEmptyCards, accent, fetchReviewSettings } = useReviewSettingsStore();
   const { results, searchTriggered } = useSearchStore();
@@ -42,6 +43,7 @@ const DisplayContent = () => {
   useEffect(() => {
     if (userId && wordsSettings) {
       fetchWords(); // userWordsSettingsの変更に連動してwordsを取得
+      fetchTotalWords();
       updatePageOffsetInSupabase(wordsSettings.page_offset);
     }
   }, [userId, wordsSettings, fetchWords]);
