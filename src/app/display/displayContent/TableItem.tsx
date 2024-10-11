@@ -130,13 +130,15 @@ const VocabListItem = ({ word }: { word: WordType }) => {
         </div>
       </motion.div>
 
-      <EditWordModal
-        isOpen={isEditModalOpen}
-        onClose={closeModal}
-        editWord={editWord}
-        setEditWord={setEditWord}
-        showDeleteBtn={true}
-      />
+      <div> {/*space-yを打ち消すために必要です*/}
+        <EditWordModal
+          isOpen={isEditModalOpen}
+          onClose={closeModal}
+          editWord={editWord}
+          setEditWord={setEditWord}
+          showDeleteBtn={true}
+        />
+      </div>
     </>
   );
 };
