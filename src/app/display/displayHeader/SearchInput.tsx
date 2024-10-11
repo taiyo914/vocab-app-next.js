@@ -135,7 +135,7 @@ const SearchInput = () => {
       </button>
       <motion.div
         initial={{ width: 0, opacity: 0 }}
-        animate={{ width: isOpen ? 150 : 0, opacity: isOpen ? 1 : 0 }}
+        animate={{ width: isOpen ? 140 : 0, opacity: isOpen ? 1 : 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="overflow-hidden relative"
       >
@@ -146,7 +146,7 @@ const SearchInput = () => {
             value={inputValue}
             onFocus={handleFocus}
             onChange={(e) => setInputValue(e.target.value)}
-            className="w-[130px] py-1 focus:outline-none"
+            className="w-[120px] py-1 focus:outline-none"
             placeholder="入力して検索..."
           />
           {inputValue && (
