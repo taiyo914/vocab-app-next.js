@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       .order(userWordsSettings.sort_field || "increment", {
         ascending: userWordsSettings.sort_order === "ASC",
       })
-      .range((userWordsSettings.page_offset - 1) * userWordsSettings.display_count, userWordsSettings.page_offset * userWordsSettings.display_count - 1);
+      // .range((userWordsSettings.page_offset - 1) * userWordsSettings.display_count, userWordsSettings.page_offset * userWordsSettings.display_count - 1);
 
     if (error) {
       throw new Error(`Error fetching words: ${error.message}`);

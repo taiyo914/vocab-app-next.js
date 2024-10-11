@@ -14,13 +14,16 @@ interface UserState {
   words: WordType[] | null;
   totalWords: number; // totalWordsを追加
   fetchingKey: number; // fetchingKeyを追加
+  page_offset: number;
   error: string | null;
   fetchUserId: () => Promise<string | null>;
   fetchUserWordsSettings: () => Promise<string | null>;
   fetchWords: () => Promise<string | null>;
+  fetchTotalWords: () => Promise<void | null>; // 追加
   setWordsSettings: (settings: any) => void;
   setWords: (words: WordType[]) => void; // 新しくsetWordsを追加
   incrementFetchingKey: () => void;
+  setPageOffset:(newOffset:number) => void;
   incrementOffset: () => void;
   decrementOffset: () => void;
 }
@@ -32,6 +35,7 @@ const useUserStore = create<UserState>((set, get) => ({
   words: null,
   totalWords: 0, // 初期値
   fetchingKey: 0, // 初期値
+  page_offset: 1,
   error: null, 
 
   fetchUserId: async () => {
@@ -56,7 +60,10 @@ const useUserStore = create<UserState>((set, get) => ({
         .eq("user_id", get().userId)
         .single();
       if (error) throw new Error(error.message);
-      set({ wordsSettings: data || null }); 
+      set({ 
+        wordsSettings: { ...data }, 
+        page_offset: data.page_offset || 1 // page_offsetを独立してセット
+      });
       return null;
     } catch (err: any) {
       set({ error: err.message });
@@ -66,38 +73,39 @@ const useUserStore = create<UserState>((set, get) => ({
 
   fetchWords: async () => {
     try {
-      const { userId, wordsSettings, words } = get();
+      const { userId, wordsSettings, page_offset, words } = get();
       if (!userId || !wordsSettings) return null;
 
-      // APIへリクエストを送信
-      const response = await fetch("/api/getWords", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          userWordsSettings: wordsSettings,
-        }),
-      });
-
-      const data = await response.json();
+      const { data, error } = await supabase
+      .from("words")
+      .select("id, word, meaning, example, example_translation, memo, index, review_count, reviewed_at, created_at, updated_at, deleted_at")
+      .eq("user_id", userId)
+      .is("deleted_at", null) 
+      .gte("index", wordsSettings.start_index || 0)
+      .lte("index", wordsSettings.end_index || 10)
+      .gte("review_count", wordsSettings.start_review_count || 0)
+      .lte("review_count", wordsSettings.end_review_count || 100)
+      .gte(wordsSettings.date_field, wordsSettings.start_date || "1900-01-01")
+      .lte(wordsSettings.date_field, wordsSettings.end_date || "2100-12-31")
+      .order(wordsSettings.sort_field || "increment", {
+        ascending: wordsSettings.sort_order === "ASC",
+      })
+      .range((page_offset - 1) * wordsSettings.display_count, page_offset * wordsSettings.display_count - 1);
       
-      if (!response.ok) {
-        throw new Error(data.error || "Error fetching words");
+
+      if (error) {
+        throw new Error(`Error fetching words: ${error.message}`);
       }
 
       // Zustandの状態を更新
-      if (JSON.stringify(words) !== JSON.stringify(data.words)) {
+      if (JSON.stringify(words) !== JSON.stringify(data)) {
         set({
-          words: data.words,
-          totalWords: data.totalWords,
+          words: data,
           fetchingKey: get().fetchingKey + 1, // fetchingKeyを更新
         });
       } else {
         set({
-          words: data.words,
-          totalWords: data.totalWords,
+          words: data,
         });
       }
       return null;
@@ -107,37 +115,46 @@ const useUserStore = create<UserState>((set, get) => ({
     }
   },
 
+  fetchTotalWords: async () => {
+    try {
+      const { userId, wordsSettings} = get();
+      if (!userId || !wordsSettings) return null;
+
+      const { count, error } = await supabase
+      .from("words")
+      .select("*", { count: "exact", head: true }) // head: true でデータを取得せずにカウントだけを実行
+      .eq("user_id", userId)
+      .is("deleted_at", null) 
+      .gte("index", wordsSettings.start_index || 0)
+      .lte("index", wordsSettings.end_index || 10)
+      .gte("review_count", wordsSettings.start_review_count || 0)
+      .lte("review_count", wordsSettings.end_review_count || 100)
+      .gte(wordsSettings.date_field, wordsSettings.start_date || "1900-01-01")
+      .lte(wordsSettings.date_field, wordsSettings.end_date || "2100-12-31");
+
+    if (error) {
+      throw new Error(`Error fetching words: ${error.message}`);
+    }
+
+      set({ totalWords: count || 0 });
+    } catch (err: any) {
+      set({ error: err.message });
+    }
+  },
+
   setWordsSettings: (settings) => set({ wordsSettings: settings }),
 
   setWords: (words) => set({ words }), // ここでsetWordsを定義
 
   incrementFetchingKey: () => set((state) => ({ fetchingKey: state.fetchingKey + 1 })),
 
-  incrementOffset: () => {
-    const { wordsSettings } = get();
-    if (!wordsSettings) {
-      set({ error: "ユーザー情報がありません。ページをリロードしてください。" });
-      return;
-    } 
-    set({
-      wordsSettings: {
-        ...wordsSettings,
-        page_offset: wordsSettings.page_offset + 1,},
-    });
-  },
+  setPageOffset: (newOffset) => set((state) => ({ page_offset: newOffset })),
 
-  decrementOffset: () => {
-    const { wordsSettings } = get();
-    if (!wordsSettings) {
-      set({ error: "ユーザー情報がありません。ページをリロードしてください。" });
-      return;
-    } 
-    set({
-      wordsSettings: {
-        ...wordsSettings,
-        page_offset: wordsSettings.page_offset - 1,},
-    });
-  },
+  incrementOffset: () => set((state) => ({ page_offset: state.page_offset + 1 })),
+
+  decrementOffset: () => set((state) => ({
+    page_offset: state.page_offset > 1 ? state.page_offset - 1 : 1,
+  })),
   
 }));
 

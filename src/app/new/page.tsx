@@ -602,7 +602,7 @@ function HowToUse(){
                 <p>1. 編集画面から「単語の質問」を<span className="font-[600]">「{"{input}"}の意味を教えて」</span>などと編集します。</p> 
                 <p>2. 単語の入力欄に<span className="font-[600]">「apple」</span>と入力します。</p>
                 <p>3. 単語の入力欄右上の<SparklesIcon className="h-4 inline mb-1"/>のアイコンから「ChatGPTに質問する」または「単語の質問をコピー」をクリックします。</p>
-                <p>4. 質問の{'{input}に"apple"が代入され、'}<span className="font-[600]">「appleの意味を教えて」</span>という質問が生成され、クリップボードにコピーされます。
+                <p>4. 質問の{'{input}'}に&quot;apple&quot;が代入され、<span className="font-[600]">「appleの意味を教えて」</span>という質問が生成され、クリップボードにコピーされます。
                 </p>
               </div>
             </div>

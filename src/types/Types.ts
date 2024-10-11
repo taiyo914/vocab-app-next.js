@@ -6,7 +6,6 @@ export type WordType = {
   example_translation: string;
   memo: string;
   index: number;
-  favorite: boolean;
   review_count:number;
   reviewed_at: string | null;
   created_at: string;
@@ -26,7 +25,6 @@ export type WordsSettingsType = {
   start_date: string | null;
   end_date: string | null;
   display_count: number;
-  page_offset: number;
 };
 
 export type InitialInfoProps = {

@@ -11,7 +11,7 @@ import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export default function SettingsModal() {
   const { isOpen, toggleModal, showDetails, toggleDetails } = useWordsSettingsModalStore();
-  const { userId, wordsSettings, setWordsSettings } = useUserStore();
+  const { userId, wordsSettings, setWordsSettings, setPageOffset } = useUserStore();
   const supabase = createClient();
   const [temporarySettings, setTemporarySettings] = useState<WordsSettingsType | null>(wordsSettings);
   const onClose = () => {
@@ -19,24 +19,11 @@ export default function SettingsModal() {
     setTemporarySettings(wordsSettings)
   }
 
-
   useEffect(() => {
     if (wordsSettings) {
       setTemporarySettings(wordsSettings);
     }
-  }, [
-    wordsSettings?.sort_field,
-    wordsSettings?.sort_order,
-    wordsSettings?.start_index,
-    wordsSettings?.end_index,
-    wordsSettings?.start_review_count,
-    wordsSettings?.end_review_count,
-    wordsSettings?.date_field,
-    wordsSettings?.start_date,
-    wordsSettings?.end_date,
-    wordsSettings?.display_count,
-    //page_offset以外
-  ]);
+  }, [wordsSettings]);
 
   //後ろの画面をスクロールできなくする設定
   useEffect(() => {
@@ -74,8 +61,8 @@ export default function SettingsModal() {
     if (error) {
       alert(`設定の更新に失敗しました...: ${error.message}`);
     } else {
-      setWordsSettings({ ...temporarySettings, page_offset: 1 });
-      console.log("submitが実行されました")
+      setWordsSettings({ ...temporarySettings });
+      setPageOffset(1);
       toggleModal()
     }
   };
