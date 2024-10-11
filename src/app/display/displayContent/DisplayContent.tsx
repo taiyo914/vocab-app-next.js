@@ -14,6 +14,7 @@ import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import useSearchStore from "@/store/searchStore";
 
 const DisplayContent = () => {
+  const supabase = createClient();
   const { currentTab } = useTabStore();
   const {
     userId,
@@ -23,7 +24,8 @@ const DisplayContent = () => {
     fetchUserId,
     fetchUserWordsSettings,
     fetchWords,
-    fetchTotalWords
+    fetchTotalWords,
+    page_offset
   } = useUserStore();
   const { fields, showEmptyCards, accent, fetchReviewSettings } = useReviewSettingsStore();
   const { results, searchTriggered } = useSearchStore();
@@ -39,14 +41,19 @@ const DisplayContent = () => {
     }
   }, [userId, fetchUserWordsSettings]);
 
+  useEffect(() => {
+    if (userId && wordsSettings) {
+      fetchTotalWords();
+    }
+  }, [userId, wordsSettings]);
+
   // userWordsSettingsの変更を監視してwordsを取得
   useEffect(() => {
     if (userId && wordsSettings) {
       fetchWords(); // userWordsSettingsの変更に連動してwordsを取得
-      fetchTotalWords();
-      updatePageOffsetInSupabase(wordsSettings.page_offset);
+      updatePageOffsetInSupabase(page_offset);
     }
-  }, [userId, wordsSettings, fetchWords]);
+  }, [userId, wordsSettings, page_offset, fetchWords]);
 
   useEffect(() => {
     if (userId && !fields && showEmptyCards === null && !accent) {
@@ -59,7 +66,6 @@ const DisplayContent = () => {
   const updatePageOffsetInSupabase = useCallback(
     debounce(async (newOffset) => {
       try {
-        const supabase = createClient();
         const { data, error } = await supabase
           .from("user_words_settings")
           .update({ page_offset: newOffset })
