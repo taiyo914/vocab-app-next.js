@@ -143,6 +143,7 @@ export default function AddNewWord() {
     if (!error) {
       setFormData(initialValue);
       showNotification("単語を追加しました", "success");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
     setInitialAddAndContinue(true);
   };
