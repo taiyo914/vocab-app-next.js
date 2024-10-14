@@ -12,6 +12,9 @@ import CardsDisplay from "./CardsDisplay";
 import LoadingDots from "@/components/LoadingDots";
 import useReviewSettingsStore from "@/store/reviewSettingsStore";
 import useSearchStore from "@/store/searchStore";
+import { GoArrowSwitch } from "react-icons/go";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import {motion} from "framer-motion"
 
 const DisplayContent = () => {
   const supabase = createClient();
@@ -29,6 +32,7 @@ const DisplayContent = () => {
   } = useUserStore();
   const { fields, showEmptyCards, accent, fetchReviewSettings } = useReviewSettingsStore();
   const { results, searchTriggered } = useSearchStore();
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
     fetchUserId(); // 初回のみ取得、キャッシュ済みなら何もしない
@@ -82,6 +86,16 @@ const DisplayContent = () => {
     [userId]
   );
 
+  useEffect(() => {
+    if (currentTab === "table") {
+      setShowMessage(true);
+      const timer = setTimeout(() => {
+        setShowMessage(false);
+      }, 2500); 
+      return () => clearTimeout(timer);
+    }
+  }, [currentTab]);
+
   if (!userId || !wordsSettings || !words) {
     return (
       <div className="border rounded rounded-tl-none shadow py-20 ">
@@ -115,7 +129,14 @@ const DisplayContent = () => {
 
   return (
     <div className="border rounded rounded-tl-none shadow">
-      <div className="flex justify-end items-start mt-2 mr-1 mb-0.5 ">
+      <div className="flex justify-between items-center mt-2 mr-1 mb-0.5 ">
+        <motion.div 
+          initial={{ opacity: 1 }}
+          animate={{ opacity: showMessage ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
+          className={`ml-5 mb-0.5 text-gray-400 notxs:invisible font-semibold ${currentTab === "table" ? "block" : "invisible"}`}>
+          <ArrowLeftIcon className="h-4 inline mb-1 mr-1 "/>左右にスワイプ<ArrowRightIcon className="h-4 inline mb-1 ml-1"/>
+        </motion.div>
         <Pagination />
       </div>
       {currentTab === "cards" ? (
