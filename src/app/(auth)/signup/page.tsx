@@ -3,8 +3,9 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import LoadingDots from "@/components/LoadingDots";
 import Spinner from "@/components/Spiner";
+import { translateSupabaseAuthError } from "@/utils/authErrorTranslator";
+
 
 export default function SignIn() {
   const supabase = createClient();
@@ -21,7 +22,8 @@ export default function SignIn() {
       password,
     });
     if (error) {
-      setMessage(`Error: ${error.message}`);
+      const errorMessage = translateSupabaseAuthError(error.code);
+      setMessage(errorMessage);
       setLoading(false);
     } else {
       const { error: profileError } = await supabase
@@ -42,7 +44,7 @@ export default function SignIn() {
 
       // 単語がないと最初の単語取得でエラーになるので、初期値としてガイドも兼ねていくつかカードを作っておく
       const { error: wordsError } = await supabase.from("words").insert([
-        { user_id: data.user?.id, word: "Welcome!", meaning: "ようこそ！" },
+        { user_id: data.user?.id, word: "Welcome!", meaning: "ようこそ！",example: "", example_translation:"", memo:""},
       ]);
 
       if (profileError) {
@@ -78,8 +80,18 @@ export default function SignIn() {
             <Spinner borderColor = "border-gray-100 border-t-blue-300 border-r-blue-300" size = "h-7 w-7" borderWeight = "border-[0.25rem]" props = "mt-1"/>
         </div>
       </>)}
-      <div className="h-screen flex flex-col justify-center items-center text-black">
-        <div className="rounded-lg p-8 w-full max-w-md ">
+
+    <div className="flex flex-col h-screen">
+      <header className='mx-auto py-4 xs:py-3 px-5 xs:px-4 w-full bg-white shadow-md flex justify-center'>
+        <div  className="max-w-[1400px] flex items-center justify-between w-full">
+          <Link className="" href="/">
+            <span className="xs:ml-0 text-3xl font-bold">VocabApp</span>
+          </Link>
+        </div>
+      </header>
+
+      <div className="flex-grow min-h-fit flex flex-col justify-center items-center text-black ">
+        <div className="rounded-lg p-8 w-full max-w-md xs:-mt-10">
           <h1 className="text-3xl font-bold mb-8 text-center">新規アカウント登録</h1>
           <input
             type="email"
@@ -113,6 +125,7 @@ export default function SignIn() {
           </div>
         </div>
       </div>
+    </div>
     </>
   );
 }
