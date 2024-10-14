@@ -8,6 +8,10 @@ import { isMobile } from "react-device-detect";
 const parseCustomMarkup = (text: string, lang:string = "en" ): React.ReactNode[] => {
   let parts: React.ReactNode[] = [];
 
+  if (!text) {
+    text = "";
+  }
+
   const fontWeight = isMobile ? "font-[700]" : "font-[650]"
   const underlineOffset = isMobile 
     ? lang === "ja" ? "underline underline-offset-[3.3px]" : "underline underline-offset-[2px]"  
