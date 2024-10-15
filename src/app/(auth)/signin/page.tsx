@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -14,6 +14,22 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
+  useEffect(() => {
+    // 認証状態の変化を監視
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        // サインインが完了したらホーム画面にリダイレクト
+        setLoading(false);
+        router.push("/");
+      }
+    });
+
+    // クリーンアップ: イベントリスナーの解除
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]);
+
   const handleSignIn = async () => {
     setLoading(true);  
     const { error } = await supabase.auth.signInWithPassword({
@@ -26,7 +42,7 @@ export default function SignIn() {
       setMessage(errorMessage);
       setLoading(false);  
     } else {
-      router.push("/");
+      // router.push("/");
     }
   };
 
