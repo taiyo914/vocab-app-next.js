@@ -63,7 +63,12 @@ export default function SignIn() {
         setMessage(`Error: ${wordsError.message}`);
         setLoading(false);
       } else {
-        router.push("/");
+        supabase.auth.onAuthStateChange((event, session) => {
+          if (session) {
+            // セッションが存在する場合、リダイレクト
+            router.push("/");
+          }
+        });
       }
     }
   };
