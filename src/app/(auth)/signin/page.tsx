@@ -14,21 +14,21 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
-  useEffect(() => {
-    // 認証状態の変化を監視
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN") {
-        // サインインが完了したらホーム画面にリダイレクト
-        setLoading(false);
-        router.push("/");
-      }
-    });
+  // useEffect(() => {
+  //   // 認証状態の変化を監視
+  //   const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+  //     if (event === "SIGNED_IN") {
+  //       // サインインが完了したらホーム画面にリダイレクト
+  //       setLoading(false);
+  //       router.push("/");
+  //     }
+  //   });
 
-    // クリーンアップ: イベントリスナーの解除
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [router]);
+  //   // クリーンアップ: イベントリスナーの解除
+  //   return () => {
+  //     authListener.subscription.unsubscribe();
+  //   };
+  // }, [router]);
 
   const handleSignIn = async () => {
     setLoading(true);  
@@ -43,6 +43,10 @@ export default function SignIn() {
       setLoading(false);  
     } else {
       // router.push("/");
+      setTimeout(() => {
+        router.push("/");
+        setLoading(false);  
+      }, 2000); // 2秒待機
     }
   };
 
