@@ -89,18 +89,18 @@ export default function HeroSection() {
               <SwiperSlide>
               <div className="max-w-full lg:w-[620px]">
                 <Image
-                  src="/images/table_screen.jpeg"
+                  src="/images/table_screen.png"
                   alt="アプリのスクリーンショット"
                   layout="responsive"
                   width={400}
-                  height={900}
+                  height={300}
                 />
               </div>
               </SwiperSlide>
               <SwiperSlide>
                 <div className="max-w-full lg:w-[620px]">
                   <Image
-                    src="/images/cards_screen.jpeg"
+                    src="/images/cards_screen.png"
                     alt="アプリのスクリーンショット"
                     layout="responsive"
                     width={400}
@@ -111,7 +111,7 @@ export default function HeroSection() {
               <SwiperSlide>
                 <div className="max-w-full lg:w-[620px]">
                   <Image
-                    src="/images/review_screen.jpeg"
+                    src="/images/review_screen.png"
                     alt="アプリのスクリーンショット"
                     layout="responsive"
                     width={400}
