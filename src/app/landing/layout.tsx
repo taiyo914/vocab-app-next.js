@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link"
 import Footer from '@/app/Footer';
+import Logo from "@/components/Logo";
 
 export default function Layout({children}:{children: React.ReactNode}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -15,9 +16,7 @@ export default function Layout({children}:{children: React.ReactNode}) {
     <div className='text-black'>
       <header className='mx-auto py-3 xs:py-2 px-5 xs:px-4 fixed w-full bg-white z-50 shadow-md flex justify-center'>
         <div  className="max-w-[1400px] flex items-center justify-between w-full">
-          <Link className="" href="#">
-            <span className="xs:ml-0 text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">VocabApp</span>
-          </Link>
+          <Logo href="#" />
           <nav className="">
             <Link className="font-medium transition-colors cursor-pointer py-1.5 px-4  text-gray-500 border rounded-full hover:bg-gray-100 -mr-1" href="/signin">
               ログイン
